@@ -1,6 +1,8 @@
 import QtQuick 2.0
+import DesktopWallpaper.ImagesRequests 1.0
 
 Rectangle{
+    id: root_item
     property int classifyID: -1
     property string classifyName: ""
 
@@ -8,6 +10,27 @@ Rectangle{
 
     signal moreImageByClassifyID(int id); //更多
     signal singelImageClicked(string url); //点击单张图片
+
+    onClassifyIDChanged: {
+        console.log("ID changed to ", classifyID)
+
+        imagesRequests.request(root_item.classifyID, 1);
+    }
+
+
+
+    ImagesRequests{
+        id: imagesRequests
+
+
+        onImagesResponse: {
+            console.log("Image data:", data);
+        }
+
+        onImagesRequestError: {
+            console.log("Error:", error);
+        }
+    }
 
     Text{
         id: text_item
@@ -66,6 +89,11 @@ Rectangle{
                     height: parent.height * 9/10
                     color: "red"
                     anchors.centerIn: parent
+
+                    Image{
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectFit
+                    }
                 }
             }
     }

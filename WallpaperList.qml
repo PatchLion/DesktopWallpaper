@@ -1,22 +1,51 @@
 import QtQuick 2.0
-import DesktopWallpaper.ImagesRequests 1.0
+import DesktopWallpaper.ImageClassify 1.0
 
 Item {
-    ImagesRequests{
-        id: imagesRequests
-    }
+    id: root_item
 
-    Component.onCompleted: {
-        console.log("分类Json数据:", imagesRequests.imageClassifies);
-        var classfies = JSON.parse(imagesRequests.imageClassifies);
+    ImageClassify{
+        id: classifies_item
 
-
-        for(var i = 0; i< classfies.length; i++){
-            var classify = classfies[i];
-            console.log(classify.id, classify.name)
+        Component.onCompleted: {
+            if(classifies.length > 0){
+                root_item.updateClassifiesListView();
+            }
         }
 
-        imageClassifyListModel.append(classfies)
+        onClassifiesChanged: {
+            root_item.updateClassifiesListView();
+        }
+    }
+
+
+    function updateClassifiesListView(){
+        var json_obj = JSON.parse(classifies_item.classifies);
+        if(json_obj)
+        {
+            var classifies = json_obj["showapi_res_body"]["list"];
+
+            var model_data = [];
+            if(classifies)
+            {
+                for(var i = 0; i < classifies.length; i++)
+                {
+                    var childlist = classifies[i].list;
+
+                    for(var j = 0; j<childlist.length; j++)
+                    {
+                        var classify = childlist[j];
+
+                        console.log(classify.id, classify.name);
+
+                        model_data.push({"id": classify.id, "name":classify.name});
+                    }
+                }
+            }
+
+            imageClassifyListModel.clear();
+            imageClassifyListModel.append(model_data);
+        }
     }
 
 
@@ -36,6 +65,7 @@ Item {
         }
 
         delegate: ImageListInReview{
+            classifyID: id
             classifyName: name
             width: 800
             height: imageClassifyList.height
