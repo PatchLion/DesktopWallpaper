@@ -153,6 +153,7 @@ Item {
             FileDialog
             {
                 id: dir_dialog
+
                 title: "Please choose a directory"
                 selectFolder: true
                 selectExisting: true
