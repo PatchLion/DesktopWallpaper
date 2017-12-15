@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qmls/Button.qml</file>
+        <file>qmls/ClassifyDetailPanel.qml</file>
+        <file>qmls/ClassifyGridView.qml</file>
+        <file>qmls/DataCache.js</file>
+        <file>qmls/Global.js</file>
+        <file>qmls/ImageDetailPanel.qml</file>
+        <file>qmls/ImageListInReview.qml</file>
+        <file>qmls/ImagesView.qml</file>
+        <file>qmls/main.qml</file>
+        <file>qmls/Toast.js</file>
+        <file>qmls/Toast.qml</file>
+        <file>qmls/WallpaperList.qml</file>
+    </qresource>
+</RCC>

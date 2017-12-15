@@ -1,4 +1,4 @@
-import QtQuick 2.0
+Kimport QtQuick 2.0
 
 GridView{
     id: grid_view_item
