@@ -1,5 +1,6 @@
 #include "ImagesRequests.h"
 #include "common.h"
+#include <QtNetwork>
 
 ImagesRequests::ImagesRequests(QObject *parent)
     : QObject(parent)
@@ -7,71 +8,48 @@ ImagesRequests::ImagesRequests(QObject *parent)
 
 }
 
-QByteArray ImagesRequests::getClassifies() const
+QByteArray ImagesRequests::request(int classify, int page)
 {
-    QJsonDocument docment;
-    QJsonArray classifies;
-    QVariantMap varMap;
-    varMap["id"] = "0";
-    varMap["name"] = "Classic";
-    classifies.append(QJsonObject::fromVariantMap(varMap));
-    varMap["id"] = "1";
-    varMap["name"] = "Beauty Girls";
-    classifies.append(QJsonObject::fromVariantMap(varMap));
-    varMap["id"] = "2";
-    varMap["name"] = "Games";
-    classifies.append(QJsonObject::fromVariantMap(varMap));
-    varMap["id"] = "3";
-    varMap["name"] = "Photos";
-    classifies.append(QJsonObject::fromVariantMap(varMap));
-    varMap["id"] = "4";
-    varMap["name"] = "Catons";
-    classifies.append(QJsonObject::fromVariantMap(varMap));
+    const QByteArray data = m_cache.pageCache(classify, page);
+    if(data.isEmpty())
+    {
+        qDebug() << "Read image data with (classify:" << classify << ", page:" << page << ") from network!";
 
-    docment.setArray(classifies);
-    return docment.toJson();
+        QEventLoop loop;
+        QNetworkRequest reuest(requestUrl(classify, page));
+        QNetworkAccessManager network;
+        QNetworkReply* reply = network.get(reuest);
+        Caches& cache = m_cache;
+        connect(reply, &QNetworkReply::finished, [=, &loop, &reply, &cache, &classify, &page](){
+
+            if(reply && QNetworkReply::NoError == reply->error())
+            {
+                QByteArray data = reply->readAll();
+                cache.setPageCache(classify, page, data);
+            }
+
+            loop.quit();
+        });
+        connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop, SLOT(quit()));
+
+        loop.exec();
+
+        delete reply;
+        reply = 0;
+    }
+
+
+    return data;
 }
 
-QByteArray ImagesRequests::images(int classifyid, int index, int count)
-{
-    return "{}";
-}
-
-void ImagesRequests::request(int type, int page)
-{
-    QNetworkRequest reuest(requestUrl(type, page));
-    QNetworkReply* reply = m_network.get(reuest);
-    connect(reply, &QNetworkReply::finished, this, &ImagesRequests::onReplyFinished);
-    connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(onReplyError(QNetworkReply::NetworkError)));
-
-    reply->setParent(&m_network);
-}
-
-QString ImagesRequests::requestUrl(int type, int page) const
+QString ImagesRequests::requestUrl(int classify, int page)
 {
     //http://route.showapi.com/852-2?showapi_appid=myappid&type=&page=&showapi_sign=mysecret
     QString ret = kImagesUrl;
     ret += QString("?showapi_appid=%1").arg(kAppID);
     ret += QString("&showapi_sign=%1").arg(kKey);
-    ret += QString("&type=%1").arg(type);
+    ret += QString("&type=%1").arg(classify);
     ret += QString("&page=%1").arg(page);
 
     return ret;
-}
-
-void ImagesRequests::onReplyFinished()
-{
-    QNetworkReply* reply = dynamic_cast<QNetworkReply*>(sender());
-
-    if(reply && QNetworkReply::NoError == reply->error())
-    {
-        QByteArray data = reply->readAll();
-
-        Q_EMIT imagesResponse(data);
-    }
-}
-
-void ImagesRequests::onReplyError(QNetworkReply::NetworkError error)
-{
-    Q_EMIT imagesRequestError(error);
 }

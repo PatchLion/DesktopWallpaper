@@ -1,82 +1,119 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.2
 import DesktopWallpaper.ImageClassify 1.0
+import "./Global.js" as Global
 
-Item {
+StackView {
     id: root_item
 
     ImageClassify{
         id: classifies_item
-
-        Component.onCompleted: {
-            if(classifies.length > 0){
-                root_item.updateClassifiesListView();
-            }
-        }
-
-        onClassifiesChanged: {
-            root_item.updateClassifiesListView();
-        }
     }
 
 
-    function updateClassifiesListView(){
-        var json_obj = JSON.parse(classifies_item.classifies);
-        if(json_obj)
-        {
-            var classifies = json_obj["showapi_res_body"]["list"];
+    initialItem: imageClassifyList_compnent
 
-            var model_data = [];
-            if(classifies)
-            {
-                for(var i = 0; i < classifies.length; i++)
-                {
-                    var childlist = classifies[i].list;
+    Component{
+        id: imageClassifyList_compnent
+        ListView{
+            id: imageClassifyList
+            anchors.margins: 10
+            orientation: ListView.Horizontal
+            spacing: 30
+            clip: true
 
-                    for(var j = 0; j<childlist.length; j++)
+
+            boundsBehavior: Flickable.OvershootBounds
+
+            model:ListModel{
+                id: imageClassifyListModel
+            }
+
+            delegate: ImageListInReview{
+                classifyID: id
+                classifyName: name
+                width: 600
+                height: imageClassifyList.height
+
+                onMoreImageByClassifyID: {
+                    root_item.push(classify_more_panel_componet);
+
+
+                    if(pagebean)
                     {
-                        var classify = childlist[j];
+                        var contentlist = pagebean.contentlist;
 
-                        console.log(classify.id, classify.name);
+                        var first_page_data = []
+                        for(var i = 0; i < contentlist.length; i++){
 
-                        model_data.push({"id": classify.id, "name":classify.name});
+                            var content = contentlist[i];
+                            first_page_data.push({"itemID": content.itemId, "title":content.title, "image": content.list[0].middle});
+
+                            console.log(content.title, content.itemId, content.list[0].middle)
+                        }
+
+                        root_item.currentItem.model.clear();
+                        root_item.currentItem.model.append(first_page_data);
                     }
+                }
+
+                onSingelImageGroupClicked: {
+                    root_item.push(image_detail_panel_component);
+                    root_item.currentItem.title = title;
+                    root_item.currentItem.model.clear();
+                    root_item.currentItem.model.append(imagelist)
                 }
             }
 
-            imageClassifyListModel.clear();
-            imageClassifyListModel.append(model_data);
+
+            Component.onCompleted: {
+                updateClassifiesListView();
+            }
+
+
+            //刷新分类数据列表
+            function updateClassifiesListView(){
+                var classifies_string = classifies_item.classifies();
+
+                var result = Global.resolveClassifiesData(classifies_string);
+
+                if(result[0])
+                {
+                    imageClassifyListModel.clear();
+                    imageClassifyListModel.append(result[1]);
+                }
+                else
+                {
+                    console.warn("解析分类数据出现异常");
+                }
+            }
+
         }
     }
 
+    //图片组详情界面
+    Component{
+        id: image_detail_panel_component
+        ImageDetailPanel{
+            id: image_detail_panel
+            anchors.margins: 10
 
-    ListView{
-        id: imageClassifyList
-        anchors.fill: parent
-        anchors.margins: 10
-        orientation: ListView.Horizontal
-        spacing: 30
-        clip: true
-
-
-        boundsBehavior: Flickable.OvershootBounds
-
-        model:ListModel{
-            id: imageClassifyListModel
+            onBackButtonClicked: {
+                root_item.pop();
+            }
         }
+    }
 
-        delegate: ImageListInReview{
-            classifyID: id
-            classifyName: name
-            width: 800
-            height: imageClassifyList.height
+    //分类详情界面
+    Component{
+        id: classify_more_panel_componet
+        ClassifyDetailPanel{
+            id: classify_more_panel
 
-            onMoreImageByClassifyID: {
-
+            onBackButtonClicked: {
+                root_item.pop();
             }
 
-            onSingelImageClicked: {
-
-            }
         }
     }
 }

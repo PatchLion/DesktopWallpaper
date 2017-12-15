@@ -14,7 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     ImagesRequests.cpp \
-    ImageClassify.cpp
+    ImageClassify.cpp \
+    Caches.cpp \
+    Downloader.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,4 +34,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ImagesRequests.h \
     ImageClassify.h \
-    common.h
+    common.h \
+    Caches.h \
+    Downloader.h

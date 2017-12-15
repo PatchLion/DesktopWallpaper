@@ -3,5 +3,14 @@
         <file>main.qml</file>
         <file>WallpaperList.qml</file>
         <file>ImageListInReview.qml</file>
+        <file>ImagesView.qml</file>
+        <file>ImageDetailPanel.qml</file>
+        <file>Button.qml</file>
+        <file>Toast.js</file>
+        <file>Toast.qml</file>
+        <file>Global.js</file>
+        <file>ClassifyDetailPanel.qml</file>
+        <file>ClassifyGridView.qml</file>
+        <file>DataCache.js</file>
     </qresource>
 </RCC>
