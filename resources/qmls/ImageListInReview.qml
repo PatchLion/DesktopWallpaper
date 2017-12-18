@@ -1,5 +1,6 @@
 import QtQuick 2.0
-import DesktopWallpaper.ImagesRequests 1.0
+import DesktopWallpaper.APIRequest 1.0
+import "./Global.js" as Global
 
 Rectangle{
     id: root_item
@@ -9,7 +10,7 @@ Rectangle{
     color: Qt.rgba(0.8, 0.8, 0.8, 0.2)
 
     signal moreImageByClassifyID(var pagebean); //更多
-    signal singelImageGroupClicked(string title, var imagelist); //点击图片组
+    signal singelImageGroupClicked(int itemID, string title); //点击图片组
 
 
     property var contentlist
@@ -18,71 +19,27 @@ Rectangle{
     onClassifyIDChanged: {
         console.log("-->ID changed to ", classifyID);
 
-        var image_json = imagesRequests.request(root_item.classifyID, 1);
-        var json_object = JSON.parse(image_json);
-
-        var page_infos = json_object.showapi_res_body.pagebean;
-        root_item.pagebean = json_object.showapi_res_body.pagebean;
-        if(page_infos)
-        {
-            //console.log(page_infos)
-            var allPages = page_infos.allPages;
-            var contentlist = page_infos.contentlist;
-            root_item.contentlist = page_infos.contentlist;
-            var currentPage = page_infos.currentPage;
-            var allNum = page_infos.allNum;
-            var maxResult = page_infos.maxResult;
-
-            console.log(allPages, currentPage, allNum)
-
-            var MAX = grid_view_item.rowCount * grid_view_item.columnCount;
-
-            var first_page_data = []
-            for(var i = 0; i < contentlist.length; i++){
-                if(i>=MAX) break;
-
-                var content = contentlist[i];
-                first_page_data.push({"itemID": content.itemId, "title":content.title, "image": content.list[0].middle});
-
-                console.log(content.title, content.itemId, content.list[0].middle)
-            }
-
-            grid_view_model.clear();
-            grid_view_model.append(first_page_data);
-        }
-
+        items_request.requestItemsByClassifyID(classifyID);
     }
 
-    //获取图片列表
-    function getImageListByItemId(itemID)
-    {
-        for(var i = 0; i < contentlist.length; i++)
-        {
-            var content = contentlist[i];
-            if(itemID === content.itemId)
+    APIRequest{
+        id: items_request
+
+        onItemsByClassifyIDResponse: {
+            if(root_item.classifyID == classifyID)
             {
-                //console.log(content.title, content.itemId, content.list[0].middle)
+                var result = Global.resolveItemsData(data, 6);
 
-                var images = []
-
-                for(var j = 0; j < content.list.length; j++)
+                if(result[0])
                 {
-                    var temp = content.list[j];
-
-                    images.push({"image": temp.big});
+                    grid_view_model.clear();
+                    grid_view_model.append(result[1]);
                 }
-
-                return [true, content.title, images]
             }
         }
-
-        return [false, 0, null]
-    }
-
-
-
-    ImagesRequests{
-        id: imagesRequests
+        onApiRequestError: {
+            console.warn("Catch error when reuqest api:", apiName, "code:", error);
+        }
     }
 
     Text{
@@ -133,18 +90,8 @@ Rectangle{
         onItemClicked: {
 
             console.log("Item " + currentID + " clicked!");
-            var result = root_item.getImageListByItemId(currentID);
 
-            var suc = result[0];
-            if (suc)
-            {
-                console.log(result[1], result[2]);
-                root_item.singelImageGroupClicked(result[1], result[2]);
-            }
-            else
-            {
-                console.warn("Can not find item: ", currentID);
-            }
+            root_item.singelImageGroupClicked(currentID, title);
         }
     }
 }

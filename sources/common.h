@@ -1,9 +1,13 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-static const char* kAppID = "52155"; //壁纸
-static const char* kKey = "5244ffe2f59349988f42d9df39ebe0e9"; //秘钥
-static const char* kImageClassifyUrl = "http://route.showapi.com/852-1"; //图片分类查询Api
-static const char* kImagesUrl = "http://route.showapi.com/852-2"; //图片查询Api
+#include <QString>
+
+static const QString kDefaultHost = "http://www.patchlion.cn";
+//static const QString kAPIHost = "/host"; //查询主机API
+static const QString kAPIClassifies = "/classifies"; //图片分类查询API
+static const QString kAPIItemsByClassifyID = "/classifies/%1"; //图片分类下的图片分组查询API
+static const QString kAPIItems = "/items"; //图片分组列表API
+static const QString kAPIItemsDetails = "/items/%1"; //图片分组详情API
 
 #endif // COMMON_H

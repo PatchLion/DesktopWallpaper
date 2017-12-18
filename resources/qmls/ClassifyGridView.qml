@@ -4,7 +4,7 @@ GridView{
     id: grid_view_item
 
 
-    signal itemClicked(string currentID);
+    signal itemClicked(int currentID, string title);
 
 
     property int rowCount: 3
@@ -27,7 +27,7 @@ GridView{
         source: image
 
         onItemClicked: {
-            grid_view_item.itemClicked(currentID);
+            grid_view_item.itemClicked(currentID, titleString);
         }
     }
 }

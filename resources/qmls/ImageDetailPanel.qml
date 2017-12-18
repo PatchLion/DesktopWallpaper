@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
-import DesktopWallpaper.Downloader 1.0
+import DesktopWallpaper.APIRequest 1.0
 import "./Toast.js" as Toast
 import "./Global.js" as Global
 
@@ -8,19 +8,39 @@ Item {
     id: root_item
 
     property alias title: text_item.text
-    property alias model: images_list_model
+    property int itemID: -1
+    //property alias model: images_list_model
 
     signal backButtonClicked();
 
-    Downloader{
+    APIRequest{
         id: downloader
 
+        onItemsDetailResponse: {
+            var result = Global.resolveItemsDetailData(data);
+
+            if(result[0])
+            {
+                images_list_model.clear();
+                images_list_model.append(result[1]);
+            }
+        }
+
         onDownloadError: {
-            Toast.showToast(Global.mainForm, errorInfo);
+            Toast.showToast(Global.mainForm, msg);
         }
+
         onDownloadFinished: {
-            Toast.showToast(Global.mainForm, url + " download finished!");
+            Toast.showToast(Global.mainForm, url+" downloaded!");
         }
+
+        onApiRequestError: {
+            console.warn("Catch error when reuqest api:", apiName, "code:", error);
+        }
+    }
+
+    onItemIDChanged: {
+        downloader.requestItemsDetailData(itemID);
     }
 
     Rectangle{
@@ -163,9 +183,10 @@ Item {
                     var dest = fileUrl;
                     //Toast.showToast(Global.mainForm, "开始下载所有图片到: "+dest);
 
-                    for(var i = 0; i<root_item.model.count; i++)
+                    console.log(images_list_model.count)
+                    for(var i = 0; i<images_list_model.count; i++)
                     {
-                        var obj = root_item.model.get(i);
+                        var obj = images_list_model.get(i);
                         if(obj)
                         {
                             var image = obj["image"];

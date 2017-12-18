@@ -3,7 +3,7 @@ import QtQuick 2.0
 Rectangle{
     id: root_item
 
-    property string currentID: ""
+    property int currentID: -1
     property alias source: image_item.source
     property alias titleString: text_item.text
 
@@ -24,6 +24,7 @@ Rectangle{
             anchors.bottom: text_area_item.top
             fillMode: Image.PreserveAspectCrop
             clip: true
+
 
             sourceSize.width: 1024
             sourceSize.height: 1024
