@@ -9,7 +9,7 @@ Rectangle{
 
     color: Qt.rgba(0.8, 0.8, 0.8, 0.2)
 
-    signal moreImageByClassifyID(var pagebean); //更多
+    signal moreImageByClassifyID(int classifyID); //更多
     signal singelImageGroupClicked(int itemID, string title); //点击图片组
 
 
@@ -19,7 +19,7 @@ Rectangle{
     onClassifyIDChanged: {
         console.log("-->ID changed to ", classifyID);
 
-        items_request.requestItemsByClassifyID(classifyID);
+        items_request.requestItemsByClassifyID(classifyID, 1);
     }
 
     APIRequest{
@@ -28,7 +28,7 @@ Rectangle{
         onItemsByClassifyIDResponse: {
             if(root_item.classifyID == classifyID)
             {
-                var result = Global.resolveItemsData(data, 6);
+                var result = Global.resolvePageData(data, 6);
 
                 if(result[0])
                 {
@@ -65,7 +65,7 @@ Rectangle{
         buttonText: "更多"
 
         onButtonClicked: {
-            root_item.moreImageByClassifyID(root_item.pagebean);
+            root_item.moreImageByClassifyID(root_item.classifyID);
         }
     }
 

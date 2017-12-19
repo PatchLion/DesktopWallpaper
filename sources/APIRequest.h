@@ -11,7 +11,7 @@ private:
     enum RequestType
     {
         RequestType_Classifies,
-        RequestType_Items,
+        //RequestType_Items,
         RequestType_ItemDetail,
         RequestType_Download,
         RequestType_ItemsByClassifyID,
@@ -28,10 +28,10 @@ public:
     Q_INVOKABLE void requestClassifiesData();
 
     //获取分组数据
-    Q_INVOKABLE void requestItemsData();
+    //Q_INVOKABLE void requestItemsData();
 
     //获取分类下的所有分组
-    Q_INVOKABLE void requestItemsByClassifyID(int classifyID);
+    Q_INVOKABLE void requestItemsByClassifyID(int classifyID, int pageindex);
 
     //获取单个图片分组数据
     Q_INVOKABLE void requestItemsDetailData(int itemID);
@@ -48,7 +48,7 @@ Q_SIGNALS:
     void classifiesResponse(const QByteArray& data);
 
     //分类下图片分组返回
-    void itemsByClassifyIDResponse(int itemID, const QByteArray& data);
+    void itemsByClassifyIDResponse(int itemID, int pageindex, const QByteArray& data);
 
     //图片分组请求返回
     void itemsResponse(const QByteArray& data);

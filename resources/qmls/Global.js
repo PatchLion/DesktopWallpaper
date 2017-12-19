@@ -69,7 +69,7 @@ function resolveClassifiesData(json_string)
 /*
   解析图片分组数据
 */
-function resolveItemsData(items_data)
+function resolvePageData(items_data)
 {
     var json_obj = resolveStandardData(items_data);
 
@@ -80,9 +80,7 @@ function resolveItemsData(items_data)
         if(code === 0)
         {
             var model_data = [];
-
-            var limit = arguments[1] ? arguments[1] : -1;
-            var childlist = json_obj[3].list;
+            var childlist = json_obj[3].items;
 
             for(var j = 0; j<childlist.length; j++)
             {
@@ -90,12 +88,8 @@ function resolveItemsData(items_data)
 
                 console.log(item.id, item.image, item.classify, item.name);
 
-                model_data.push({"itemID": item.id, "image": item.image, "classify":item.classify, "title": item.name});
+                model_data.push({"itemID": item.id, "image": item.image, "title": item.name});
 
-                if(limit > 0 && model_data.length ===limit)
-                {
-                    break;
-                }
             }
 
             return [true, model_data];
@@ -124,7 +118,7 @@ function resolveItemsDetailData(images_data)
         {
             var model_data = [];
 
-            var childlist = json_obj[3].list;
+            var childlist = json_obj[3];
 
             for(var j = 0; j<childlist.length; j++)
             {

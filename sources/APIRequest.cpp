@@ -17,15 +17,18 @@ void APIRequest::requestClassifiesData()
     doRequest(RequestType_Classifies);
 }
 
+/*
 void APIRequest::requestItemsData()
 {
     doRequest(RequestType_Items);
 }
+*/
 
-void APIRequest::requestItemsByClassifyID(int classifyID)
+void APIRequest::requestItemsByClassifyID(int classifyID, int pageindex)
 {
     QVariantList args;
     args<<classifyID;
+    args<<pageindex;
     doRequest(RequestType_ItemsByClassifyID, args);
 }
 
@@ -70,11 +73,15 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
         url += kAPIClassifies;
     }
         break;
+
+    /*
     case RequestType_Items:
     {
         url += kAPIItems;
     }
         break;
+    */
+
     case RequestType_ItemDetail:
     {
         Q_ASSERT(args.size() == 1);
@@ -93,9 +100,10 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
 
     case RequestType_ItemsByClassifyID:
     {
-        Q_ASSERT(args.size() == 1);
+        Q_ASSERT(args.size() == 2);
         Q_ASSERT(args[0].isValid());
-        url += kAPIItemsByClassifyID.arg(args[0].toInt());
+        Q_ASSERT(args[1].isValid());
+        url += kAPIItemsByClassifyIDAndPageIndex.arg(args[0].toInt()).arg(args[1].toInt());
     }
         break;
     default:
@@ -144,6 +152,8 @@ void APIRequest::onReplyFinished()
             }
         }
             break;
+
+        /*
         case RequestType_Items:
         {
             if(success)
@@ -158,6 +168,8 @@ void APIRequest::onReplyFinished()
             }
         }
             break;
+        */
+
         case RequestType_ItemDetail:
         {
             Q_ASSERT(args.size() == 1);
@@ -175,16 +187,17 @@ void APIRequest::onReplyFinished()
             break;
         case RequestType_ItemsByClassifyID:
         {
-            Q_ASSERT(args.size() == 1);
+            Q_ASSERT(args.size() == 2);
             Q_ASSERT(args[0].isValid());
+            Q_ASSERT(args[1].isValid());
             if(success)
             {
-                Q_EMIT itemsByClassifyIDResponse(args[0].toInt(), data);
+                Q_EMIT itemsByClassifyIDResponse(args[0].toInt(), args[1].toInt(),data);
             }
             else
             {
 
-                Q_EMIT apiRequestError(kAPIItemsByClassifyID.arg(args[0].toInt()), error);
+                Q_EMIT apiRequestError(kAPIItemsByClassifyIDAndPageIndex.arg(args[0].toInt()).arg(args[1].toInt()), error);
             }
         }
             break;
