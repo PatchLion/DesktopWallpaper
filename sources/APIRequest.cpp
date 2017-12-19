@@ -113,7 +113,9 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
         break;
     }
 
-    QNetworkReply* reply = m_network.get(QNetworkRequest(url));
+    QNetworkRequest request(url);
+    request.setRawHeader("Referer", "http://www.mzitu.com/");
+    QNetworkReply* reply = m_network.get(request);
 
     reply->setProperty(RequestTypeRole, requestType);
     reply->setProperty(RequestArgsRole, args);

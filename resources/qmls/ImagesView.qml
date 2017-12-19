@@ -29,7 +29,7 @@ Rectangle{
             sourceSize.width: 1024
             sourceSize.height: 1024
 
-            cache: true
+            cache: false
         }
 
         Rectangle{

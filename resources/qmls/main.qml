@@ -10,7 +10,6 @@ Window {
     height: 600
     title: qsTr("Desktop Wallpaper")
 
-
     WallpaperList{
         anchors.fill: parent;
 
@@ -18,4 +17,5 @@ Window {
             Global.mainForm = this;
         }
     }
+
 }
