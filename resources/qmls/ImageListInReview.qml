@@ -13,7 +13,7 @@ Rectangle{
     radius: 5
 
     signal moreImageByClassifyID(int classifyID); //更多
-    signal singelImageGroupClicked(int itemID, string title); //点击图片组
+    signal singelImageGroupClicked(int itemID, string title, string itemurl); //点击图片组
 
     onClassifyIDChanged: {
         console.log("-->ID changed to ", classifyID);
@@ -90,7 +90,7 @@ Rectangle{
 
             console.log("Item " + currentID + " clicked!");
 
-            root_item.singelImageGroupClicked(currentID, title);
+            root_item.singelImageGroupClicked(currentID, title, itemurl);
         }
     }
 }

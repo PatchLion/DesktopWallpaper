@@ -7,6 +7,7 @@ import "./DataCache.js" as DataCache
 Window {
     visible: true
     visibility: Window.Windowed
+    flags: Qt.FramelessWindowHint | Qt.Window
     width: 800
     height: 600
     title: qsTr("Beauty Finder")

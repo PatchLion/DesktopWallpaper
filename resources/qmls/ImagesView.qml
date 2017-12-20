@@ -6,9 +6,9 @@ Rectangle{
     property int currentID: -1
     property alias source: image_item.source
     property alias titleString: text_item.text
+    property string itemUrl: ""
 
-
-    signal itemClicked(string currentID);
+    signal itemClicked(string currentID, string itemurl);
 
     Item{
         width: parent.width * 9/10
@@ -69,7 +69,7 @@ Rectangle{
         cursorShape: Qt.PointingHandCursor
 
         onClicked: {
-            root_item.itemClicked(root_item.currentID);
+            root_item.itemClicked(root_item.currentID, root_item.itemUrl);
         }
     }
 }

@@ -14,7 +14,7 @@ StackView {
             id: imageClassifyList
             anchors.margins: 10
             orientation: ListView.Horizontal
-            spacing: 30
+            spacing: 20
             clip: true
 
 
@@ -42,6 +42,8 @@ StackView {
 
                 onSingelImageGroupClicked: {
                     root_item.push(image_detail_panel_component);
+                    console.log("ItemUrl:", itemurl);
+                    root_item.currentItem.itemUrl = itemurl
                     root_item.currentItem.isUseReferer = isUseReferer;
                     root_item.currentItem.title = title;
                     root_item.currentItem.itemID = itemID;
@@ -101,7 +103,8 @@ StackView {
 
             onItemClicked: {
                 root_item.push(image_detail_panel_component);
-
+                console.log("ItemUrl:", itemurl);
+                root_item.currentItem.itemUrl = itemurl
                 root_item.currentItem.isUseReferer = isUseReferer;
                 root_item.currentItem.title = title;
                 root_item.currentItem.itemID = currentID;

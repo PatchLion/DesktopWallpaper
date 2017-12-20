@@ -10,6 +10,8 @@ Item {
     property bool isUseReferer: false
     property alias title: text_item.text
     property int itemID: -1
+
+    property string itemUrl: ""
     //property alias model: images_list_model
 
     signal backButtonClicked();
@@ -51,7 +53,7 @@ Item {
 
         anchors.fill: parent
         anchors.topMargin: 40
-        anchors.bottomMargin: 40
+        anchors.bottomMargin: 5
         anchors.leftMargin: 5
         anchors.rightMargin: 5
 
@@ -158,6 +160,23 @@ Item {
         }
     }
 
+    Button{
+
+        id: link_button
+
+        anchors.right: downloadall_button.left
+        anchors.rightMargin: 10
+        anchors.bottom: downloadall_button.bottom
+        width: 120
+        height: 30
+        buttonText: "跳转到源网页"
+
+        onButtonClicked: {
+            console.log("Jump to", root_item.itemUrl)
+            Qt.openUrlExternally(root_item.itemUrl)
+        }
+    }
+
 
     Button{
         id: downloadall_button
@@ -212,7 +231,7 @@ Item {
         height: 40
         font.pointSize: 12
         font.family: "微软雅黑"
-        color: "#222222"
+        color: "#EEEEEE"
         text: "Title"
         verticalAlignment:Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

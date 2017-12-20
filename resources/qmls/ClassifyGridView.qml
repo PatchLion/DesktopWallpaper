@@ -4,7 +4,7 @@ GridView{
     id: grid_view_item
 
 
-    signal itemClicked(int currentID, string title);
+    signal itemClicked(int currentID, string title, string itemurl);
 
 
     //property bool isUseReferer: false
@@ -26,9 +26,10 @@ GridView{
         currentID: itemID
         titleString: title
         source: image
+        itemUrl: sourcePage
 
         onItemClicked: {
-            grid_view_item.itemClicked(currentID, titleString);
+            grid_view_item.itemClicked(currentID, titleString, itemUrl);
         }
     }
 }

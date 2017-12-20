@@ -90,9 +90,9 @@ function resolvePageData(items_data, referer)
                 var item = childlist[j];
 
                 var image_url = (referer ? safeUrl:"")+item.image
-                console.log(item.id, image_url, item.name);
+                console.log(item.id, image_url, item.name, item.source);
 
-                model_data.push({"itemID": item.id, "image": image_url, "title": item.name});
+                model_data.push({"itemID": item.id, "image": image_url, "title": item.name, "sourcePage":item.source});
 
                 if (limit > 0 && j>=(limit-1))
                 {

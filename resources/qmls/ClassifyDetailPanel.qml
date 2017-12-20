@@ -8,7 +8,7 @@ import "./Global.js" as Global
 Item {
     id: root_item
 
-    signal itemClicked(int currentID, string title);
+    signal itemClicked(int currentID, string title, string itemurl);
 
     signal backButtonClicked();
     //property alias model: grid_view_model
@@ -57,7 +57,7 @@ Item {
             }
 
             onItemClicked: {
-                root_item.itemClicked(currentID, title);
+                root_item.itemClicked(currentID, title,itemurl);
             }
 
 
