@@ -12,10 +12,6 @@ Rectangle{
     signal moreImageByClassifyID(int classifyID); //更多
     signal singelImageGroupClicked(int itemID, string title); //点击图片组
 
-
-    property var contentlist
-    property var pagebean
-
     onClassifyIDChanged: {
         console.log("-->ID changed to ", classifyID);
 
@@ -28,7 +24,7 @@ Rectangle{
         onItemsByClassifyIDResponse: {
             if(root_item.classifyID == classifyID)
             {
-                var result = Global.resolvePageData(data, 6);
+                var result = Global.resolvePageData(data);
 
                 if(result[0])
                 {

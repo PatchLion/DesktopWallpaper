@@ -29,6 +29,7 @@ void APIRequest::requestItemsByClassifyID(int classifyID, int pageindex)
     QVariantList args;
     args<<classifyID;
     args<<pageindex;
+    qDebug() << "Request items by classify and pageindex:" << classifyID << " " << pageindex;
     doRequest(RequestType_ItemsByClassifyID, args);
 }
 
@@ -59,6 +60,11 @@ void APIRequest::startDownload(const QString &url, const QString &destDir)
         doRequest(RequestType_Download, args);
         g_downloadInfo[url] = destDir;
     }
+}
+
+QString APIRequest::refererUrl() const
+{
+    return kDefaultHost + kAPISafe;
 }
 
 void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
@@ -114,7 +120,7 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     }
 
     QNetworkRequest request(url);
-    request.setRawHeader("Referer", "http://www.mzitu.com/");
+    //request.setRawHeader("Referer", "http://www.mzitu.com/");
     QNetworkReply* reply = m_network.get(request);
 
     reply->setProperty(RequestTypeRole, requestType);

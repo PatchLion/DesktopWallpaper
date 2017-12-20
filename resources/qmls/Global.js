@@ -1,6 +1,7 @@
 .pragma library
 
 var mainForm = null; //主页面
+var safeUrl = ""; //反防盗链url
 
 //解析api标准格式数据
 function resolveStandardData(standData)
@@ -88,7 +89,7 @@ function resolvePageData(items_data)
 
                 console.log(item.id, item.image, item.classify, item.name);
 
-                model_data.push({"itemID": item.id, "image": item.image, "title": item.name});
+                model_data.push({"itemID": item.id, "image": safeUrl+item.image, "title": item.name});
 
             }
 
@@ -126,7 +127,7 @@ function resolveItemsDetailData(images_data)
 
                 //console.log(item.id, item.image, item.classify, item.name);
 
-                model_data.push({ "image": item});
+                model_data.push({ "image": safeUrl+item});
             }
 
             return [true, model_data];

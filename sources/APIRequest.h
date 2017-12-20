@@ -39,6 +39,9 @@ public:
     //发起下载请求
     Q_INVOKABLE void startDownload(const QString& url, const QString& destDir);
 
+    //反防盗链地址
+    Q_INVOKABLE QString refererUrl() const;
+
 private:
     //发起api请求
     void doRequest(RequestType apitype, const QVariantList& args = QVariantList());
