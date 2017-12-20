@@ -7,6 +7,7 @@ GridView{
     signal itemClicked(int currentID, string title);
 
 
+    //property bool isUseReferer: false
     property int rowCount: 3
     property int columnCount: 2
 

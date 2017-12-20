@@ -29,10 +29,12 @@ StackView {
                 classifyName: name
                 width: 500
                 height: imageClassifyList.height
+                isUseReferer: referer
 
                 onMoreImageByClassifyID: {
                     root_item.push(classify_more_panel_componet);
 
+                    root_item.currentItem.isUseReferer = isUseReferer;
                     root_item.currentItem.classifyID = classifyID;
                     root_item.currentItem.grid_view_model.clear();
                     root_item.currentItem.grid_view_model.append();
@@ -40,6 +42,7 @@ StackView {
 
                 onSingelImageGroupClicked: {
                     root_item.push(image_detail_panel_component);
+                    root_item.currentItem.isUseReferer = isUseReferer;
                     root_item.currentItem.title = title;
                     root_item.currentItem.itemID = itemID;
                 }
@@ -98,6 +101,8 @@ StackView {
 
             onItemClicked: {
                 root_item.push(image_detail_panel_component);
+
+                root_item.currentItem.isUseReferer = isUseReferer;
                 root_item.currentItem.title = title;
                 root_item.currentItem.itemID = currentID;
             }

@@ -51,9 +51,9 @@ function resolveClassifiesData(json_string)
             {
                 var classify = childlist[j];
 
-                console.log(classify.id, classify.name);
+                console.log(classify.id, classify.name, classify.referer);
 
-                model_data.push({"id": classify.id, "name":classify.name});
+                model_data.push({"id": classify.id, "name":classify.name, "referer":classify.referer});
             }
 
             return [true, model_data];
@@ -70,7 +70,7 @@ function resolveClassifiesData(json_string)
 /*
   解析图片分组数据
 */
-function resolvePageData(items_data)
+function resolvePageData(items_data, referer)
 {
     var json_obj = resolveStandardData(items_data);
 
@@ -87,9 +87,10 @@ function resolvePageData(items_data)
             {
                 var item = childlist[j];
 
-                console.log(item.id, item.image, item.classify, item.name);
+                var image_url = (referer ? safeUrl:"")+item.image
+                console.log(item.id, image_url, item.name);
 
-                model_data.push({"itemID": item.id, "image": safeUrl+item.image, "title": item.name});
+                model_data.push({"itemID": item.id, "image": image_url, "title": item.name});
 
             }
 
@@ -107,7 +108,7 @@ function resolvePageData(items_data)
 /*
   解析图片分组中的图片数据
 */
-function resolveItemsDetailData(images_data)
+function resolveItemsDetailData(images_data, referer)
 {
     var json_obj = resolveStandardData(images_data);
 
@@ -125,9 +126,12 @@ function resolveItemsDetailData(images_data)
             {
                 var item = childlist[j];
 
-                //console.log(item.id, item.image, item.classify, item.name);
 
-                model_data.push({ "image": safeUrl+item});
+
+                var image_url = (referer ? safeUrl:"")+item
+
+                console.log("image_url:", image_url);
+                model_data.push({ "image": image_url});
             }
 
             return [true, model_data];

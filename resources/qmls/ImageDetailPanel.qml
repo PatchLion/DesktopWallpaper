@@ -7,17 +7,20 @@ import "./Global.js" as Global
 Item {
     id: root_item
 
+    property bool isUseReferer: false
     property alias title: text_item.text
     property int itemID: -1
     //property alias model: images_list_model
 
     signal backButtonClicked();
 
+
+
     APIRequest{
         id: downloader
 
         onItemsDetailResponse: {
-            var result = Global.resolveItemsDetailData(data);
+            var result = Global.resolveItemsDetailData(data, root_item.isUseReferer);
 
             if(result[0])
             {

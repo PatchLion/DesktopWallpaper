@@ -6,6 +6,7 @@ Rectangle{
     id: root_item
     property int classifyID: -1
     property string classifyName: ""
+    property bool isUseReferer: false
 
     color: Qt.rgba(0.8, 0.8, 0.8, 0.2)
 
@@ -24,7 +25,7 @@ Rectangle{
         onItemsByClassifyIDResponse: {
             if(root_item.classifyID == classifyID)
             {
-                var result = Global.resolvePageData(data);
+                var result = Global.resolvePageData(data, root_item.isUseReferer);
 
                 if(result[0])
                 {

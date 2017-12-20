@@ -15,11 +15,13 @@ Item {
     property int classifyID: -1
     property int currentPageIndex: 1
 
+
+    property bool isUseReferer: false
     APIRequest{
         id:api_request
 
         onItemsByClassifyIDResponse: {
-            var result = Global.resolvePageData(data)
+            var result = Global.resolvePageData(data, isUseReferer)
             if(result[0])
             {
                 //grid_view_model.clear();
