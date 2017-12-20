@@ -32,7 +32,7 @@ FramelessAndMoveableWindow {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.top
-            height: 45
+            height: 30
 
             Image{
                 id: icon_image
@@ -117,7 +117,7 @@ FramelessAndMoveableWindow {
 
         WallpaperList{
             anchors.fill: parent
-            anchors.topMargin: 50
+            anchors.topMargin: 35
             anchors.leftMargin: 5
             anchors.rightMargin: 5
             anchors.bottomMargin: 5
