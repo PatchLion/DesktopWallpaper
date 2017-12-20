@@ -52,18 +52,15 @@ Item {
         id: image_area
 
         anchors.fill: parent
-        anchors.topMargin: 40
-        anchors.bottomMargin: 5
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
 
-        color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
+
+        color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
         ListView{
             id: listview_item
             anchors.fill: parent
 
-            spacing: 20
+            spacing: 5
 
             clip: true
 
@@ -146,98 +143,109 @@ Item {
         }
     }
 
-    Button{
-        id: back_button
+    Item{
+        id: top_area
+
         anchors.left: parent.left
-        anchors.leftMargin: 5
         anchors.top: parent.top
-        anchors.topMargin: 5
-        width: 100
-        height: 30
-        buttonText: "返回"
-        onButtonClicked: {
-            root_item.backButtonClicked();
-        }
-    }
-
-    Button{
-
-        id: link_button
-
-        anchors.right: downloadall_button.left
-        anchors.rightMargin: 10
-        anchors.bottom: downloadall_button.bottom
-        width: 120
-        height: 30
-        buttonText: "跳转到源网页"
-
-        onButtonClicked: {
-            console.log("Jump to", root_item.itemUrl)
-            Qt.openUrlExternally(root_item.itemUrl)
-        }
-    }
-
-
-    Button{
-        id: downloadall_button
         anchors.right: parent.right
-        anchors.rightMargin: 5
-        anchors.top: parent.top
-        anchors.topMargin: 5
-        width: 100
+
         height: 30
-        buttonText: "下载所有"
 
-        Component{
-            id: dir_dialog_component
-            FileDialog
-            {
-                id: dir_dialog
-
-                title: "Please choose a directory"
-                selectFolder: true
-                selectExisting: true
-                folder: shortcuts.pictures
-
-                onAccepted: {
-                    var dest = fileUrl;
-                    //Toast.showToast(Global.mainForm, "开始下载所有图片到: "+dest);
-
-                    console.log(images_list_model.count)
-                    for(var i = 0; i<images_list_model.count; i++)
-                    {
-                        var obj = images_list_model.get(i);
-                        if(obj)
-                        {
-                            var image = obj["image"];
-                            var destpath = fileUrl+ "/" + Global.fixedDirName(root_item.title) +"/"+i+".png";
-                            console.log(image, destpath);
-                            downloader.startDownload(image, destpath);
-                        }
-
-                    }
-                }
-
-                Component.onCompleted: visible=true
+        Button{
+            id: back_button
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            width: 60
+            height: 20
+            buttonText: "返回"
+            onButtonClicked: {
+                root_item.backButtonClicked();
             }
         }
 
-        onButtonClicked: {
-            var dir_dialog = dir_dialog_component.createObject(root_item);
+        Button{
+
+            id: link_button
+
+            anchors.right: downloadall_button.left
+            anchors.rightMargin: 10
+            anchors.bottom: downloadall_button.bottom
+            width: 100
+            height: 20
+            buttonText: "跳转到源网页"
+
+            onButtonClicked: {
+                console.log("Jump to", root_item.itemUrl)
+                Qt.openUrlExternally(root_item.itemUrl)
+            }
         }
-    }
-    Text{
-        id: text_item
-        height: 40
-        font.pointSize: 12
-        font.family: "微软雅黑"
-        color: "#EEEEEE"
-        text: "Title"
-        verticalAlignment:Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
 
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: back_button.verticalCenter
-    }
 
+        Button{
+            id: downloadall_button
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            width: 80
+            height: 20
+            buttonText: "下载所有"
+
+            Component{
+                id: dir_dialog_component
+                FileDialog
+                {
+                    id: dir_dialog
+
+                    title: "Please choose a directory"
+                    selectFolder: true
+                    selectExisting: true
+                    folder: shortcuts.pictures
+
+                    onAccepted: {
+                        var dest = fileUrl;
+                        //Toast.showToast(Global.mainForm, "开始下载所有图片到: "+dest);
+
+                        console.log(images_list_model.count)
+                        for(var i = 0; i<images_list_model.count; i++)
+                        {
+                            var obj = images_list_model.get(i);
+                            if(obj)
+                            {
+                                var image = obj["image"];
+                                var destpath = fileUrl+ "/" + Global.fixedDirName(root_item.title) +"/"+i+".png";
+                                console.log(image, destpath);
+                                downloader.startDownload(image, destpath);
+                            }
+
+                        }
+                    }
+
+                    Component.onCompleted: visible=true
+                }
+            }
+
+            onButtonClicked: {
+                var dir_dialog = dir_dialog_component.createObject(root_item);
+            }
+        }
+        Text{
+            id: text_item
+            height: 30
+            font.pointSize: 12
+            font.family: "微软雅黑"
+            color: "#EEEEEE"
+            text: "Title"
+            verticalAlignment:Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: back_button.verticalCenter
+        }
+
+    }
 }
+

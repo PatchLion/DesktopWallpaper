@@ -39,15 +39,14 @@ Item {
         id: image_area
 
         anchors.fill: parent
-        anchors.topMargin: 40
-        anchors.bottomMargin: 5
-        anchors.leftMargin: 5
-        anchors.rightMargin: 5
+        anchors.topMargin: 1
 
-        color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
+        color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
         ClassifyGridView{
             anchors.fill: parent
+
+            anchors.topMargin: 35
             columnCount: 3
 
             flow: GridView.FlowTopToBottom
@@ -73,19 +72,32 @@ Item {
         }
     }
 
-    Button{
-        id: back_button
+    Item{
+
+        id: top_area
         anchors.left: parent.left
-        anchors.leftMargin: 5
-        anchors.top: parent.top
-        anchors.topMargin: 5
-        width: 100
+        anchors.right: parent.right
+        anchors.top:parent.top
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
         height: 30
-        buttonText: "返回"
-        onButtonClicked: {
-            root_item.backButtonClicked();
+
+        Button{
+            id: back_button
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            width: 60
+            height: 20
+            buttonText: "返回"
+            onButtonClicked: {
+                root_item.backButtonClicked();
+            }
         }
     }
+
+
 
 
 }

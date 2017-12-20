@@ -116,11 +116,11 @@ FramelessAndMoveableWindow {
         }
 
         WallpaperList{
-            anchors.fill: parent
-            anchors.topMargin: 35
-            anchors.leftMargin: 5
-            anchors.rightMargin: 5
-            anchors.bottomMargin: 5
+            anchors.top: head_area.bottom
+            anchors.margins: 1
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
 
             Component.onCompleted: {
                 Global.mainForm = this;

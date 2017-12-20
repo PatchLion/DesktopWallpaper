@@ -12,9 +12,9 @@ StackView {
         id: imageClassifyList_compnent
         ListView{
             id: imageClassifyList
-            anchors.margins: 10
+            //anchors.margins: 10
             orientation: ListView.Horizontal
-            spacing: 20
+            spacing: 2
             clip: true
 
 
@@ -83,7 +83,6 @@ StackView {
         id: image_detail_panel_component
         ImageDetailPanel{
             id: image_detail_panel
-            anchors.margins: 10
 
             onBackButtonClicked: {
                 root_item.pop();

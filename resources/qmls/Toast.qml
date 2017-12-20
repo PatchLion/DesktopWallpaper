@@ -9,6 +9,8 @@ Rectangle {
     radius: 8
     color: "#606060"
 
+    property alias timerRunning: showTimer.running
+
     antialiasing: true
     Text{
         id: toast_text

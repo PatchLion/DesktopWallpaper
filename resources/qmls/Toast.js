@@ -6,7 +6,7 @@ function showToast(parent, text) {
     com = Qt.createComponent("Toast.qml")
     if(com.status === Component.Ready)
     {
-        var toast = com.createObject(parent, {"anchors.horizontalCenter":parent.horizontalCenter, "anchors.bottomMargin": parent.height/5, "anchors.bottom": parent.bottom, "text": text})
+        var toast = com.createObject(parent, {"timerRunning": true, "anchors.horizontalCenter":parent.horizontalCenter, "anchors.bottomMargin": parent.height/5, "anchors.bottom": parent.bottom, "text": text})
     }
     else
     {

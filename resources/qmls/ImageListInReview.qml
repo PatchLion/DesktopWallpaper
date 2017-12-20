@@ -8,9 +8,9 @@ Rectangle{
     property string classifyName: ""
     property bool isUseReferer: false
 
-    color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
+    color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
-    radius: 5
+    radius: 3
 
     signal moreImageByClassifyID(int classifyID); //更多
     signal singelImageGroupClicked(int itemID, string title, string itemurl); //点击图片组
@@ -41,43 +41,56 @@ Rectangle{
         }
     }
 
-    Text{
-        id: text_item
+    Item{
+        id: top_area
+
         anchors.left: parent.left
-        anchors.leftMargin: 25
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.rightMargin: 10
         height: 40
-        font.pointSize: 10
-        font.family: "微软雅黑"
-        color: "#EEEEEE"
-        text: classifyName
-        verticalAlignment:Text.AlignVCenter
-    }
 
-    Button{
-        anchors.right: parent.right
-        anchors.rightMargin: 25
-        anchors.verticalCenter: text_item.verticalCenter
 
-        buttonText: "更多"
-
-        onButtonClicked: {
-            root_item.moreImageByClassifyID(root_item.classifyID);
+        Text{
+            id: text_item
+            anchors.left: parent.left
+            anchors.leftMargin: 25
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            height: 30
+            font.pointSize: 10
+            font.family: "微软雅黑"
+            color: "#EEEEEE"
+            text: classifyName
+            verticalAlignment:Text.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
         }
+
+        Button{
+            anchors.right: parent.right
+            anchors.rightMargin: 25
+            anchors.verticalCenter: parent.verticalCenter
+
+            buttonText: "更多"
+            width: 60
+            height: 20
+
+            onButtonClicked: {
+                root_item.moreImageByClassifyID(root_item.classifyID);
+            }
+        }
+
     }
 
     ClassifyGridView{
         id: grid_view_item
 
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 5
         anchors.right: parent.right
-        anchors.rightMargin: 10
-        anchors.top: text_item.bottom
+        anchors.rightMargin: 5
+        anchors.top: top_area.bottom
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
+        anchors.bottomMargin: 5
 
         rowCount: 3
         columnCount: 2
