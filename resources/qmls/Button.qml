@@ -7,7 +7,6 @@ Rectangle{
     property alias buttonText: text_item.text
     property alias isContainMouse: mouse_area.containsMouse
 
-
     signal buttonClicked();
 
     color: mouse_area.containsMouse ? "#666666" : "#888888"
@@ -32,6 +31,7 @@ Rectangle{
         onClicked: {
             root_item.buttonClicked();
         }
+
         hoverEnabled: true
     }
 }

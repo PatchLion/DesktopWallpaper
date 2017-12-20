@@ -95,9 +95,7 @@ Item {
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
 
-                        onPositionChanged: {
-                            download_button.visible = true
-                        }
+
                     }
 
                     Button{
@@ -112,7 +110,7 @@ Item {
                         height: 30
                         buttonText: "下载"
 
-                        visible:(image_mouse_area.containsMouse || isContainMouse)
+                        visible: (image_mouse_area.containsMouse || isContainMouse)
 
                         Component{
                             id: file_dialog_component
