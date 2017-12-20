@@ -8,7 +8,9 @@ Rectangle{
     property string classifyName: ""
     property bool isUseReferer: false
 
-    color: Qt.rgba(0.8, 0.8, 0.8, 0.2)
+    color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
+
+    radius: 5
 
     signal moreImageByClassifyID(int classifyID); //更多
     signal singelImageGroupClicked(int itemID, string title); //点击图片组
@@ -25,7 +27,7 @@ Rectangle{
         onItemsByClassifyIDResponse: {
             if(root_item.classifyID == classifyID)
             {
-                var result = Global.resolvePageData(data, root_item.isUseReferer);
+                var result = Global.resolvePageData(data, root_item.isUseReferer, grid_view_item.rowCount*grid_view_item.columnCount);
 
                 if(result[0])
                 {
@@ -49,7 +51,7 @@ Rectangle{
         height: 40
         font.pointSize: 10
         font.family: "微软雅黑"
-        color: "#444444"
+        color: "#EEEEEE"
         text: classifyName
         verticalAlignment:Text.AlignVCenter
     }

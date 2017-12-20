@@ -9,7 +9,9 @@ Window {
     visibility: Window.Windowed
     width: 800
     height: 600
-    title: qsTr("Desktop Wallpaper")
+    title: qsTr("Beauty Finder")
+
+    color: "black"
 
     APIRequest{
         id: api_reqeuest
@@ -21,7 +23,8 @@ Window {
 
 
     WallpaperList{
-        anchors.fill: parent;
+        anchors.fill: parent
+        anchors.margins: 5
 
         Component.onCompleted: {
             Global.mainForm = this;

@@ -83,6 +83,8 @@ function resolvePageData(items_data, referer)
             var model_data = [];
             var childlist = json_obj[3].items;
 
+            var limit = arguments[2] ? arguments[2] : -1
+
             for(var j = 0; j<childlist.length; j++)
             {
                 var item = childlist[j];
@@ -92,6 +94,10 @@ function resolvePageData(items_data, referer)
 
                 model_data.push({"itemID": item.id, "image": image_url, "title": item.name});
 
+                if (limit > 0 && j>=(limit-1))
+                {
+                    break;
+                }
             }
 
             return [true, model_data];

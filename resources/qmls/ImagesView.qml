@@ -38,8 +38,10 @@ Rectangle{
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             height: 40
+            border.color: Qt.rgba(1, 1, 1, 0.5)
+            border.width: 0
 
-            color: Qt.rgba(0, 0, 0, 0.6)
+            color: Qt.rgba(1, 1, 1, 0.5)
             Text{
                 id: text_item
                 anchors.fill:parent
@@ -52,6 +54,8 @@ Rectangle{
             }
         }
     }
+
+    color: "transparent"
 
     border.color: mouse_area.containsMouse ? "#1E90FF" : "transparent"
 

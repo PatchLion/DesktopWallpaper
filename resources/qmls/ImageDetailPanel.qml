@@ -55,7 +55,7 @@ Item {
         anchors.leftMargin: 5
         anchors.rightMargin: 5
 
-        color: "#EEEEEE"
+        color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
 
         ListView{
             id: listview_item
@@ -81,7 +81,7 @@ Item {
                     id: image_item
                     anchors.centerIn: parent
 
-                    height: parent.height * 4 / 5
+                    height: parent.height * 7 / 8
 
                     fillMode: Image.PreserveAspectFit
 

@@ -40,11 +40,11 @@ Item {
 
         anchors.fill: parent
         anchors.topMargin: 40
-        anchors.bottomMargin: 40
+        anchors.bottomMargin: 5
         anchors.leftMargin: 5
         anchors.rightMargin: 5
 
-        color: "#EEEEEE"
+        color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
 
         ClassifyGridView{
             anchors.fill: parent
