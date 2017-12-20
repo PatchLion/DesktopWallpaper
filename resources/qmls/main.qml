@@ -4,15 +4,131 @@ import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
 import "./DataCache.js" as DataCache
 
-Window {
+FramelessAndMoveableWindow {
+    id: root_window
     visible: true
-    visibility: Window.Windowed
+    //visibility: Window.Windowed
     flags: Qt.FramelessWindowHint | Qt.Window
     width: 800
     height: 600
     title: qsTr("Beauty Finder")
 
-    color: "black"
+    color: "transparent"
+
+    dragArea: Qt.rect(0, 0, width, 50)
+
+    Rectangle{
+        color: "black"
+        radius: 5
+        anchors.fill: parent
+
+        smooth: true
+
+        Rectangle{
+            id: head_area
+
+            color: Qt.rgba(1, 1, 1, 0.15)
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: 45
+
+            Image{
+                id: icon_image
+                source: "qrc:/images/icon.png"
+                width: 16
+                height: 16
+                fillMode: Image.PreserveAspectFit
+                anchors.right: app_title_text.left
+                anchors.rightMargin: 10
+
+                smooth:true
+
+                anchors.verticalCenter: parent.verticalCenter
+
+            }
+
+            Text{
+                id: app_title_text
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                color: "white"
+                font.pointSize: 10
+                font.family: "微软雅黑"
+                text: root_window.title
+            }
+
+            Button{
+                id: close_button
+                width: 16
+                height: 16
+                buttonText: "X"
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                radius: 2
+
+                onButtonClicked: {
+                    Qt.quit();
+                }
+            }
+            Button{
+                id: max_normal_button
+                width: close_button.width
+                height: close_button.height
+                buttonText: (root_window.visibility === Window.Maximized) ? "=" : "口"
+                anchors.right: close_button.left
+                anchors.rightMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
+
+                radius: close_button.radius
+
+                onButtonClicked: {
+                    if(root_window.visibility === Window.Maximized)
+                    {
+                        root_window.visibility = Window.Windowed
+                    }
+                    else
+                    {
+                        root_window.visibility = Window.Maximized
+                    }
+                }
+            }
+            Button{
+                id: min_button
+                width: max_normal_button.width
+                height: max_normal_button.height
+                buttonText: "-"
+                anchors.right: max_normal_button.left
+                anchors.rightMargin: 5
+                anchors.top: close_button.top
+
+                radius: close_button.radius
+
+                onButtonClicked: {
+                    root_window.visibility = Window.Minimized
+                }
+            }
+        }
+
+        WallpaperList{
+            anchors.fill: parent
+            anchors.topMargin: 50
+            anchors.leftMargin: 5
+            anchors.rightMargin: 5
+            anchors.bottomMargin: 5
+
+            Component.onCompleted: {
+                Global.mainForm = this;
+            }
+        }
+
+    }
+
 
     APIRequest{
         id: api_reqeuest
@@ -20,16 +136,6 @@ Window {
 
     Component.onCompleted: {
         Global.safeUrl = api_reqeuest.refererUrl();
-    }
-
-
-    WallpaperList{
-        anchors.fill: parent
-        anchors.margins: 5
-
-        Component.onCompleted: {
-            Global.mainForm = this;
-        }
     }
 
 }
