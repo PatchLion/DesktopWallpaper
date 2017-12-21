@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 
 Rectangle{
     id: root_item
@@ -25,7 +25,9 @@ Rectangle{
             fillMode: Image.PreserveAspectCrop
             clip: true
 
+            smooth: true
 
+            mipmap: true
             sourceSize.width: 1024
             sourceSize.height: 1024
 

@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.9
 import QtQuick.Dialogs 1.2
 import DesktopWallpaper.APIRequest 1.0
 import "./Toast.js" as Toast
@@ -63,6 +63,7 @@ Item {
             spacing: 5
 
             clip: true
+            boundsBehavior: Flickable.StopAtBounds
 
             orientation: ListView.Horizontal
 
@@ -73,7 +74,40 @@ Item {
             delegate: Item{
 
                 height: listview_item.height
-                width: image_item.width
+                width: image_item.status === Image.Ready ? image_item.width : loadding_image.width
+
+                visible: !(image_item.status === Image.Error || image_item.status === Image.Null)
+
+                Rectangle{
+                    id: loadding_image
+
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 10
+
+                    height: image_item.height
+
+                    visible: !image_item.visible
+
+                    width: 300
+
+                    color: Qt.rgba(0.3, 0.3, 0.3, 0.5)
+
+                    Text{
+                        text: qsTr("Loadding......")
+
+                        anchors.centerIn: parent
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+
+                        color: "white"
+
+                        font.pointSize: 11
+                        font.family: "微软雅黑"
+
+                    }
+
+
+                }
 
                 Image{
 
@@ -82,9 +116,17 @@ Item {
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 10
 
+                    cache: true
+
+                    smooth: false
+                    mipmap: false
+
+
                     height: parent.height * 0.93
 
-                    fillMode: Image.PreserveAspectFit
+                    visible: status === Image.Ready
+
+                    fillMode: Image.PreserveAspectCrop
 
                     sourceSize.height: height
 
