@@ -1,10 +1,10 @@
-import QtQuick 2.0
-import QtQuick.Window 2.0
+import QtQuick 2.9
+import QtQuick.Window 2.3
 
 Window {
     id: frameless_moveable_window
     flags: Qt.FramelessWindowHint | Qt.Window
-
+    visibility: Window.Windowed
     color: "transparent"
 
     property var dragArea: Qt.rect(0, 0, width, height)

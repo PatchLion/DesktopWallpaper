@@ -1,5 +1,5 @@
 import QtQuick 2.9
-import QtQuick.Window 2.2
+import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
 import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
@@ -7,12 +7,12 @@ import "./Global.js" as Global
 FramelessAndMoveableWindow {
     id: root_window
     visible: true
-
-    width: 800
-    height: 600
+    width: 1200
+    height: 800
     title: qsTr("Beauty Finder")
     color: "transparent"
     dragArea: Qt.rect(0, 0, width, 50)
+    //visibility: Window.Windowed
 
 
 

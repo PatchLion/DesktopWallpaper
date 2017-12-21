@@ -31,7 +31,7 @@ Item {
         }
 
         onDownloadFinished: {
-            Toast.showToast(root_item, url+" downloaded!");
+            //Toast.showToast(root_item, url+" downloaded!");
         }
 
         onApiRequestError: {
@@ -172,7 +172,7 @@ Item {
                                 onAccepted: {
                                     var source = image_item.source;
                                     var dest = fileUrl;
-                                    Toast.showToast(root_item, "开始下载: " + source + "\n到: "+dest);
+                                    Toast.showToast(root_item, "开始下载图片到: "+dest);
                                     downloader.startDownload(source, dest);
                                 }
 
