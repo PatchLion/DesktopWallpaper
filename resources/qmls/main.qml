@@ -8,7 +8,7 @@ FramelessAndMoveableWindow {
     id: root_window
     visible: true
     width: 1200
-    height: 800
+    height: 700
     title: qsTr("Beauty Finder")
     color: "transparent"
     dragArea: Qt.rect(0, 0, width, 50)
