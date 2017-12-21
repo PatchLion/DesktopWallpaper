@@ -11,8 +11,8 @@ Rectangle{
     signal itemClicked(string currentID, string itemurl);
 
     Item{
-        width: parent.width * 9/10
-        height: parent.height * 9/10
+        width: parent.width * 0.95
+        height: parent.height * 0.95
         //color: "red"
         anchors.centerIn: parent
 
@@ -38,8 +38,7 @@ Rectangle{
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             height: 40
-            border.color: Qt.rgba(1, 1, 1, 0.5)
-            border.width: 0
+            border.color: color
 
             color: Qt.rgba(1, 1, 1, 0.5)
             Text{

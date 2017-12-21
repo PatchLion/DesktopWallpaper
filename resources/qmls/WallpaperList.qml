@@ -12,9 +12,9 @@ StackView {
         id: imageClassifyList_compnent
         ListView{
             id: imageClassifyList
-            //anchors.margins: 10
+            anchors.margins: 10
             orientation: ListView.Horizontal
-            spacing: 2
+            spacing: 4
             clip: true
 
 
@@ -56,7 +56,9 @@ StackView {
                 onClassifiesResponse: {
                     //console.log("Classifies data:", data);
 
-                    var result = Global.resolveClassifiesData(data);
+                    var result = Global.runFuncWithUseTime(Global.resolveClassifiesData, "Global.resolveClassifiesData", data);
+
+                    //console.log("UseTime:", start, end,  end-start);
 
                     if(result[0])
                     {
@@ -83,6 +85,7 @@ StackView {
         id: image_detail_panel_component
         ImageDetailPanel{
             id: image_detail_panel
+            anchors.margins: 10
 
             onBackButtonClicked: {
                 root_item.pop();

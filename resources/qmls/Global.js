@@ -3,13 +3,32 @@
 var mainForm = null; //主页面
 var safeUrl = ""; //反防盗链url
 
+//函数运行计时
+function runFuncWithUseTime(func, funcname){
+    var start = new Date().getTime();//起始时间
+    var pars = [];
+    for (var i = 0; i<arguments.length; i++){
+        pars.push(arguments[i]);
+    }
+
+    //console.log("runFuncWithUseTime arguments:", pars, typeof(pars), arguments.length);
+    pars.splice(0, 2);
+
+    //console.log("runFuncWithUseTime->pars:", pars);
+    var result = func.apply(this, pars);
+    var end = new Date().getTime();//接受时间
+
+    console.log("===> Run", "<"+funcname+">", "use time(s):", (end-start)/1000,"(", start/1000, ",", end/1000, ")");
+    return result
+}
+
 //解析api标准格式数据
 function resolveStandardData(standData)
 {
-    console.log("Resolve standard data:", standData);
+    //console.log("Resolve standard data:", standData);
     if(standData !== undefined)
     {
-        var json_obj = JSON.parse(standData);
+        var json_obj = runFuncWithUseTime(JSON.parse, "JSON.parse", standData);
 
         if(json_obj !== null)
         {
@@ -51,7 +70,7 @@ function resolveClassifiesData(json_string)
             {
                 var classify = childlist[j];
 
-                console.log(classify.id, classify.name, classify.referer);
+                //console.log(classify.id, classify.name, classify.referer);
 
                 model_data.push({"id": classify.id, "name":classify.name, "referer":classify.referer});
             }
@@ -90,7 +109,7 @@ function resolvePageData(items_data, referer)
                 var item = childlist[j];
 
                 var image_url = (referer ? safeUrl:"")+item.image
-                console.log(item.id, image_url, item.name, item.source);
+                //console.log(item.id, image_url, item.name, item.source);
 
                 model_data.push({"itemID": item.id, "image": image_url, "title": item.name, "sourcePage":item.source});
 

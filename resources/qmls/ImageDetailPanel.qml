@@ -78,9 +78,11 @@ Item {
                 Image{
 
                     id: image_item
-                    anchors.centerIn: parent
+                    //anchors.centerIn: parent
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 10
 
-                    height: parent.height * 7 / 8
+                    height: parent.height * 0.93
 
                     fillMode: Image.PreserveAspectFit
 
@@ -156,8 +158,7 @@ Item {
             id: back_button
             anchors.left: parent.left
             anchors.leftMargin: 5
-            anchors.top: parent.top
-            anchors.topMargin: 5
+            anchors.verticalCenter: parent.verticalCenter
             width: 60
             height: 20
             buttonText: "返回"
@@ -172,7 +173,7 @@ Item {
 
             anchors.right: downloadall_button.left
             anchors.rightMargin: 10
-            anchors.bottom: downloadall_button.bottom
+            anchors.verticalCenter: parent.verticalCenter
             width: 100
             height: 20
             buttonText: "跳转到源网页"
@@ -188,8 +189,7 @@ Item {
             id: downloadall_button
             anchors.right: parent.right
             anchors.rightMargin: 5
-            anchors.top: parent.top
-            anchors.topMargin: 5
+            anchors.verticalCenter: parent.verticalCenter
             width: 80
             height: 20
             buttonText: "下载所有"

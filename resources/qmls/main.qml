@@ -17,7 +17,9 @@ FramelessAndMoveableWindow {
 
     dragArea: Qt.rect(0, 0, width, 50)
 
+
     Rectangle{
+        id: bg_rect
         color: "black"
         radius: 5
         anchors.fill: parent
@@ -115,27 +117,41 @@ FramelessAndMoveableWindow {
             }
         }
 
-        WallpaperList{
-            anchors.top: head_area.bottom
-            anchors.margins: 1
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
 
-            Component.onCompleted: {
-                Global.mainForm = this;
+        Component{
+            id: wallpaper_list_component
+
+            WallpaperList{
+                anchors.top: head_area.bottom
+                anchors.margins: 1
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
             }
+
         }
 
+
     }
-
-
     APIRequest{
         id: api_reqeuest
     }
 
     Component.onCompleted: {
         Global.safeUrl = api_reqeuest.refererUrl();
+        Global.mainForm = this;
+        timer.start()
+    }
+
+    //延时加载图片分类列表
+    Timer{
+        id: timer
+        interval: 10
+        repeat: false
+        running: false
+        onTriggered: {
+            wallpaper_list_component.createObject(bg_rect);
+        }
     }
 
 }
