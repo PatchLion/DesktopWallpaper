@@ -9,6 +9,8 @@ Rectangle {
     radius: 8
     color: "#606060"
 
+    z: 100000
+
     property alias timerRunning: showTimer.running
 
     antialiasing: true

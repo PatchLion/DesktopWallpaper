@@ -1,7 +1,6 @@
 .pragma library
 
-var mainForm = null; //主页面
-var safeUrl = ""; //反防盗链url
+var RootPanel = null; //根页面
 
 //函数运行计时
 function runFuncWithUseTime(func, funcname){
@@ -70,9 +69,9 @@ function resolveClassifiesData(json_string)
             {
                 var classify = childlist[j];
 
-                //console.log(classify.id, classify.name, classify.referer);
+                //console.log(classify.id, classify.name);
 
-                model_data.push({"id": classify.id, "name":classify.name, "referer":classify.referer});
+                model_data.push({"id": classify.id, "name":classify.name});
             }
 
             return [true, model_data];
@@ -89,7 +88,7 @@ function resolveClassifiesData(json_string)
 /*
   解析图片分组数据
 */
-function resolvePageData(items_data, referer)
+function resolvePageData(items_data)
 {
     var json_obj = resolveStandardData(items_data);
 
@@ -108,10 +107,10 @@ function resolvePageData(items_data, referer)
             {
                 var item = childlist[j];
 
-                var image_url = (referer ? safeUrl:"")+item.image
+
                 //console.log(item.id, image_url, item.name, item.source);
 
-                model_data.push({"itemID": item.id, "image": image_url, "title": item.name, "sourcePage":item.source});
+                model_data.push({"itemID": item.id, "image": item.image, "title": item.name, "sourcePage":item.source});
 
                 if (limit > 0 && j>=(limit-1))
                 {
@@ -133,7 +132,7 @@ function resolvePageData(items_data, referer)
 /*
   解析图片分组中的图片数据
 */
-function resolveItemsDetailData(images_data, referer)
+function resolveItemsDetailData(images_data)
 {
     var json_obj = resolveStandardData(images_data);
 
@@ -152,11 +151,8 @@ function resolveItemsDetailData(images_data, referer)
                 var item = childlist[j];
 
 
-
-                var image_url = (referer ? safeUrl:"")+item
-
-                console.log("image_url:", image_url);
-                model_data.push({ "image": image_url});
+                console.log("image_url:", item);
+                model_data.push({ "image": item});
             }
 
             return [true, model_data];

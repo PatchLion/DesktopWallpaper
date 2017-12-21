@@ -7,22 +7,17 @@ import "./Global.js" as Global
 Item {
     id: root_item
 
-    property bool isUseReferer: false
     property alias title: text_item.text
     property int itemID: -1
 
     property string itemUrl: ""
-    //property alias model: images_list_model
-
-    signal backButtonClicked();
-
 
 
     APIRequest{
         id: downloader
 
         onItemsDetailResponse: {
-            var result = Global.resolveItemsDetailData(data, root_item.isUseReferer);
+            var result = Global.resolveItemsDetailData(data);
 
             if(result[0])
             {
@@ -32,11 +27,11 @@ Item {
         }
 
         onDownloadError: {
-            Toast.showToast(Global.mainForm, msg);
+            Toast.showToast(Global.RootPanel, msg);
         }
 
         onDownloadFinished: {
-            Toast.showToast(Global.mainForm, url+" downloaded!");
+            Toast.showToast(Global.RootPanel, url+" downloaded!");
         }
 
         onApiRequestError: {
@@ -59,6 +54,9 @@ Item {
         ListView{
             id: listview_item
             anchors.fill: parent
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            anchors.bottomMargin: 10
 
             spacing: 5
 
@@ -82,7 +80,7 @@ Item {
                     id: loadding_image
 
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 10
+                    //anchors.bottomMargin: 10
 
                     height: image_item.height
 
@@ -117,7 +115,7 @@ Item {
                     id: image_item
                     //anchors.centerIn: parent
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 10
+                    //anchors.bottomMargin: 10
 
                     cache: true
 
@@ -144,7 +142,7 @@ Item {
 
                     }
 
-                    Button{
+                    DefaultButton{
 
                         id: download_button
 
@@ -174,7 +172,7 @@ Item {
                                 onAccepted: {
                                     var source = image_item.source;
                                     var dest = fileUrl;
-                                    Toast.showToast(Global.mainForm, "开始下载: " + source + "\n到: "+dest);
+                                    Toast.showToast(Global.RootPanel, "开始下载: " + source + "\n到: "+dest);
                                     downloader.startDownload(source, dest);
                                 }
 
@@ -196,23 +194,24 @@ Item {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
 
-        height: 30
+        height: 50
 
-        Button{
+        DefaultButton{
             id: back_button
             anchors.left: parent.left
-            anchors.leftMargin: 5
             anchors.verticalCenter: parent.verticalCenter
             width: 60
             height: 20
             buttonText: "返回"
             onButtonClicked: {
-                root_item.backButtonClicked();
+                Global.RootPanel.back()
             }
         }
 
-        Button{
+        DefaultButton{
 
             id: link_button
 
@@ -230,7 +229,7 @@ Item {
         }
 
 
-        Button{
+        DefaultButton{
             id: downloadall_button
             anchors.right: parent.right
             anchors.rightMargin: 5
@@ -280,7 +279,7 @@ Item {
         Text{
             id: text_item
             height: 30
-            font.pointSize: 12
+            font.pointSize: 10
             font.family: "微软雅黑"
             color: "#EEEEEE"
             text: "Title"

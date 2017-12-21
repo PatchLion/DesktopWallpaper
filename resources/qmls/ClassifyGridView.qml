@@ -4,10 +4,6 @@ GridView{
     id: grid_view_item
 
 
-    signal itemClicked(int currentID, string title, string itemurl);
-
-
-    //property bool isUseReferer: false
     property int rowCount: 3
     property int columnCount: 2
 
@@ -27,9 +23,5 @@ GridView{
         titleString: title
         source: image
         itemUrl: sourcePage
-
-        onItemClicked: {
-            grid_view_item.itemClicked(currentID, titleString, itemUrl);
-        }
     }
 }

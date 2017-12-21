@@ -1,5 +1,6 @@
-import QtQuick 2.3
+import QtQuick 2.9
 import QtQuick.Window 2.2
+import QtQuick.Controls 2.2
 import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
 import "./DataCache.js" as DataCache
@@ -7,16 +8,25 @@ import "./DataCache.js" as DataCache
 FramelessAndMoveableWindow {
     id: root_window
     visible: true
-    //visibility: Window.Windowed
-    flags: Qt.FramelessWindowHint | Qt.Window
     width: 800
     height: 600
     title: qsTr("Beauty Finder")
-
     color: "transparent"
-
     dragArea: Qt.rect(0, 0, width, 50)
 
+
+    //分类下更多的items classifyID：分类ID
+    signal showAllItemByClassifyIDPanel(int classifyID, string title);
+
+    //显示图片组详情 itemID: 图片组ID title: 图片组名称 source: 图片组源网址
+    signal showItemDetailsPanel(int itemID, string title, string source);
+
+    //显示搜索界面 keyword：关键词
+    signal showSearchPanel(string keyword);
+
+
+    //回退
+    signal back();
 
     Rectangle{
         id: bg_rect
@@ -26,121 +36,26 @@ FramelessAndMoveableWindow {
 
         smooth: true
 
-        Rectangle{
-            id: head_area
 
-            color: Qt.rgba(1, 1, 1, 0.15)
+        StackView{
+            id: main_stackView
 
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            height: 30
-
-            Image{
-                id: icon_image
-                source: "qrc:/images/icon.png"
-                width: 16
-                height: 16
-                fillMode: Image.PreserveAspectFit
-                anchors.right: app_title_text.left
-                anchors.rightMargin: 10
-
-                smooth:true
-
-                anchors.verticalCenter: parent.verticalCenter
-
-            }
-
-            Text{
-                id: app_title_text
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                color: "white"
-                font.pointSize: 10
-                font.family: "微软雅黑"
-                text: root_window.title
-            }
-
-            Button{
-                id: close_button
-                width: 16
-                height: 16
-                buttonText: "X"
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-
-                anchors.verticalCenter: parent.verticalCenter
-
-                radius: 2
-
-                onButtonClicked: {
-                    Qt.quit();
-                }
-            }
-            Button{
-                id: max_normal_button
-                width: close_button.width
-                height: close_button.height
-                buttonText: (root_window.visibility === Window.Maximized) ? "=" : "口"
-                anchors.right: close_button.left
-                anchors.rightMargin: 5
-                anchors.verticalCenter: parent.verticalCenter
-
-                radius: close_button.radius
-
-                onButtonClicked: {
-                    if(root_window.visibility === Window.Maximized)
-                    {
-                        root_window.visibility = Window.Windowed
-                    }
-                    else
-                    {
-                        root_window.visibility = Window.Maximized
-                    }
-                }
-            }
-            Button{
-                id: min_button
-                width: max_normal_button.width
-                height: max_normal_button.height
-                buttonText: "-"
-                anchors.right: max_normal_button.left
-                anchors.rightMargin: 5
-                anchors.top: close_button.top
-
-                radius: close_button.radius
-
-                onButtonClicked: {
-                    root_window.visibility = Window.Minimized
-                }
-            }
+            anchors.fill: parent
         }
-
-
-        Component{
-            id: wallpaper_list_component
-
-            WallpaperList{
-                anchors.top: head_area.bottom
-                anchors.margins: 1
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-            }
-
-        }
-
-
     }
-    APIRequest{
-        id: api_reqeuest
+
+
+    Component{
+        id: mainpage_component
+
+        MainPage{
+        }
+
     }
 
     Component.onCompleted: {
-        Global.safeUrl = api_reqeuest.refererUrl();
-        Global.mainForm = this;
-        timer.start()
+        Global.RootPanel = root_window;
+        timer.start();
     }
 
     //延时加载图片分类列表
@@ -150,8 +65,44 @@ FramelessAndMoveableWindow {
         repeat: false
         running: false
         onTriggered: {
-            wallpaper_list_component.createObject(bg_rect);
+            main_stackView.push(mainpage_component.createObject(0, {"window": root_window}));
         }
+    }
+
+    //分类详情界面
+    Component{
+        id: classify_more_panel_componet
+        ClassifyDetailPanel{
+            id: classify_more_panel
+        }
+    }
+
+    onBack: {
+        main_stackView.pop();
+    }
+
+    onShowAllItemByClassifyIDPanel: {
+        main_stackView.push(classify_more_panel_componet);
+        main_stackView.currentItem.classifyID = classifyID;
+        main_stackView.currentItem.title = title;
+    }
+
+
+
+    //图片组详情界面
+       Component{
+           id: image_detail_panel_component
+           ImageDetailPanel{
+               id: image_detail_panel
+               anchors.margins: 10
+           }
+       }
+
+    onShowItemDetailsPanel: {
+        main_stackView.push(image_detail_panel_component);
+        main_stackView.currentItem.itemUrl = source
+        main_stackView.currentItem.title = title;
+        main_stackView.currentItem.itemID = itemID;
     }
 
 }

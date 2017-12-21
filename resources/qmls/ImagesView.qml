@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import "./Global.js" as Global
 
 Rectangle{
     id: root_item
@@ -7,8 +8,6 @@ Rectangle{
     property alias source: image_item.source
     property alias titleString: text_item.text
     property string itemUrl: ""
-
-    signal itemClicked(string currentID, string itemurl);
 
     Item{
         width: parent.width * 0.95
@@ -70,7 +69,7 @@ Rectangle{
         cursorShape: Qt.PointingHandCursor
 
         onClicked: {
-            root_item.itemClicked(root_item.currentID, root_item.itemUrl);
+            Global.RootPanel.showItemDetailsPanel(root_item.currentID, text_item.text, root_item.itemUrl);
         }
     }
 }

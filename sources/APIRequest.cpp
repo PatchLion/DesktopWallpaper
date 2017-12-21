@@ -40,6 +40,13 @@ void APIRequest::requestItemsDetailData(int itemID)
     doRequest(RequestType_ItemDetail, args);
 }
 
+void APIRequest::searchKeyWord(const QString &key)
+{
+    QVariantList args;
+    args<<key;
+    doRequest(RequestType_Search, args);
+}
+
 void APIRequest::startDownload(const QString &url, const QString &destDir)
 {
     if(url.isEmpty())
@@ -61,12 +68,12 @@ void APIRequest::startDownload(const QString &url, const QString &destDir)
         g_downloadInfo[url] = destDir;
     }
 }
-
-QString APIRequest::refererUrl() const
+/*
+QString APIRequest::refererUrl()
 {
     return kDefaultHost + kAPISafe;
 }
-
+*/
 void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
 {
 
@@ -104,6 +111,13 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     }
         break;
 
+    case RequestType_Search:
+    {
+        Q_ASSERT(args.size() == 1);
+        Q_ASSERT(args[0].isValid());
+        url += kAPISearch.arg(args[0].toString().toUtf8().toBase64().data());
+    }
+        break;
     case RequestType_ItemsByClassifyID:
     {
         Q_ASSERT(args.size() == 2);
@@ -206,6 +220,22 @@ void APIRequest::onReplyFinished()
             {
 
                 Q_EMIT apiRequestError(kAPIItemsByClassifyIDAndPageIndex.arg(args[0].toInt()).arg(args[1].toInt()), error);
+            }
+        }
+            break;
+
+        case RequestType_Search:
+        {
+            Q_ASSERT(args.size() == 1);
+            Q_ASSERT(args[0].isValid());
+            if(success)
+            {
+                Q_EMIT searchResponse(data);
+            }
+            else
+            {
+
+                Q_EMIT apiRequestError(kAPISearch.arg(args[0].toString().toUtf8().toBase64().data()), error);
             }
         }
             break;

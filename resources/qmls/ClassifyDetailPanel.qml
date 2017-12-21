@@ -8,20 +8,16 @@ import "./Global.js" as Global
 Item {
     id: root_item
 
-    signal itemClicked(int currentID, string title, string itemurl);
-
-    signal backButtonClicked();
-    //property alias model: grid_view_model
     property int classifyID: -1
     property int currentPageIndex: 1
+    property alias title: text_item.text
 
 
-    property bool isUseReferer: false
     APIRequest{
         id:api_request
 
         onItemsByClassifyIDResponse: {
-            var result = Global.resolvePageData(data, isUseReferer)
+            var result = Global.resolvePageData(data)
             if(result[0])
             {
                 //grid_view_model.clear();
@@ -39,7 +35,7 @@ Item {
         id: image_area
 
         anchors.fill: parent
-        anchors.topMargin: 1
+
 
         color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
@@ -47,16 +43,16 @@ Item {
             anchors.fill: parent
 
             anchors.topMargin: 35
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            anchors.bottomMargin: 10
+
             columnCount: 3
 
             flow: GridView.FlowTopToBottom
 
             model: ListModel{
                 id: grid_view_model
-            }
-
-            onItemClicked: {
-                root_item.itemClicked(currentID, title,itemurl);
             }
 
 
@@ -80,20 +76,29 @@ Item {
         anchors.top:parent.top
         anchors.leftMargin: 10
         anchors.rightMargin: 10
-        height: 30
+        height: 50
 
-        Button{
+        DefaultButton{
             id: back_button
             anchors.left: parent.left
             anchors.leftMargin: 5
-            anchors.top: parent.top
-            anchors.topMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
             width: 60
             height: 20
             buttonText: "返回"
             onButtonClicked: {
-                root_item.backButtonClicked();
+                Global.RootPanel.back();
             }
+        }
+
+        Text{
+            id: text_item
+
+            anchors.centerIn: parent
+            font.family: "微软雅黑"
+            font.pointSize: 10
+            color: "white"
+            clip: true
         }
     }
 

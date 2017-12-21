@@ -6,6 +6,7 @@ Rectangle{
 
     property alias buttonText: text_item.text
     property alias isContainMouse: mouse_area.containsMouse
+    property alias buttonTextPointSize: text_item.font.pointSize
 
     signal buttonClicked();
 

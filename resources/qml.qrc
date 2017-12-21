@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qmls/Button.qml</file>
         <file>qmls/ClassifyDetailPanel.qml</file>
         <file>qmls/ClassifyGridView.qml</file>
         <file>qmls/DataCache.js</file>
@@ -11,8 +10,9 @@
         <file>qmls/main.qml</file>
         <file>qmls/Toast.js</file>
         <file>qmls/Toast.qml</file>
-        <file>qmls/WallpaperList.qml</file>
         <file>images/icon.png</file>
         <file>qmls/FramelessAndMoveableWindow.qml</file>
+        <file>qmls/DefaultButton.qml</file>
+        <file>qmls/MainPage.qml</file>
     </qresource>
 </RCC>

@@ -7,6 +7,9 @@
 class APIRequest : public QObject
 {
     Q_OBJECT
+
+    //Q_PROPERTY(QString refererUrl READ refererUrl)
+
 private:
     enum RequestType
     {
@@ -15,6 +18,7 @@ private:
         RequestType_ItemDetail,
         RequestType_Download,
         RequestType_ItemsByClassifyID,
+        RequestType_Search,
     };
 
 
@@ -36,11 +40,14 @@ public:
     //获取单个图片分组数据
     Q_INVOKABLE void requestItemsDetailData(int itemID);
 
+    //搜索关键词
+    Q_INVOKABLE void searchKeyWord(const QString& key);
+
     //发起下载请求
     Q_INVOKABLE void startDownload(const QString& url, const QString& destDir);
 
     //反防盗链地址
-    Q_INVOKABLE QString refererUrl() const;
+    //Q_INVOKABLE static QString refererUrl();
 
 private:
     //发起api请求
@@ -61,6 +68,9 @@ Q_SIGNALS:
 
     //API请求错误
     void apiRequestError(const QString& apiName, QNetworkReply::NetworkError error);
+
+    //搜索完成
+    void searchResponse(const QByteArray& data);
 
     //下载完成
     void downloadFinished(const QString& url);

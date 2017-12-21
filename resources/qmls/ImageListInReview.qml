@@ -6,7 +6,6 @@ Rectangle{
     id: root_item
     property int classifyID: -1
     property string classifyName: ""
-    property bool isUseReferer: false
 
     color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
@@ -27,7 +26,7 @@ Rectangle{
         onItemsByClassifyIDResponse: {
             if(root_item.classifyID == classifyID)
             {
-                var result = Global.runFuncWithUseTime(Global.resolvePageData, "Global.resolvePageData", data, root_item.isUseReferer, grid_view_item.rowCount*grid_view_item.columnCount);
+                var result = Global.runFuncWithUseTime(Global.resolvePageData, "Global.resolvePageData", data, grid_view_item.rowCount*grid_view_item.columnCount);
 
                 if(result[0])
                 {
@@ -65,7 +64,7 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        Button{
+        DefaultButton{
             anchors.right: parent.right
             anchors.rightMargin: 25
             anchors.verticalCenter: parent.verticalCenter
@@ -75,7 +74,8 @@ Rectangle{
             height: 20
 
             onButtonClicked: {
-                root_item.moreImageByClassifyID(root_item.classifyID);
+                //root_item.moreImageByClassifyID(root_item.classifyID);
+                Global.RootPanel.showAllItemByClassifyIDPanel(root_item.classifyID, root_item.classifyName);
             }
         }
 
@@ -97,13 +97,6 @@ Rectangle{
 
         model: ListModel{
             id: grid_view_model
-        }
-
-        onItemClicked: {
-
-            console.log("Item " + currentID + " clicked!");
-
-            root_item.singelImageGroupClicked(currentID, title, itemurl);
         }
     }
 }
