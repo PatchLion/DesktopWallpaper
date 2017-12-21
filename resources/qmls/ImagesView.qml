@@ -6,7 +6,7 @@ Rectangle{
 
     property int currentID: -1
     property alias source: image_item.source
-    property alias titleString: text_item.text
+    property string titleString: ""
     property string itemUrl: ""
 
     Item{
@@ -51,6 +51,7 @@ Rectangle{
                 font.pointSize: 9
                 color: "white"
                 clip: true
+                text: titleString.substring(0, 25)
             }
         }
     }

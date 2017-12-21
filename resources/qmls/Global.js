@@ -85,6 +85,39 @@ function resolveClassifiesData(json_string)
     return [false, []];
 }
 
+function resolveSearchResult(data)
+{
+    //console.log("Search result-->", data);
+    var json_obj = resolveStandardData(data);
+
+    if(json_obj[0])
+    {
+        var code = json_obj[1];
+        var msg = json_obj[2];
+        if(code === 0)
+        {
+            var items = json_obj[3];
+            var model_data = [];
+            for(var i = 0; i<items.length; i++)
+            {
+                //console.log(items[i]);
+                var item = items[i];
+
+
+                //console.log(item.id, image_url, item.name, item.source);
+
+                model_data.push({"itemID": item.id, "image": item.image, "title": item.name, "sourcePage":item.source});
+
+
+            }
+
+            return [true, model_data]
+        }
+    }
+
+    return [false]
+}
+
 /*
   解析图片分组数据
 */

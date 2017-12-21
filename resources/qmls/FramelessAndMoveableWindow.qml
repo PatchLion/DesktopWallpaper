@@ -3,7 +3,7 @@ import QtQuick.Window 2.0
 
 Window {
     id: frameless_moveable_window
-    flags: Qt.FramelessWindowHint | Qt.Window | Qt.WA_TranslucentBackground
+    flags: Qt.FramelessWindowHint | Qt.Window
 
     color: "transparent"
 

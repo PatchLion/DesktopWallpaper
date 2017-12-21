@@ -22,8 +22,20 @@ Rectangle {
     APIRequest{
         id:api_request
 
+        onApiRequestError: {
+            console.warn("Failed to search: ", apiName, "|", error)
+        }
+
         onSearchResponse: {
-            console.log("search--->", data);
+            var result = Global.resolveSearchResult(data);
+
+            if(result[0])
+            {
+                var items = result[1];
+
+                grid_view_model.clear();
+                grid_view_model.append(items);
+            }
         }
     }
 

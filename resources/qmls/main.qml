@@ -3,11 +3,11 @@ import QtQuick.Window 2.2
 import QtQuick.Controls 2.2
 import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
-import "./DataCache.js" as DataCache
 
 FramelessAndMoveableWindow {
     id: root_window
     visible: true
+
     width: 800
     height: 600
     title: qsTr("Beauty Finder")
