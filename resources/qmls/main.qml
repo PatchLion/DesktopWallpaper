@@ -15,6 +15,7 @@ FramelessAndMoveableWindow {
     dragArea: Qt.rect(0, 0, width, 50)
 
 
+
     //分类下更多的items classifyID：分类ID
     signal showAllItemByClassifyIDPanel(int classifyID, string title);
 
@@ -24,9 +25,9 @@ FramelessAndMoveableWindow {
     //显示搜索界面 keyword：关键词
     signal showSearchPanel(string keyword);
 
-
     //回退
     signal back();
+
 
     Rectangle{
         id: bg_rect
@@ -35,7 +36,6 @@ FramelessAndMoveableWindow {
         anchors.fill: parent
 
         smooth: true
-
 
         StackView{
             id: main_stackView

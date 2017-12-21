@@ -15,5 +15,6 @@
         <file>qmls/DefaultButton.qml</file>
         <file>qmls/MainPage.qml</file>
         <file>qmls/SearchPage.qml</file>
+        <file>qmls/SearchControl.qml</file>
     </qresource>
 </RCC>

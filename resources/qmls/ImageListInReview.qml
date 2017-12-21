@@ -26,7 +26,7 @@ Rectangle{
         onItemsByClassifyIDResponse: {
             if(root_item.classifyID == classifyID)
             {
-                var result = Global.runFuncWithUseTime(Global.resolvePageData, "Global.resolvePageData", data, grid_view_item.rowCount*grid_view_item.columnCount);
+                var result = Global.resolvePageData(data, grid_view_item.rowCount*grid_view_item.columnCount);
 
                 if(result[0])
                 {

@@ -5,13 +5,17 @@ Rectangle {
     property alias text: toast_text.text
     width: toast_text.width + 40
     height: 36
-    border.color: "#606060"
+    border.color: "#AAAAAA"
     radius: 8
     color: "#606060"
 
     z: 100000
 
-    property alias timerRunning: showTimer.running
+    function show(){
+        toast.visible = true;
+        toast.opacity = 1.0;
+        showTimer.running = true;
+    }
 
     antialiasing: true
     Text{
@@ -37,7 +41,7 @@ Rectangle {
     }
     Timer{
         id: showTimer
-        interval: 1600
+        interval: 2000
         repeat: false
         running: false
         onTriggered: {

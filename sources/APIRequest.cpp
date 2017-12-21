@@ -230,7 +230,7 @@ void APIRequest::onReplyFinished()
             Q_ASSERT(args[0].isValid());
             if(success)
             {
-                qDebug() << "Search result-->" <<data.data();
+                //qDebug() << "Search result-->" <<data.data();
                 Q_EMIT searchResponse(data);
             }
             else

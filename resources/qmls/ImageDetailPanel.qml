@@ -27,11 +27,11 @@ Item {
         }
 
         onDownloadError: {
-            Toast.showToast(Global.RootPanel, msg);
+            Toast.showToast(root_item, msg);
         }
 
         onDownloadFinished: {
-            Toast.showToast(Global.RootPanel, url+" downloaded!");
+            Toast.showToast(root_item, url+" downloaded!");
         }
 
         onApiRequestError: {
@@ -172,7 +172,7 @@ Item {
                                 onAccepted: {
                                     var source = image_item.source;
                                     var dest = fileUrl;
-                                    Toast.showToast(Global.RootPanel, "开始下载: " + source + "\n到: "+dest);
+                                    Toast.showToast(root_item, "开始下载: " + source + "\n到: "+dest);
                                     downloader.startDownload(source, dest);
                                 }
 
@@ -251,7 +251,7 @@ Item {
 
                     onAccepted: {
                         var dest = fileUrl;
-                        //Toast.showToast(Global.mainForm, "开始下载所有图片到: "+dest);
+                        //Toast.showToast(root_item, "开始下载所有图片到: "+dest);
 
                         console.log(images_list_model.count)
                         for(var i = 0; i<images_list_model.count; i++)

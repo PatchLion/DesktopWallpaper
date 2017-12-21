@@ -134,7 +134,9 @@ function resolvePageData(items_data)
             var model_data = [];
             var childlist = json_obj[3].items;
 
-            var limit = arguments[2] ? arguments[2] : -1
+            var limit = arguments[1] ? arguments[1] : -1
+
+            console.log("Limit ------->", limit)
 
             for(var j = 0; j<childlist.length; j++)
             {

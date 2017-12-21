@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import DesktopWallpaper.APIRequest 1.0
-import "./Toast.js" as Toast
 import "./Global.js" as Global
 
+import "./Toast.js" as Toast
 Rectangle {
 
     id:root_item
@@ -13,6 +13,8 @@ Rectangle {
         root_item.keyword = keyword
         console.log("keyword change to:", keyword);
         api_request.searchKeyWord(keyword);
+
+        Toast.showToast(root_item, "正在搜索中...");
     }
 
     ClassifyDetailPanel{
@@ -24,9 +26,13 @@ Rectangle {
 
         onApiRequestError: {
             console.warn("Failed to search: ", apiName, "|", error)
+
+
+            Toast.showToast(root_item, "搜索失败! 错误代码:"+error);
         }
 
         onSearchResponse: {
+
             var result = Global.resolveSearchResult(data);
 
             if(result[0])
@@ -36,6 +42,9 @@ Rectangle {
                 grid_view_model.clear();
                 grid_view_model.append(items);
             }
+
+
+            Toast.showToast(root_item, "搜索完成");
         }
     }
 
@@ -72,6 +81,25 @@ Rectangle {
             color: "white"
             clip: true
             text: "关键字：" + keyword
+        }
+
+        SearchControl{
+            id: search_button
+
+            width: 160
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+
+
+            smooth: true
+
+            onStartSearch: {
+                if (keyword.length>0){
+                    grid_view_model.clear();
+                    root_item.startToSearch(keyword);
+                }
+            }
         }
     }
 

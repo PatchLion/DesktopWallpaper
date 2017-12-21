@@ -107,93 +107,23 @@ Item {
             }
         }
 
-        DefaultButton{
+        SearchControl{
             id: search_button
-            width: 40
+
+            width: 160
             height: close_button.height
-            buttonText: qsTr("搜索")
             anchors.right: min_button.left
             anchors.rightMargin: 10
+            anchors.verticalCenter: close_button.verticalCenter
 
 
             smooth: true
-            buttonTextPointSize: 8
 
-            radius: close_button.radius
-            anchors.verticalCenter: close_button.verticalCenter
-
-            onButtonClicked: {
-                var keyword = textinput_keyword.text
-                if ( keyword.length>0){
+            onStartSearch: {
+                if (keyword.length>0){
                     //console.log("Search keyword =", keyword)
                     Global.RootPanel.showSearchPanel(keyword);
                 }
-            }
-        }
-
-
-
-        Rectangle{
-            width: 100
-            height: 20
-
-            color: "white"
-
-            anchors.right: search_button.left
-            anchors.rightMargin: 5
-            anchors.verticalCenter: search_button.verticalCenter
-
-
-
-            smooth: true
-
-            Text{
-                id: default_text_item
-                anchors.fill: parent
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-
-                font.pointSize: 9
-                font.family: "微软雅黑"
-                color: "#999999"
-
-
-                smooth: true
-
-                text: " 请输入关键词"
-
-
-                visible: textinput_keyword.text.length === 0
-
-            }
-
-
-            TextInput{
-
-                id: textinput_keyword
-                anchors.fill: parent
-                color: "#666666"
-                selectByMouse: true
-
-                font.pointSize: 9
-                font.family: "微软雅黑"
-
-
-
-                smooth: true
-
-
-                clip: true
-
-                verticalAlignment: TextInput.AlignVCenter
-                horizontalAlignment: TextInput.AlignLeft
-
-                Keys.onPressed: {
-                      if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                          search_button.buttonClicked();
-                      }
-                  }
-
             }
         }
     }
@@ -242,9 +172,6 @@ Item {
             }
 
 
-            onSearchResponse: {
-                console.log("Search result-->", data)
-            }
 
             onApiRequestError: {
                 console.warn("Catch error when reuqest api:", apiName, "code:", error);
