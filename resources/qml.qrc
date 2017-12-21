@@ -14,5 +14,6 @@
         <file>qmls/FramelessAndMoveableWindow.qml</file>
         <file>qmls/DefaultButton.qml</file>
         <file>qmls/MainPage.qml</file>
+        <file>qmls/SearchPage.qml</file>
     </qresource>
 </RCC>

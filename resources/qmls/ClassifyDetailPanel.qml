@@ -39,12 +39,51 @@ Item {
 
         color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
-        ClassifyGridView{
-            anchors.fill: parent
 
-            anchors.topMargin: 35
+        Item{
+
+            id: top_area
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top:parent.top
             anchors.leftMargin: 10
             anchors.rightMargin: 10
+            height: 50
+
+            DefaultButton{
+                id: back_button
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
+                width: 60
+                height: 20
+                buttonText: "返回"
+                onButtonClicked: {
+                    Global.RootPanel.back();
+                }
+            }
+
+            Text{
+                id: text_item
+
+                anchors.centerIn: parent
+                font.family: "微软雅黑"
+                font.pointSize: 11
+                color: "white"
+                clip: true
+            }
+        }
+
+
+
+
+        ClassifyGridView{
+            anchors.top: top_area.bottom
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+            anchors.bottom:  parent.bottom
             anchors.bottomMargin: 10
 
             columnCount: 3
@@ -67,42 +106,6 @@ Item {
             }
         }
     }
-
-    Item{
-
-        id: top_area
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top:parent.top
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-        height: 50
-
-        DefaultButton{
-            id: back_button
-            anchors.left: parent.left
-            anchors.leftMargin: 5
-            anchors.verticalCenter: parent.verticalCenter
-            width: 60
-            height: 20
-            buttonText: "返回"
-            onButtonClicked: {
-                Global.RootPanel.back();
-            }
-        }
-
-        Text{
-            id: text_item
-
-            anchors.centerIn: parent
-            font.family: "微软雅黑"
-            font.pointSize: 10
-            color: "white"
-            clip: true
-        }
-    }
-
-
 
 
 }

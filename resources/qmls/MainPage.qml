@@ -47,8 +47,8 @@ Item {
 
         DefaultButton{
             id: close_button
-            width: 16
-            height: 16
+            width: 18
+            height: 18
             buttonText: "X"
             anchors.right: parent.right
             anchors.rightMargin: 10
@@ -125,7 +125,8 @@ Item {
             onButtonClicked: {
                 var keyword = textinput_keyword.text
                 if ( keyword.length>0){
-                    console.log("Search keyword =", keyword)
+                    //console.log("Search keyword =", keyword)
+                    Global.RootPanel.showSearchPanel(keyword);
                 }
             }
         }
@@ -134,7 +135,7 @@ Item {
 
         Rectangle{
             width: 100
-            height: 18
+            height: 20
 
             color: "white"
 
@@ -247,7 +248,19 @@ Item {
 
 
         Component.onCompleted: {
-            classifies_request.requestClassifiesData();
+            timer.start();
         }
+
+        //延时加载图片分类列表
+        Timer{
+            id: timer
+            interval: 1
+            repeat: false
+            running: false
+            onTriggered: {
+                classifies_request.requestClassifiesData();
+            }
+        }
+
     }
 }

@@ -41,6 +41,8 @@ FramelessAndMoveableWindow {
             id: main_stackView
 
             anchors.fill: parent
+
+            initialItem: mainpage_component
         }
     }
 
@@ -49,24 +51,28 @@ FramelessAndMoveableWindow {
         id: mainpage_component
 
         MainPage{
+            window: root_window
         }
 
     }
 
     Component.onCompleted: {
         Global.RootPanel = root_window;
-        timer.start();
+
     }
 
-    //延时加载图片分类列表
-    Timer{
-        id: timer
-        interval: 10
-        repeat: false
-        running: false
-        onTriggered: {
-            main_stackView.push(mainpage_component.createObject(0, {"window": root_window}));
+    //搜索页面
+    Component{
+        id: search_page_component
+        SearchPage{
+
         }
+    }
+
+    onShowSearchPanel: {
+        main_stackView.push(search_page_component)
+        //console.log("onShowSearchPanel: ", keyword)
+        main_stackView.currentItem.startToSearch(keyword);
     }
 
     //分类详情界面
@@ -74,6 +80,8 @@ FramelessAndMoveableWindow {
         id: classify_more_panel_componet
         ClassifyDetailPanel{
             id: classify_more_panel
+
+
         }
     }
 
