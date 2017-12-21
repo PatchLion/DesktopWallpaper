@@ -90,7 +90,10 @@ Item {
 
                     width: 300
 
-                    color: Qt.rgba(0.3, 0.3, 0.3, 0.5)
+                    color: Qt.rgba(0.3, 0.3, 0.3, 0.3)
+
+                    border.color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
+                    border.width: 1
 
                     Text{
                         text: qsTr("Loadding......")
