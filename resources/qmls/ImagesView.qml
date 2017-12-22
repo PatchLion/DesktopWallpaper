@@ -70,6 +70,7 @@ Rectangle{
         cursorShape: Qt.PointingHandCursor
 
         onClicked: {
+            console.log("Item", root_item.currentID, "clicked!!!")
             Global.RootPanel.showItemDetailsPanel(root_item.currentID, text_item.text, root_item.itemUrl);
         }
     }

@@ -102,7 +102,7 @@ Item {
                 if (contentX >= temp)
                 {
                     root_item.currentPageIndex += 1
-                    api_request.requestItemsByClassifyID(root_item.classify, root_item.currentPageIndex);
+                    api_request.requestItemsByClassify(root_item.classify, root_item.currentPageIndex);
                 }
             }
         }

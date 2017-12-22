@@ -130,7 +130,7 @@ Rectangle {
             if (contentX >= temp)
             {
                 root_item.currentPageIndex += 1
-                api_request.requestItemsByClassifyID(root_item.classifyID, root_item.currentPageIndex);
+                api_request.requestItemsByClassify(root_item.classifyID, root_item.currentPageIndex);
             }
         }
     }
