@@ -4,7 +4,7 @@ import "./Global.js" as Global
 Rectangle{
     id: root_item
 
-    property int currentID: -1
+    property string currentID: ""
     property alias source: image_item.source
     property string titleString: ""
     property string itemUrl: ""

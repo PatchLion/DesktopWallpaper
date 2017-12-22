@@ -4,27 +4,24 @@ import "./Global.js" as Global
 
 Rectangle{
     id: root_item
-    property int classifyID: -1
-    property string classifyName: ""
+    property string classify: ""
 
     color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
     radius: 3
 
-    signal moreImageByClassifyID(int classifyID); //更多
-    signal singelImageGroupClicked(int itemID, string title, string itemurl); //点击图片组
 
-    onClassifyIDChanged: {
-        console.log("-->ID changed to ", classifyID);
+    onClassifyChanged: {
+        console.log("Classify-->", classify);
 
-        items_request.requestItemsByClassifyID(classifyID, 1);
+        items_request.requestItemsByClassify(classify, 1);
     }
 
     APIRequest{
         id: items_request
 
-        onItemsByClassifyIDResponse: {
-            if(root_item.classifyID == classifyID)
+        onItemsByClassifyResponse: {
+            if(root_item.classify == classify)
             {
                 var result = Global.resolvePageData(data, grid_view_item.rowCount*grid_view_item.columnCount);
 
@@ -59,7 +56,7 @@ Rectangle{
             font.pointSize: 10
             font.family: "微软雅黑"
             color: "#EEEEEE"
-            text: classifyName
+            text: classify
             verticalAlignment:Text.AlignVCenter
             anchors.verticalCenter: parent.verticalCenter
         }
@@ -74,8 +71,7 @@ Rectangle{
             height: 20
 
             onButtonClicked: {
-                //root_item.moreImageByClassifyID(root_item.classifyID);
-                Global.RootPanel.showAllItemByClassifyIDPanel(root_item.classifyID, root_item.classifyName);
+                Global.RootPanel.showAllItemByClassifyPanel(root_item.classify);
             }
         }
 

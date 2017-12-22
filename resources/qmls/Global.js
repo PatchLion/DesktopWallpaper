@@ -49,10 +49,11 @@ function resolveStandardData(standData)
 /*
     解析分类数据
     return: [成功标志, 分类信息数组]
-          例如[true, [{"id":0, "name":"分组1"}, {"id":1, "name":"分组2"}]]
+          例如[true, [{"name":"分组1"}, {"name":"分组2"}]]
 */
 function resolveClassifiesData(json_string)
 {
+
     var json_obj = resolveStandardData(json_string);
 
     if(json_obj[0])
@@ -69,9 +70,9 @@ function resolveClassifiesData(json_string)
             {
                 var classify = childlist[j];
 
-                //console.log(classify.id, classify.name);
+                //console.log(classify.name);
 
-                model_data.push({"id": classify.id, "name":classify.name});
+                model_data.push({"name":classify});
             }
 
             return [true, model_data];
@@ -123,6 +124,7 @@ function resolveSearchResult(data)
 */
 function resolvePageData(items_data)
 {
+    console.log("---->", items_data)
     var json_obj = resolveStandardData(items_data);
 
     if(json_obj[0])
@@ -136,16 +138,15 @@ function resolvePageData(items_data)
 
             var limit = arguments[1] ? arguments[1] : -1
 
-            console.log("Limit ------->", limit)
+            //console.log("Limit ------->", limit)
 
             for(var j = 0; j<childlist.length; j++)
             {
                 var item = childlist[j];
 
 
-                //console.log(item.id, image_url, item.name, item.source);
 
-                model_data.push({"itemID": item.id, "image": item.image, "title": item.name, "sourcePage":item.source});
+                model_data.push({"itemID": item.id, "image": item.image, "title": item.title, "sourcePage":item.source});
 
                 if (limit > 0 && j>=(limit-1))
                 {
@@ -153,6 +154,7 @@ function resolvePageData(items_data)
                 }
             }
 
+            console.log("-----", model_data.length)
             return [true, model_data];
         }
         else
@@ -169,6 +171,8 @@ function resolvePageData(items_data)
 */
 function resolveItemsDetailData(images_data)
 {
+
+
     var json_obj = resolveStandardData(images_data);
 
     if(json_obj[0])
@@ -179,14 +183,14 @@ function resolveItemsDetailData(images_data)
         {
             var model_data = [];
 
-            var childlist = json_obj[3];
+            var childlist = json_obj[3].images;
 
             for(var j = 0; j<childlist.length; j++)
             {
                 var item = childlist[j];
 
 
-                console.log("image_url:", item);
+                //console.log("image_url:", item);
                 model_data.push({ "image": item});
             }
 

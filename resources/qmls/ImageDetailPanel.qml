@@ -8,13 +8,13 @@ Item {
     id: root_item
 
     property alias title: text_item.text
-    property int itemID: -1
+    property string itemID: ""
 
     property string itemUrl: ""
 
 
     APIRequest{
-        id: downloader
+        id: api_reqeust
 
         onItemsDetailResponse: {
             var result = Global.resolveItemsDetailData(data);
@@ -40,7 +40,7 @@ Item {
     }
 
     onItemIDChanged: {
-        downloader.requestItemsDetailData(itemID);
+        api_reqeust.requestItemsDetailData(itemID);
     }
 
     Rectangle{
@@ -173,7 +173,7 @@ Item {
                                     var source = image_item.source;
                                     var dest = fileUrl;
                                     Toast.showToast(root_item, "开始下载图片到: "+dest);
-                                    downloader.startDownload(source, dest);
+                                    api_reqeust.startDownload(source, dest);
                                 }
 
                                 Component.onCompleted: visible=true
@@ -262,7 +262,7 @@ Item {
                                 var image = obj["image"];
                                 var destpath = fileUrl+ "/" + Global.fixedDirName(root_item.title) +"/"+i+".png";
                                 console.log(image, destpath);
-                                downloader.startDownload(image, destpath);
+                                api_reqeust.startDownload(image, destpath);
                             }
 
                         }

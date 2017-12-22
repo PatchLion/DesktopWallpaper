@@ -24,16 +24,16 @@ void APIRequest::requestItemsData()
 }
 */
 
-void APIRequest::requestItemsByClassifyID(int classifyID, int pageindex)
+void APIRequest::requestItemsByClassify(const QString& classify, int pageindex)
 {
     QVariantList args;
-    args<<classifyID;
+    args<<classify;
     args<<pageindex;
-    qDebug() << "Request items by classify and pageindex:" << classifyID << " " << pageindex;
-    doRequest(RequestType_ItemsByClassifyID, args);
+    qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
+    doRequest(RequestType_ItemsByClassify, args);
 }
 
-void APIRequest::requestItemsDetailData(int itemID)
+void APIRequest::requestItemsDetailData(const QString& itemID)
 {
     QVariantList args;
     args<<itemID;
@@ -99,7 +99,7 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     {
         Q_ASSERT(args.size() == 1);
         Q_ASSERT(args[0].isValid());
-        url += kAPIItemsDetails.arg(args[0].toInt());
+        url += kAPIItemsDetails.arg(args[0].toString());
     }
         break;
 
@@ -118,12 +118,12 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
         url += kAPISearch.arg(args[0].toString().toUtf8().toBase64().data());
     }
         break;
-    case RequestType_ItemsByClassifyID:
+    case RequestType_ItemsByClassify:
     {
         Q_ASSERT(args.size() == 2);
         Q_ASSERT(args[0].isValid());
         Q_ASSERT(args[1].isValid());
-        url += kAPIItemsByClassifyIDAndPageIndex.arg(args[0].toInt()).arg(args[1].toInt());
+        url += kAPIItemsByClassifyAndPageIndex.arg(args[0].toString()).arg(args[1].toInt());
     }
         break;
     default:
@@ -198,28 +198,28 @@ void APIRequest::onReplyFinished()
             Q_ASSERT(args[0].isValid());
             if(success)
             {
-                Q_EMIT itemsDetailResponse(args[0].toInt(), data);
+                Q_EMIT itemsDetailResponse(args[0].toString(), data);
             }
             else
             {
 
-                Q_EMIT apiRequestError(kAPIItemsDetails.arg(args[0].toInt()), error);
+                Q_EMIT apiRequestError(kAPIItemsDetails.arg(args[0].toString()), error);
             }
         }
             break;
-        case RequestType_ItemsByClassifyID:
+        case RequestType_ItemsByClassify:
         {
             Q_ASSERT(args.size() == 2);
             Q_ASSERT(args[0].isValid());
             Q_ASSERT(args[1].isValid());
             if(success)
             {
-                Q_EMIT itemsByClassifyIDResponse(args[0].toInt(), args[1].toInt(),data);
+                Q_EMIT itemsByClassifyResponse(args[0].toString(), args[1].toInt(),data);
             }
             else
             {
 
-                Q_EMIT apiRequestError(kAPIItemsByClassifyIDAndPageIndex.arg(args[0].toInt()).arg(args[1].toInt()), error);
+                Q_EMIT apiRequestError(kAPIItemsByClassifyAndPageIndex.arg(args[0].toString()).arg(args[1].toInt()), error);
             }
         }
             break;

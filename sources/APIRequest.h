@@ -17,7 +17,7 @@ private:
         //RequestType_Items,
         RequestType_ItemDetail,
         RequestType_Download,
-        RequestType_ItemsByClassifyID,
+        RequestType_ItemsByClassify,
         RequestType_Search,
     };
 
@@ -35,10 +35,10 @@ public:
     //Q_INVOKABLE void requestItemsData();
 
     //获取分类下的所有分组
-    Q_INVOKABLE void requestItemsByClassifyID(int classifyID, int pageindex);
+    Q_INVOKABLE void requestItemsByClassify(const QString& classify, int pageindex);
 
     //获取单个图片分组数据
-    Q_INVOKABLE void requestItemsDetailData(int itemID);
+    Q_INVOKABLE void requestItemsDetailData(const QString& itemID);
 
     //搜索关键词
     Q_INVOKABLE void searchKeyWord(const QString& key);
@@ -58,13 +58,13 @@ Q_SIGNALS:
     void classifiesResponse(const QByteArray& data);
 
     //分类下图片分组返回
-    void itemsByClassifyIDResponse(int itemID, int pageindex, const QByteArray& data);
+    void itemsByClassifyResponse(const QString& classify, int pageindex, const QByteArray& data);
 
     //图片分组请求返回
     void itemsResponse(const QByteArray& data);
 
     //图片组返回
-    void itemsDetailResponse(int itemID, const QByteArray& data);
+    void itemsDetailResponse(const QString& itemID, const QByteArray& data);
 
     //API请求错误
     void apiRequestError(const QString& apiName, QNetworkReply::NetworkError error);

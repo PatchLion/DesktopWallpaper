@@ -8,7 +8,7 @@ import "./Global.js" as Global
 Item {
     id: root_item
 
-    property int classifyID: -1
+    property string classify: ""
     property int currentPageIndex: 1
     property alias title: text_item.text
 
@@ -16,7 +16,7 @@ Item {
     APIRequest{
         id:api_request
 
-        onItemsByClassifyIDResponse: {
+        onItemsByClassifyResponse: {
             var result = Global.resolvePageData(data)
             if(result[0])
             {
@@ -27,8 +27,9 @@ Item {
         }
     }
 
-    onClassifyIDChanged: {
-        api_request.requestItemsByClassifyID(classifyID, currentPageIndex);
+    onClassifyChanged: {
+        console.log("xxxxxxxxxxxxxxxxxxxxxx")
+        api_request.requestItemsByClassify(classify, currentPageIndex);
     }
 
     Rectangle{
@@ -101,7 +102,7 @@ Item {
                 if (contentX >= temp)
                 {
                     root_item.currentPageIndex += 1
-                    api_request.requestItemsByClassifyID(root_item.classifyID, root_item.currentPageIndex);
+                    api_request.requestItemsByClassifyID(root_item.classify, root_item.currentPageIndex);
                 }
             }
         }

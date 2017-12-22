@@ -148,8 +148,7 @@ Item {
         }
 
         delegate: ImageListInReview{
-            classifyID: id
-            classifyName: name
+            classify: name
             width: 500
             height: imageClassifyList.height
         }

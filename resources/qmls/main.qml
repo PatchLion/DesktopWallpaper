@@ -17,10 +17,10 @@ FramelessAndMoveableWindow {
 
 
     //分类下更多的items classifyID：分类ID
-    signal showAllItemByClassifyIDPanel(int classifyID, string title);
+    signal showAllItemByClassifyPanel(string title);
 
     //显示图片组详情 itemID: 图片组ID title: 图片组名称 source: 图片组源网址
-    signal showItemDetailsPanel(int itemID, string title, string source);
+    signal showItemDetailsPanel(string itemID, string title, string source);
 
     //显示搜索界面 keyword：关键词
     signal showSearchPanel(string keyword);
@@ -89,10 +89,9 @@ FramelessAndMoveableWindow {
         main_stackView.pop();
     }
 
-    onShowAllItemByClassifyIDPanel: {
+    onShowAllItemByClassifyPanel: {
         main_stackView.push(classify_more_panel_componet);
-        main_stackView.currentItem.classifyID = classifyID;
-        main_stackView.currentItem.title = title;
+        main_stackView.currentItem.classify = title;
     }
 
 
