@@ -8,6 +8,7 @@ Rectangle{
     property alias source: image_item.source
     property string titleString: ""
     property string itemUrl: ""
+    property bool isNew: false
 
     Item{
         width: parent.width * 0.95
@@ -42,6 +43,7 @@ Rectangle{
             border.color: color
 
             color: Qt.rgba(1, 1, 1, 0.5)
+
             Text{
                 id: text_item
                 anchors.fill:parent
@@ -52,6 +54,32 @@ Rectangle{
                 color: "white"
                 clip: true
                 text: titleString.substring(0, 25)
+            }
+        }
+        Rectangle{
+            width: 32
+            height: 32
+            color: Qt.rgba(1.0, 0, 0, 0.5)
+            anchors.right: parent.right
+            anchors.rightMargin: -10
+            anchors.top:parent.top
+            anchors.topMargin: -10
+            radius: width/2
+
+            transform: Rotation{
+                angle: 15
+            }
+
+
+            smooth: true
+            Text{
+                anchors.centerIn: parent
+                text: "New"
+                color: "white"
+                font.family: "微软雅黑"
+                font.pointSize: 8
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

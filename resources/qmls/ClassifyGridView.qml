@@ -19,6 +19,7 @@ GridView{
         width: grid_view_item.cellWidth
         height: grid_view_item.cellHeight
 
+        isNew: newOne
         currentID: itemID
         titleString: title
         source: image

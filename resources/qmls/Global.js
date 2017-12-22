@@ -107,7 +107,7 @@ function resolveSearchResult(data)
 
                 //console.log(item.id, image_url, item.name, item.source);
 
-                model_data.push({"itemID": item.id, "image": item.image, "title": item.title, "sourcePage":item.source});
+                model_data.push({"itemID": item.id, "newOne": item.new, "image": item.image, "title": item.title, "sourcePage":item.source});
 
 
             }
@@ -146,7 +146,7 @@ function resolvePageData(items_data)
 
 
 
-                model_data.push({"itemID": item.id, "image": item.image, "title": item.title, "sourcePage":item.source});
+                model_data.push({"itemID": item.id, "newOne": item.new, "image": item.image, "title": item.title, "sourcePage":item.source});
 
                 if (limit > 0 && j>=(limit-1))
                 {
