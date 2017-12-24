@@ -15,7 +15,9 @@ public:
     };
     Q_ENUMS(Mode)
 public:
-    Functions(QObject* parent = 0){}
+    Functions(QObject* parent = 0)
+        :m_loop(0){}
+    ~Functions();
 
 public:
     //
@@ -26,5 +28,8 @@ private:
 
 Q_SIGNALS:
     void finished(bool success, const QString& msg);
+
+private:
+    QEventLoop* m_loop;
 };
 #endif

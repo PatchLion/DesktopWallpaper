@@ -16,6 +16,14 @@ QString dirPath(){
     return QStandardPaths::standardLocations(QStandardPaths::PicturesLocation)[0] + "/" + kDirName;
 }
 
+Functions::~Functions()
+{
+    if(m_loop)
+    {
+        m_loop->quit();
+    }
+}
+
 void Functions::setImageToDesktop(const QString& url, Mode mode) {
     if(url.isEmpty())
     {
@@ -74,9 +82,11 @@ void Functions::setImageToDesktop(const QString& url, Mode mode) {
             Q_EMIT finished(false, QString::fromLocal8Bit("网络请求出现异常，错误代码:%1").arg(error));
         }
 
-        loop.exec();
+        m_loop = 0;
+        loop.quit();
     });
 
+    m_loop = &loop;
     loop.exec();
 }
 
