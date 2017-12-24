@@ -18,8 +18,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += ./sources/common.h\
     ./sources/APIRequest.h\
+    ./sources/Functions.h \
+    sources/ImageCache.h
 
-SOURCES += ./sources/APIRequest.cpp  main.cpp
+macx:{
+    OBJECTIVE_SOURCES += ./sources/mac/Wallpaper.mm
+    QMAKE_LFLAGS += -framework AppKit
+}
+SOURCES += ./sources/APIRequest.cpp  main.cpp \
+    sources/ImageCache.cpp
 
 RESOURCES += ./resources/qml.qrc
 

@@ -28,7 +28,7 @@ Item {
     }
 
     onClassifyChanged: {
-        console.log("xxxxxxxxxxxxxxxxxxxxxx")
+        //console.log("xxxxxxxxxxxxxxxxxxxxxx")
         api_request.requestItemsByClassify(classify, currentPageIndex);
     }
 

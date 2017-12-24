@@ -35,15 +35,62 @@ FramelessAndMoveableWindow {
         radius: 5
         anchors.fill: parent
 
+        clip: true
+
         smooth: true
+
+        Rectangle{
+            id: top_area
+            color: Qt.rgba(1, 1, 1, 0.15)
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            height: 40
+            border.width: 0
+
+
+            SystemMenuPanel{
+
+                window: root_window
+                Component.onCompleted: {
+                    //if (Qt.platform.os == "windows")
+                    //{
+
+                        anchors.right = parent.right;
+                        anchors.rightMargin = 10;
+                    //}
+                    //else if (Qt.platform.os == "osx"){
+                        //anchors.left = parent.left;
+                        //anchors.leftMargin = 10;
+                    //}
+                }
+
+                anchors.verticalCenter: parent.verticalCenter
+
+            }
+
+        }
 
         StackView{
             id: main_stackView
 
             anchors.fill: parent
+            anchors.topMargin: top_area.height+1
+
 
             initialItem: mainpage_component
         }
+
+        Keys.onEscapePressed: {
+            root_window.back();
+
+        }
+
+        Keys.onBackPressed: {
+            root_window.back();
+        }
+
+        focus: true
     }
 
 
@@ -51,7 +98,7 @@ FramelessAndMoveableWindow {
         id: mainpage_component
 
         MainPage{
-            window: root_window
+
         }
 
     }
@@ -86,7 +133,10 @@ FramelessAndMoveableWindow {
     }
 
     onBack: {
-        main_stackView.pop();
+        if (main_stackView.depth > 1)
+        {
+            main_stackView.pop();
+        }
     }
 
     onShowAllItemByClassifyPanel: {

@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
 import DesktopWallpaper.APIRequest 1.0
+import DesktopWallpaper.Functions 1.0
 import "./Toast.js" as Toast
 import "./Global.js" as Global
 
@@ -86,7 +87,7 @@ Item {
 
                     visible: !image_item.visible
 
-                    width: 300
+                    width: 400
 
                     color: Qt.rgba(0.3, 0.3, 0.3, 0.3)
 
@@ -143,6 +144,35 @@ Item {
                     }
 
                     DefaultButton{
+                        id: set_wallpaper_button
+                        buttonText: "设置为壁纸"
+                        width: 130
+                        height: download_button.height
+                        anchors.right: download_button.left
+                        anchors.rightMargin: 10
+                        anchors.verticalCenter: download_button.verticalCenter
+                        onButtonClicked: {
+                            funcs_item.setImageToDesktop(image_item.source);
+                        }
+
+                        visible: (download_button.visible===true)
+
+                        Functions{
+                            id: funcs_item
+
+                            onFinished: {
+                                if(success){
+                                    Toast.showToast(root_item, "壁纸已设置！")
+
+                                }
+                                else{
+                                    Toast.showToast(root_item, "壁纸设置失败,"+msg)
+                                }
+                            }
+                        }
+                    }
+
+                    DefaultButton{
 
                         id: download_button
 
@@ -150,8 +180,8 @@ Item {
                         anchors.rightMargin: 10
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: 10
-                        width: 50
-                        height: 30
+                        width: 60
+                        height: 20
                         buttonText: "下载"
 
                         visible: (image_mouse_area.containsMouse || isContainMouse)
@@ -207,8 +237,11 @@ Item {
             height: 20
             buttonText: "返回"
             onButtonClicked: {
+
                 Global.RootPanel.back()
             }
+
+
         }
 
         DefaultButton{

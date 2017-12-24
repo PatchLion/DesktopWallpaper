@@ -1,88 +1,76 @@
 import QtQuick 2.0
 
-Row{
+Rectangle{
     id: root_item
     signal startSearch(string keyword);
 
-    width: 200
+    width: 150
     height: 20
-    spacing: 10
+    color: "white"
+    radius: 2
 
-    Rectangle{
+    smooth: true
 
-        color: "white"
+    Text{
+        id: default_text_item
+        anchors.fill: parent
+        anchors.rightMargin: search_button.width
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignLeft
 
-        radius: 2
+        font.pointSize: 9
+        font.family: "微软雅黑"
+        color: "#999999"
 
-        anchors.left: parent.left
-        anchors.right: search_button.left
-        anchors.rightMargin: 5
-        height: parent.height
 
         smooth: true
 
-        Text{
-            id: default_text_item
-            anchors.fill: parent
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
+        text: " 请输入关键词"
 
-            font.pointSize: 9
-            font.family: "微软雅黑"
-            color: "#999999"
-
-
-            smooth: true
-
-            text: " 请输入关键词"
-
-
-            visible: textinput_keyword.text.length === 0
-
-        }
-
-
-        TextInput{
-
-            id: textinput_keyword
-            anchors.fill: parent
-            color: "#666666"
-            selectByMouse: true
-
-            font.pointSize: 9
-            font.family: "微软雅黑"
-
-
-
-            smooth: true
-
-
-            clip: true
-
-            verticalAlignment: TextInput.AlignVCenter
-            horizontalAlignment: TextInput.AlignLeft
-
-            Keys.onPressed: {
-                  if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                      search_button.buttonClicked();
-                  }
-              }
-
-        }
+        visible: textinput_keyword.text.length === 0
     }
+
+
+    TextInput{
+
+        id: textinput_keyword
+        anchors.fill: parent
+        anchors.rightMargin: search_button.width
+        color: "#666666"
+        selectByMouse: true
+
+        font.pointSize: 9
+        font.family: "微软雅黑"
+
+        smooth: true
+
+
+        clip: true
+
+        verticalAlignment: TextInput.AlignVCenter
+        horizontalAlignment: TextInput.AlignLeft
+
+        Keys.onPressed: {
+              if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                  search_button.buttonClicked();
+              }
+          }
+
+    }
+
 
 
     DefaultButton{
         id: search_button
-        width: 60
-        height: 20
+        width: 40
+        height: root_item.height
         buttonText: qsTr("搜索")
         anchors.right: parent.right
 
         smooth: true
         buttonTextPointSize: 8
 
-        radius: close_button.radius
+        radius: 0
         anchors.verticalCenter: parent.verticalCenter
 
         onButtonClicked: {
@@ -93,5 +81,7 @@ Row{
             }
         }
     }
+
+
 
 }

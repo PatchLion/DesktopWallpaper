@@ -16,22 +16,32 @@ Rectangle{
         //color: "red"
         anchors.centerIn: parent
 
-        Image{
-            id: image_item
+
+        Rectangle{
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: text_area_item.top
-            fillMode: Image.PreserveAspectCrop
-            clip: true
+            color: Qt.rgba(1, 1, 1, 0.05)
 
-            smooth: true
+            Image{
+                id: image_item
 
-            mipmap: true
-            sourceSize.width: 1024
-            sourceSize.height: 1024
+                fillMode: Image.PreserveAspectCrop
+                clip: true
 
-            cache: true
+                smooth: true
+
+                mipmap: true
+                sourceSize.width: 1024
+                sourceSize.height: 1024
+
+                anchors.fill: parent
+
+                cache: true
+
+            }
+
         }
 
         Rectangle{
@@ -42,7 +52,7 @@ Rectangle{
             height: 40
             border.color: color
 
-            color: Qt.rgba(1, 1, 1, 0.5)
+            color: Qt.rgba(1, 1, 1, 0.3)
 
             Text{
                 id: text_item
@@ -57,13 +67,13 @@ Rectangle{
             }
         }
         Rectangle{
-            width: 32
-            height: 32
+            width: 28
+            height: 28
             color: Qt.rgba(1.0, 0, 0, 0.5)
             anchors.right: parent.right
-            anchors.rightMargin: -10
+            anchors.rightMargin: -5
             anchors.top:parent.top
-            anchors.topMargin: -10
+            anchors.topMargin: -5
             radius: width/2
 
             transform: Rotation{
@@ -77,7 +87,7 @@ Rectangle{
                 text: "New"
                 color: "white"
                 font.family: "微软雅黑"
-                font.pointSize: 8
+                font.pointSize: 9
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }

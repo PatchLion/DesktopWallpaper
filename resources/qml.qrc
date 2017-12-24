@@ -16,5 +16,6 @@
         <file>qmls/MainPage.qml</file>
         <file>qmls/SearchPage.qml</file>
         <file>qmls/SearchControl.qml</file>
+        <file>qmls/SystemMenuPanel.qml</file>
     </qresource>
 </RCC>
