@@ -91,7 +91,7 @@ Rectangle {
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
 
-
+            visible: false
             smooth: true
 
             onStartSearch: {

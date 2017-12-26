@@ -105,7 +105,7 @@ function resolveSearchResult(data)
                 var item = items[i];
 
 
-                //console.log(item.id, image_url, item.name, item.source);
+                //console.log(item.id, item.image, item.new, item.source);
 
                 model_data.push({"itemID": item.id, "newOne": item.new, "image": item.image, "title": item.title, "sourcePage":item.source});
 

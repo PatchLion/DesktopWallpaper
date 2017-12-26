@@ -76,6 +76,8 @@ Rectangle{
             anchors.topMargin: -5
             radius: width/2
 
+            visible: root_item.isNew
+
             transform: Rotation{
                 angle: 15
             }
