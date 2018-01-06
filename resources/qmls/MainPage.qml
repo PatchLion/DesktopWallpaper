@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
-import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
 
 Item {
@@ -29,8 +28,10 @@ Item {
             height: imageClassifyList.height
         }
 
-        APIRequest{
-            id: classifies_request
+        Connections{
+            //id: classifies_request
+
+            target: Global.APIRequest
 
             onClassifiesResponse: {
                 //console.log("Classifies data:", data);
@@ -66,7 +67,7 @@ Item {
             repeat: false
             running: false
             onTriggered: {
-                classifies_request.requestClassifiesData();
+                Global.APIRequest.requestClassifiesData();
             }
         }
 

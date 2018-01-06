@@ -10,7 +10,7 @@ Rectangle{
 
     signal buttonClicked();
 
-    color: mouse_area.containsMouse ? "#DDDDDD" : "#EEEEEE"
+    color: enabled ? (mouse_area.containsMouse ? "#DDDDDD" : "#EEEEEE")  : "#BBBBBB"
     width: 60
     height: 24
     radius: 5
@@ -20,7 +20,7 @@ Rectangle{
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         font.pointSize: 9
-        color: mouse_area.containsMouse ? "#888888" : "#555555"
+        color: enabled ? (mouse_area.containsMouse ? "#888888" : "#555555") : "#999999"
         font.family: "微软雅黑"
         text: "更多"
     }

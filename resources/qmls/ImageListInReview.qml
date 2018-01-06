@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
 
 Rectangle{
@@ -12,13 +11,13 @@ Rectangle{
 
 
     onClassifyChanged: {
-        console.log("Classify-->", classify);
+        //console.log("Classify-->", classify);
 
-        items_request.requestItemsByClassify(classify, 1);
+        Global.APIRequest.requestItemsByClassify(classify, 1);
     }
 
-    APIRequest{
-        id: items_request
+    Connections{
+        target: Global.APIRequest
 
         onItemsByClassifyResponse: {
             if(root_item.classify == classify)
@@ -49,12 +48,13 @@ Rectangle{
         Text{
             id: text_item
             anchors.left: parent.left
-            anchors.leftMargin: 25
+            anchors.leftMargin: 15
             anchors.right: parent.right
             anchors.rightMargin: 10
             height: 30
-            font.pointSize: 10
+            font.pointSize: 13
             font.family: "微软雅黑"
+            font.bold: true
             color: "#EEEEEE"
             text: classify
             verticalAlignment:Text.AlignVCenter

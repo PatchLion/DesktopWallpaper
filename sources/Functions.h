@@ -27,6 +27,7 @@ private:
     QString doImageToDesktop(const QString& localfile, Mode mode = Fit);
 
 Q_SIGNALS:
+    void progress(double progress, const QString& text);
     void finished(bool success, const QString& msg);
 
 private:

@@ -1,6 +1,6 @@
 import QtQuick 2.0
-import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
+import "./CoverPanel.js" as CoverPanel
 
 import "./Toast.js" as Toast
 Rectangle {
@@ -9,20 +9,27 @@ Rectangle {
     color: Qt.rgba(0.3, 0.3, 0.3, 0.3)
 
     property string keyword: ""
+    property var cover: null
+
+
     function startToSearch(keyword){
         root_item.keyword = keyword
         console.log("keyword change to:", keyword);
-        api_request.searchKeyWord(keyword);
+        Global.APIRequest.searchKeyWord(keyword);
 
-        Toast.showToast(root_item, "正在搜索中...");
+        //Toast.showToast(root_item, "正在搜索中...");
+
+
+        cover = CoverPanel.showLoadingCover(Global.RootView, "加载中");
     }
 
     ClassifyDetailPanel{
         anchors.fill: parent
     }
 
-    APIRequest{
-        id:api_request
+    Connections{
+        //id:api_request
+        target: Global.APIRequest
 
         onApiRequestError: {
             console.warn("Failed to search: ", apiName, "|", error)
@@ -44,7 +51,13 @@ Rectangle {
             }
 
 
-            Toast.showToast(root_item, "搜索完成");
+            //Toast.showToast(root_item, "搜索完成");
+
+            if(root_item.cover)
+            {
+                root_item.cover.visible = false;
+                root_item.cover.destroy();
+            }
         }
     }
 
@@ -90,6 +103,7 @@ Rectangle {
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
+            //property var cover: null
 
             visible: false
             smooth: true
@@ -98,6 +112,8 @@ Rectangle {
                 if (keyword.length>0){
                     grid_view_model.clear();
                     root_item.startToSearch(keyword);
+                    //cover = CoverPanel.showLoadingCover(root_item, "加载中...");
+                    //console.log("Cover-->", cover)
                 }
             }
         }
@@ -130,7 +146,7 @@ Rectangle {
             if (contentX >= temp)
             {
                 root_item.currentPageIndex += 1
-                api_request.requestItemsByClassify(root_item.classifyID, root_item.currentPageIndex);
+                Global.APIRequest.requestItemsByClassify(root_item.classifyID, root_item.currentPageIndex);
             }
         }
     }

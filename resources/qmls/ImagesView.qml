@@ -66,15 +66,13 @@ Rectangle{
                 text: titleString.substring(0, 25)
             }
         }
-        Rectangle{
+        CircleTooltip{
             width: 28
             height: 28
-            color: Qt.rgba(1.0, 0, 0, 0.5)
             anchors.right: parent.right
             anchors.rightMargin: -5
             anchors.top:parent.top
             anchors.topMargin: -5
-            radius: width/2
 
             visible: root_item.isNew
 
@@ -83,16 +81,8 @@ Rectangle{
             }
 
 
-            smooth: true
-            Text{
-                anchors.centerIn: parent
-                text: "New"
-                color: "white"
-                font.family: "微软雅黑"
-                font.pointSize: 9
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
+            text: "New"
+
         }
     }
 

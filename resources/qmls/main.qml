@@ -3,6 +3,7 @@ import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
 import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
+import "./CoverPanel.js" as CoverPanel
 
 FramelessAndMoveableWindow {
     id: root_window
@@ -25,8 +26,21 @@ FramelessAndMoveableWindow {
     //显示搜索界面 keyword：关键词
     signal showSearchPanel(string keyword);
 
+    //显示下载盒子界面
+    signal showDownloadBoxButtonClicked();
+
     //回退
     signal back();
+
+    Component{
+        id: api_request_component
+        APIRequest{
+            id: api_request
+
+        }
+    }
+
+
 
 
     Rectangle{
@@ -50,7 +64,7 @@ FramelessAndMoveableWindow {
 
 
             SystemMenuPanel{
-
+                id: system_menu_panel
                 window: root_window
                 Component.onCompleted: {
                     //if (Qt.platform.os == "windows")
@@ -67,6 +81,8 @@ FramelessAndMoveableWindow {
 
                 anchors.verticalCenter: parent.verticalCenter
 
+                enableDownloadBoxButton: main_stackView.depth === 1
+                enableSearchControl: main_stackView.depth === 1
             }
 
         }
@@ -76,9 +92,6 @@ FramelessAndMoveableWindow {
 
             anchors.fill: parent
             anchors.topMargin: top_area.height+1
-
-
-            initialItem: mainpage_component
         }
 
         Keys.onEscapePressed: {
@@ -93,19 +106,46 @@ FramelessAndMoveableWindow {
         focus: true
     }
 
+    Component{
+        id: download_box_component
+
+        DownloadBox{
+
+        }
+    }
 
     Component{
         id: mainpage_component
 
-        MainPage{
 
+        MainPage{
         }
 
     }
 
+
     Component.onCompleted: {
+
+        Global.APIRequest = api_request_component.createObject();
+        //console.log("1-->", Global.APIRequest);
+        Global.APIRequest.downloadingCountChanged.connect(function(count){
+            //console.log("Downloading count:", count);
+            system_menu_panel.downloadCount = count;
+        });
+        Global.RootView = main_stackView;
         Global.RootPanel = root_window;
 
+        main_stackView.push(mainpage_component);
+
+        //var cover = CoverPanel.showLoadingCover(root_window, "加载中........");
+
+        //var cover = CoverPanel.showProgressBarCover(root_window);
+        //console.log("Cover-------->", cover);
+        //if(0 !== cover)
+        //{
+            //CoverPanel.setProgressBarCoverProgress(cover, 0.35);
+            //CoverPanel.setProgressBarCoverTooltip(cover, "测试进度");
+        //}
     }
 
     //搜索页面
@@ -114,6 +154,10 @@ FramelessAndMoveableWindow {
         SearchPage{
 
         }
+    }
+
+    onShowDownloadBoxButtonClicked: {
+        main_stackView.push(download_box_component)
     }
 
     onShowSearchPanel: {
@@ -137,6 +181,7 @@ FramelessAndMoveableWindow {
         {
             main_stackView.pop();
         }
+
     }
 
     onShowAllItemByClassifyPanel: {

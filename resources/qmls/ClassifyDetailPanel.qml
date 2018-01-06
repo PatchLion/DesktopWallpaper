@@ -1,7 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
-
-import DesktopWallpaper.APIRequest 1.0
 import "./Toast.js" as Toast
 import "./Global.js" as Global
 
@@ -13,9 +11,8 @@ Item {
     property alias title: text_item.text
 
 
-    APIRequest{
-        id:api_request
-
+    Connections{
+        target: Global.APIRequest
         onItemsByClassifyResponse: {
             var result = Global.resolvePageData(data)
             if(result[0])
@@ -29,7 +26,7 @@ Item {
 
     onClassifyChanged: {
         //console.log("xxxxxxxxxxxxxxxxxxxxxx")
-        api_request.requestItemsByClassify(classify, currentPageIndex);
+        Global.APIRequest.requestItemsByClassify(classify, currentPageIndex);
     }
 
     Rectangle{
@@ -97,12 +94,12 @@ Item {
 
 
             onContentXChanged: {
-                console.log(contentX, contentWidth, width)
+                //console.log(contentX, contentWidth, width)
                 var temp = contentWidth - width - 100
                 if (contentX >= temp)
                 {
                     root_item.currentPageIndex += 1
-                    api_request.requestItemsByClassify(root_item.classify, root_item.currentPageIndex);
+                    Global.APIRequest.requestItemsByClassify(root_item.classify, root_item.currentPageIndex);
                 }
             }
         }

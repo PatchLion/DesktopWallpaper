@@ -5,7 +5,7 @@
 #define RequestArgsRole "RequestArgsRole"
 
 
-APIRequest::MapUrlToLocal APIRequest::g_downloadInfo = APIRequest::MapUrlToLocal();
+APIRequest::MapDownloadPictureGroup APIRequest::g_imageGroupDownloadInfos = APIRequest::MapDownloadPictureGroup();
 APIRequest::APIRequest(QObject *parent)
     : QObject(parent)
 {
@@ -29,7 +29,7 @@ void APIRequest::requestItemsByClassify(const QString& classify, int pageindex)
     QVariantList args;
     args<<classify;
     args<<pageindex;
-    qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
+    //qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
     doRequest(RequestType_ItemsByClassify, args);
 }
 
@@ -46,7 +46,7 @@ void APIRequest::searchKeyWord(const QString &key)
     args<<key;
     doRequest(RequestType_Search, args);
 }
-
+/*
 void APIRequest::startDownload(const QString &url, const QString &destDir)
 {
     if(url.isEmpty())
@@ -67,6 +67,62 @@ void APIRequest::startDownload(const QString &url, const QString &destDir)
         doRequest(RequestType_Download, args);
         g_downloadInfo[url] = destDir;
     }
+}
+*/
+QString buildKey(const QString& savePath, const QString& name)
+{
+    const QString& absDir = QUrl(savePath).toLocalFile();
+
+    const QString& key = name + "<>" + absDir;
+
+    return key.toLocal8Bit().toBase64().data();
+}
+QString urlToFileName(const QString& url)
+{
+    return QString("%1.jpg").arg(url.toLocal8Bit().toBase64().data());
+}
+QString APIRequest::addDownload(const QString &savePath, const QString &name, const QStringList &urls)
+{
+    if(savePath.isEmpty() || name.isEmpty() || urls.isEmpty())
+    {
+        qWarning() << QString::fromLocal8Bit("APIRequest::addDownload 参数无效!");
+        return "";
+    }
+
+    const QString& key = buildKey(savePath, name);
+    if(!g_imageGroupDownloadInfos.contains(key)){
+        //
+        stImageGroupDownloadInfo downloadInfo;
+        downloadInfo.savePath = QUrl(savePath).toLocalFile() + "/" + name;
+        Q_FOREACH(QString url, urls)
+        {
+            const QString& filename = urlToFileName(url);
+            const QString& fullpath = QDir(downloadInfo.savePath).absoluteFilePath(filename);
+            QFileInfo fileInfo(fullpath);
+            if(fileInfo.exists() && fileInfo.size() > 0)
+            {
+                downloadInfo.downloads[fullpath] = Downloaded;
+            }
+            else
+            {
+                downloadInfo.downloads[fullpath] = Downloading;
+
+                QVariantList args;
+                args << key;
+                args << url;
+                args << fullpath;
+                doRequest(RequestType_Download, args);
+            }
+        }
+
+        g_imageGroupDownloadInfos[key] = downloadInfo;
+    }
+
+    Q_EMIT downloadingCountChanged(getDownloadingCount());
+
+    //Q_EMIT downloadingCountChanged(20);
+
+    return key;
 }
 /*
 QString APIRequest::refererUrl()
@@ -105,9 +161,11 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
 
     case RequestType_Download:
     {
-        Q_ASSERT(args.size() == 1);
-        Q_ASSERT(args[0].isValid());
-        url = args[0].toString();
+        Q_ASSERT(args.size() == 3);
+        Q_ASSERT(args[0].isValid()); //key
+        Q_ASSERT(args[1].isValid()); //url
+        Q_ASSERT(args[2].isValid()); //fullpath
+        url = args[1].toString();
     }
         break;
 
@@ -143,6 +201,29 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     connect(reply, SIGNAL(finished()), this, SLOT(onReplyFinished()));
 
     reply->setParent(this);
+}
+
+int APIRequest::getDownloadingCount()
+{
+    //return 20;
+    int downloading = 0;
+    MapDownloadPictureGroup::const_iterator groupItor = g_imageGroupDownloadInfos.begin();
+
+    for(groupItor; g_imageGroupDownloadInfos.end() != groupItor; groupItor++)
+    {
+        MapDownloadState::const_iterator downloadItor = groupItor.value().downloads.begin();
+
+        for(downloadItor; groupItor.value().downloads.end()!=downloadItor; downloadItor++)
+        {
+            if(downloadItor.value() == Downloading)
+            {
+                downloading++;
+                break;
+            }
+        }
+    }
+
+    return downloading;
 }
 
 
@@ -242,46 +323,69 @@ void APIRequest::onReplyFinished()
             break;
         case RequestType_Download:
         {
-            Q_ASSERT(args.size() == 1);
-            Q_ASSERT(args[0].isValid());
+            Q_ASSERT(args.size() == 3);
+            Q_ASSERT(args[0].isValid()); //key
+            Q_ASSERT(args[1].isValid()); //url
+            Q_ASSERT(args[2].isValid()); //fullpath
             if(success)
             {
-                QString url = args[0].toString();
-                if(g_downloadInfo.contains(url))
+                QString key = args[0].toString();
+                QString url = args[1].toString();
+                QString fullpath = args[2].toString();
+                if(!key.isEmpty() && g_imageGroupDownloadInfos.contains(key))
                 {
-                    qDebug() << "Download finished: " << url << " data length: " << data.count();
+                    //qDebug() << "Download finished: " << url << " data length: " << data.count();
 
-                    const QString dest = g_downloadInfo[url];
+                    stImageGroupDownloadInfo& downloadInfo = g_imageGroupDownloadInfos[key];
 
-                    const QString tempDest = QUrl(dest).toLocalFile();
-                    QFileInfo fileInfo(tempDest);
+                    //const QString tempDest = QUrl(fullpath).toLocalFile();
+                    QFileInfo fileInfo(fullpath);
                     if(!fileInfo.absoluteDir().exists())
                     {
-                        qDebug() << "Make path: " << fileInfo.absolutePath();
+                        //qDebug() << "Make path: " << fileInfo.absolutePath();
                         fileInfo.absoluteDir().mkpath(fileInfo.absolutePath());
                     }
 
-                    QFile file(tempDest);
+                    QFile file(fullpath);
                     if(file.open(QIODevice::WriteOnly))
                     {
                         file.write(data);
                         file.close();
 
-                        Q_EMIT downloadFinished(url);
+                        downloadInfo.downloads[fullpath] = Downloaded;
+
                     }
                     else
                     {
-                        const QString msg = "Failed to write to file: " + tempDest + "! reason: " + file.errorString();
+
+                        downloadInfo.downloads[fullpath] = DownloadFailed;
+
+                        const QString msg = "Failed to write to file: " + fullpath + "! reason: " + file.errorString();
                         qWarning() <<msg;
-                        Q_EMIT downloadError(url, msg);
                     }
+
+                    int finished = 0, error = 0;
+
+                    MapDownloadState::const_iterator downloadItor = downloadInfo.downloads.begin();
+
+                    for(downloadItor; downloadInfo.downloads.end()!=downloadItor; downloadItor++)
+                    {
+                        if(downloadItor.value() == Downloaded)
+                        {
+                            finished++;
+                        }
+                        else if(downloadItor.value() == DownloadFailed)
+                        {
+                            error++;
+                        }
+                    }
+
+                    Q_EMIT imageGroupDownloadProgress(key, downloadInfo.downloads.size(), finished, error);
                 }
             }
-            else
-            {
-                Q_EMIT downloadError(args[0].toString(), "Failed to download! Error code:" + error);
 
-            }
+
+            Q_EMIT downloadingCountChanged(getDownloadingCount());
         }
             break;
 

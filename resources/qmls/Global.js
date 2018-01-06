@@ -1,6 +1,8 @@
 .pragma library
 
 var RootPanel = null; //根页面
+var RootView = null; //
+var APIRequest = null; //
 
 //函数运行计时
 function runFuncWithUseTime(func, funcname){
@@ -124,7 +126,7 @@ function resolveSearchResult(data)
 */
 function resolvePageData(items_data)
 {
-    console.log("---->", items_data)
+    //console.log("---->", items_data)
     var json_obj = resolveStandardData(items_data);
 
     if(json_obj[0])
@@ -154,7 +156,7 @@ function resolvePageData(items_data)
                 }
             }
 
-            console.log("-----", model_data.length)
+            //console.log("-----", model_data.length)
             return [true, model_data];
         }
         else
@@ -211,6 +213,6 @@ function fixedDirName(old)
     var chars = "[/:*?《》<>\"\f\n\r\t\v]";
 
     temp = temp.replace(new RegExp(chars,"g"), "_");
-    console.log("fixedDirName: ", old, "->", temp);
+    //console.log("fixedDirName: ", old, "->", temp);
     return temp;
 }

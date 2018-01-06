@@ -17,5 +17,14 @@
         <file>qmls/SearchPage.qml</file>
         <file>qmls/SearchControl.qml</file>
         <file>qmls/SystemMenuPanel.qml</file>
+        <file>qmls/ProgressBar.qml</file>
+        <file>qmls/ProgressTooltipPanel.qml</file>
+        <file>qmls/CoverPanel.js</file>
+        <file>qmls/CoverPanel.qml</file>
+        <file>images/loading.gif</file>
+        <file>qmls/LoadingItem.qml</file>
+        <file>qmls/DownloadBox.qml</file>
+        <file>qmls/DownloadBoxItem.qml</file>
+        <file>qmls/CircleTooltip.qml</file>
     </qresource>
 </RCC>

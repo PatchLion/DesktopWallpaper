@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import "./Global.js" as Global
+import "./Toast.js" as Toast
 
 Rectangle{
     id: root_item
@@ -6,7 +8,7 @@ Rectangle{
 
     width: 150
     height: 20
-    color: "white"
+    color: enabled ? "white" : "#BBBBBB"
     radius: 2
 
     smooth: true
@@ -78,6 +80,9 @@ Rectangle{
             if ( keyword.length>0){
                 root_item.startSearch(keyword);
                 textinput_keyword.text = "";
+            }
+            else{
+                Toast.showToast(Global.RootView, "关键词不能为空")
             }
         }
     }

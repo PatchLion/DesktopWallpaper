@@ -50,7 +50,12 @@ void Functions::setImageToDesktop(const QString& url, Mode mode) {
     QNetworkReply* reply = network.get(QNetworkRequest(url));
 
     QEventLoop loop;
-    connect(reply, &QNetworkReply::finished, [=, &loop, &reply](){
+    Functions* object = this;
+    connect(reply, &QNetworkReply::downloadProgress, [=, &object](qint64 bytesReceived, qint64 bytesTotal){
+        Q_EMIT object->progress((double)bytesReceived/(double)bytesTotal, QString::fromLocal8Bit("壁纸下载中"));
+    } );
+
+    connect(reply, &QNetworkReply::finished, [=, &loop, &reply, &object](){
         if (!QDir().exists(dirPath())){
             QDir().mkpath(dirPath());
         }
@@ -65,10 +70,13 @@ void Functions::setImageToDesktop(const QString& url, Mode mode) {
            {
                file.write(data);
                file.close();
+
+               Q_EMIT object->progress(1.0, QString::fromLocal8Bit("壁纸设置中..."));
                 const QString res = doImageToDesktop(fullpath, mode);
 
                 if(res.isEmpty()){
                     Q_EMIT finished(true, "");
+                    Q_EMIT object->progress(1.0, QString::fromLocal8Bit("壁纸设置完成"));
                 }
                 else{
                     Q_EMIT finished(false, res);

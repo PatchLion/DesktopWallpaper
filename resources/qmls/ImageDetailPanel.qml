@@ -1,9 +1,9 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
-import DesktopWallpaper.APIRequest 1.0
 import DesktopWallpaper.Functions 1.0
 import "./Toast.js" as Toast
 import "./Global.js" as Global
+import  "./CoverPanel.js" as CoverPanel
 
 Item {
     id: root_item
@@ -14,9 +14,8 @@ Item {
     property string itemUrl: ""
 
 
-    APIRequest{
-        id: api_reqeust
-
+    Connections{
+        target: Global.APIRequest
         onItemsDetailResponse: {
             var result = Global.resolveItemsDetailData(data);
 
@@ -27,13 +26,6 @@ Item {
             }
         }
 
-        onDownloadError: {
-            Toast.showToast(root_item, msg);
-        }
-
-        onDownloadFinished: {
-            //Toast.showToast(root_item, url+" downloaded!");
-        }
 
         onApiRequestError: {
             console.warn("Catch error when reuqest api:", apiName, "code:", error);
@@ -41,7 +33,7 @@ Item {
     }
 
     onItemIDChanged: {
-        api_reqeust.requestItemsDetailData(itemID);
+        Global.APIRequest.requestItemsDetailData(itemID);
     }
 
     Rectangle{
@@ -145,22 +137,38 @@ Item {
 
                     DefaultButton{
                         id: set_wallpaper_button
+
+
                         buttonText: "设置为壁纸"
                         width: 130
                         height: download_button.height
                         anchors.right: download_button.left
                         anchors.rightMargin: 10
                         anchors.verticalCenter: download_button.verticalCenter
+                        property var cover: null
                         onButtonClicked: {
+                            cover = CoverPanel.showProgressBarCover(Global.RootPanel);
                             funcs_item.setImageToDesktop(image_item.source);
                         }
 
-                        visible: (download_button.visible===true)
+                        //visible: download_button.visible
 
                         Functions{
                             id: funcs_item
 
+                            onProgress: {
+                                if(set_wallpaper_button.cover){
+                                    CoverPanel.setProgressBarCoverProgress(set_wallpaper_button.cover, progress);
+                                    CoverPanel.setProgressBarCoverTooltip(set_wallpaper_button.cover, text);
+                                }
+                            }
+
                             onFinished: {
+
+                                if(set_wallpaper_button.cover){
+                                    set_wallpaper_button.cover.visible = false;
+                                }
+
                                 if(success){
                                     Toast.showToast(root_item, "壁纸已设置！")
 
@@ -176,6 +184,8 @@ Item {
 
                         id: download_button
 
+
+
                         anchors.right: parent.right
                         anchors.rightMargin: 10
                         anchors.bottom: parent.bottom
@@ -184,26 +194,25 @@ Item {
                         height: 20
                         buttonText: "下载"
 
-                        visible: (image_mouse_area.containsMouse || isContainMouse)
+                        //visible: (image_mouse_area.containsMouse || download_button.isContainMouse)
 
                         Component{
                             id: file_dialog_component
                             FileDialog
                             {
                                 id: file_dialog
-                                title: "Please choose a file"
                                 nameFilters: [ "PNG(*.png)", "JPG(*.jpg)" ]
-                                selectFolder: false
                                 selectMultiple: false
-                                selectExisting: false
-                                folder: shortcuts.pictures
 
+                                title: "Please choose a directory"
+                                selectFolder: true
+                                selectExisting: true
+                                folder: shortcuts.pictures
 
                                 onAccepted: {
                                     var source = image_item.source;
-                                    var dest = fileUrl;
-                                    Toast.showToast(root_item, "开始下载图片到: "+dest);
-                                    api_reqeust.startDownload(source, dest);
+
+                                    Global.APIRequest.addDownload(fileUrl, Global.fixedDirName(root_item.title), [source]);
                                 }
 
                                 Component.onCompleted: visible=true
@@ -281,24 +290,25 @@ Item {
                     selectFolder: true
                     selectExisting: true
                     folder: shortcuts.pictures
+                    selectMultiple: false
 
                     onAccepted: {
-                        var dest = fileUrl;
-                        //Toast.showToast(root_item, "开始下载所有图片到: "+dest);
-
-                        console.log(images_list_model.count)
+                        //var dest = fileUrl;
+                        var urls = []
                         for(var i = 0; i<images_list_model.count; i++)
                         {
                             var obj = images_list_model.get(i);
                             if(obj)
                             {
                                 var image = obj["image"];
-                                var destpath = fileUrl+ "/" + Global.fixedDirName(root_item.title) +"/"+i+".png";
-                                console.log(image, destpath);
-                                api_reqeust.startDownload(image, destpath);
+                                urls.push(image);
+                                //console.log(image, urls.length)
                             }
 
                         }
+
+                        //console.log(fileUrl, Global.fixedDirName(root_item.title))
+                        Global.APIRequest.addDownload(fileUrl, Global.fixedDirName(root_item.title), urls)
                     }
 
                     Component.onCompleted: visible=true

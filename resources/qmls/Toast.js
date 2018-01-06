@@ -6,14 +6,14 @@ var toast = 0
 function showToast(parent, text) {
     if(toast)
     {
-        console.log("Old toast --------------------");
+        //console.log("Old toast --------------------");
         toast.parent = parent;
         toast.text = text;
         toast.show();
     }
     else
     {
-        console.log("New toast --------------------");
+        //console.log("New toast --------------------");
         com = Qt.createComponent("Toast.qml")
         if(com.status === Component.Ready)
         {
