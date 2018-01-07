@@ -173,7 +173,7 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     {
         Q_ASSERT(args.size() == 1);
         Q_ASSERT(args[0].isValid());
-        url += kAPISearch.arg(args[0].toString().toUtf8().toBase64().data());
+        url += kAPISearch.arg(QUrl::toPercentEncoding(args[0].toString()).data());
     }
         break;
     case RequestType_ItemsByClassify:

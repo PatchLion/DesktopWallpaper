@@ -36,6 +36,13 @@ Rectangle {
 
 
             Toast.showToast(root_item, "搜索失败! 错误代码:"+error);
+
+
+            if(root_item.cover)
+            {
+                root_item.cover.visible = false;
+                root_item.cover.destroy();
+            }
         }
 
         onSearchResponse: {

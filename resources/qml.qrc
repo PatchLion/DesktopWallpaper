@@ -26,5 +26,6 @@
         <file>qmls/DownloadBox.qml</file>
         <file>qmls/DownloadBoxItem.qml</file>
         <file>qmls/CircleTooltip.qml</file>
+        <file>qmls/DataType.js</file>
     </qresource>
 </RCC>

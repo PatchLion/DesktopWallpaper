@@ -4,6 +4,7 @@ import QtQuick.Controls 2.2
 import DesktopWallpaper.APIRequest 1.0
 import "./Global.js" as Global
 import "./CoverPanel.js" as CoverPanel
+import "./DataType.js" as DataType
 
 FramelessAndMoveableWindow {
     id: root_window
@@ -31,6 +32,7 @@ FramelessAndMoveableWindow {
 
     //回退
     signal back();
+
 
     Component{
         id: api_request_component
@@ -81,14 +83,18 @@ FramelessAndMoveableWindow {
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                enableDownloadBoxButton: main_stackView.depth === 1
-                enableSearchControl: main_stackView.depth === 1
+                enableDownloadBoxButton: main_stackView.lastPage !== DataType.PanelDownloadBox
+                enableSearchControl: main_stackView.lastPage !== DataType.PanelSearchResult
             }
 
         }
 
         StackView{
             id: main_stackView
+
+            //页面栈
+            property var panelStackedPanel: []
+            property int lastPage: -1
 
             anchors.fill: parent
             anchors.topMargin: top_area.height+1
@@ -136,6 +142,8 @@ FramelessAndMoveableWindow {
         Global.RootPanel = root_window;
 
         main_stackView.push(mainpage_component);
+        main_stackView.panelStackedPanel.push(DataType.PanelMainPage)
+        main_stackView.lastPage = DataType.PanelMainPage
 
         //var cover = CoverPanel.showLoadingCover(root_window, "加载中........");
 
@@ -158,12 +166,16 @@ FramelessAndMoveableWindow {
 
     onShowDownloadBoxButtonClicked: {
         main_stackView.push(download_box_component)
+        main_stackView.panelStackedPanel.push(DataType.PanelDownloadBox)
+        main_stackView.lastPage = DataType.PanelDownloadBox
     }
 
     onShowSearchPanel: {
         main_stackView.push(search_page_component)
         //console.log("onShowSearchPanel: ", keyword)
         main_stackView.currentItem.startToSearch(keyword);
+        main_stackView.panelStackedPanel.push(DataType.PanelSearchResult)
+        main_stackView.lastPage = DataType.PanelSearchResult
     }
 
     //分类详情界面
@@ -180,6 +192,8 @@ FramelessAndMoveableWindow {
         if (main_stackView.depth > 1)
         {
             main_stackView.pop();
+            main_stackView.panelStackedPanel.pop();
+            main_stackView.lastPage = ((main_stackView.panelStackedPanel.length === 0) ? -1 : main_stackView.panelStackedPanel[main_stackView.panelStackedPanel.length-1])
         }
 
     }
@@ -187,6 +201,8 @@ FramelessAndMoveableWindow {
     onShowAllItemByClassifyPanel: {
         main_stackView.push(classify_more_panel_componet);
         main_stackView.currentItem.classify = title;
+        main_stackView.panelStackedPanel.push(DataType.PanelClassifyDetails)
+        main_stackView.lastPage = DataType.PanelClassifyDetails
     }
 
 
@@ -205,6 +221,8 @@ FramelessAndMoveableWindow {
         main_stackView.currentItem.itemUrl = source
         main_stackView.currentItem.title = title;
         main_stackView.currentItem.itemID = itemID;
+        main_stackView.panelStackedPanel.push(DataType.PanelImageDetails)
+        main_stackView.lastPage = DataType.PanelImageDetails
     }
 
 }
