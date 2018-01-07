@@ -9,6 +9,15 @@ Rectangle {
 
     color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
+    Component.onCompleted: {
+        var data = Global.APIRequest.buildDownloadInfo();
+
+        var jsonData = JSON.parse(data)
+
+        downloadlist_model.clear();
+        downloadlist_model.append(jsonData);
+    }
+
     Item{
         id: top_area
 
@@ -38,6 +47,21 @@ Rectangle {
         }
     }
 
+    Connections{
+        //id:api_request
+        target: Global.APIRequest
+
+        onDownloadInfosChanged:{
+            //console.log("onDownloadInfosChanged:", downloads)
+            var jsondata = JSON.parse(downloads);
+
+            downloadlist_model.clear();
+            downloadlist_model.append(jsondata);
+        }
+
+    }
+
+
     Item{
         anchors.left: top_area.left
         anchors.right: top_area.right
@@ -55,19 +79,31 @@ Rectangle {
             cellHeight: 70
             clip: true
 
-            model: 10
-            //model: ListModel{
-                //id: downloadlist_model
-            //}
+            model: ListModel{
+                id: downloadlist_model
+            }
 
             delegate: Item{
                 width: downloadlist_item.cellWidth
                 height: downloadlist_item.cellHeight
 
+
+                property string groupName: name
+                property int groupDownloading: downloading
+                property int groupDownloaded: downloaded
+                property int groupDownloadFailed: downloadFailed
+
                 DownloadBoxItem{
                     anchors.centerIn: parent
                     width: parent.width-1
                     height: parent.height-10
+
+                    title: groupName
+
+                    downloaded: groupDownloaded
+                    failed: groupDownloadFailed
+
+                    downloading:groupDownloading
                 }
             }
         }

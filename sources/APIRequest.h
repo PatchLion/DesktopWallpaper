@@ -71,12 +71,15 @@ public:
     //反防盗链地址
     //Q_INVOKABLE static QString refererUrl();
 
+    //构建下载信息
+    Q_INVOKABLE QByteArray buildDownloadInfo();
 private:
     //发起api请求
     void doRequest(RequestType apitype, const QVariantList& args = QVariantList());
 
     //统计下载中的请求
     int getDownloadingCount();
+
 
 Q_SIGNALS:
     //分类请求返回
@@ -106,6 +109,9 @@ Q_SIGNALS:
 
     //下载中总数改变
     void downloadingCountChanged(int count);
+
+    //下载信息变化
+    void downloadInfosChanged(const QByteArray& downloads);
 
 private Q_SLOTS:
     void onReplyFinished();

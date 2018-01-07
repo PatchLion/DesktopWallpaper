@@ -1,11 +1,14 @@
 import QtQuick 2.0
 
 Rectangle {
+    id: rectangle
     width: 500
     height: 80
 
-    property alias progress: progressBar.progress
     property alias title: title_item.text
+    property int downloaded: 0
+    property int failed: 0
+    property int downloading: 0
 
     border.color: "#66888888"
     color: "#66555555"
@@ -20,36 +23,48 @@ Rectangle {
 
         anchors.left: parent.left
         anchors.leftMargin: 5
-        anchors.right: state_item.left
+        anchors.right: text_item.left
         anchors.rightMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -parent.height / 4
     }
 
+    property int total: downloaded+failed+downloading
     ProgressBar {
         id: progressBar
-        height: 16
+
+        height: 14
         anchors.left: title_item.left
         anchors.right: title_item.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: parent.height / 4
+
+        progress: total ===0 ? 0 : (downloaded / total)
     }
 
-    Rectangle
+    Text
     {
-        id: state_item
+        id: text_item
 
         anchors.right: parent.right
         anchors.rightMargin: 5
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: progressBar.verticalCenter
 
-        width: parent.height * 4 / 5
-        height: parent.height * 4 / 5
+        width: 50
+        height: 40
 
-        radius: 5
 
-        border.color: "white"
-        color: "transparent"
+
+
+        text: downloaded + "/" + total
+
+        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignVCenter
+
+        font.pixelSize: 12
+
+
+        color: "white"
     }
 
 }

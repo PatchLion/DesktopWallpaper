@@ -83,6 +83,7 @@ QString urlToFileName(const QString& url)
 }
 QString APIRequest::addDownload(const QString &savePath, const QString &name, const QStringList &urls)
 {
+    qDebug() << savePath << " " << name << " " << urls.length();
     if(savePath.isEmpty() || name.isEmpty() || urls.isEmpty())
     {
         qWarning() << QString::fromLocal8Bit("APIRequest::addDownload 参数无效!");
@@ -120,6 +121,7 @@ QString APIRequest::addDownload(const QString &savePath, const QString &name, co
 
     Q_EMIT downloadingCountChanged(getDownloadingCount());
 
+    Q_EMIT downloadInfosChanged(buildDownloadInfo());
     //Q_EMIT downloadingCountChanged(20);
 
     return key;
@@ -224,6 +226,56 @@ int APIRequest::getDownloadingCount()
     }
 
     return downloading;
+}
+
+QByteArray APIRequest::buildDownloadInfo()
+{
+    QVariantList downloadinfos;
+    MapDownloadPictureGroup::const_iterator groupItor = g_imageGroupDownloadInfos.begin();
+
+    for(groupItor; g_imageGroupDownloadInfos.end() != groupItor; groupItor++)
+    {
+        QVariantMap download;
+        QString temp = QByteArray::fromBase64(groupItor.key().toLocal8Bit()).data();
+        QString name = temp.split("<>")[0];
+        download.insert("name", name);
+        download.insert("path", groupItor.value().savePath);
+
+        int downloading = 0, downloaded = 0, downloadFailed = 0;
+        MapDownloadState::const_iterator downloadItor = groupItor.value().downloads.begin();
+        for(downloadItor; groupItor.value().downloads.end()!=downloadItor; downloadItor++)
+        {
+            if(downloadItor.value() == Downloading)
+            {
+                downloading++;
+            }
+            else if(downloadItor.value() == Downloaded)
+            {
+                downloaded++;
+            }
+            else if(downloadItor.value() == DownloadFailed)
+            {
+                downloadFailed++;
+            }
+        }
+
+        download.insert("downloading", downloading);
+        download.insert("downloaded", downloaded);
+        download.insert("downloadFailed", downloadFailed);
+
+        if(downloading > 0)
+        {
+            downloadinfos << download;
+        }
+    }
+
+    QString ret = "[]";
+    QJsonDocument jsonDocument = QJsonDocument::fromVariant(downloadinfos);
+    if (!jsonDocument.isNull()) {
+        ret = jsonDocument.toJson(QJsonDocument::Compact);
+    }
+    //qDebug() << "Download info json --->" << ret;
+    return ret.toLocal8Bit();
 }
 
 
@@ -386,6 +438,7 @@ void APIRequest::onReplyFinished()
 
 
             Q_EMIT downloadingCountChanged(getDownloadingCount());
+            Q_EMIT downloadInfosChanged(buildDownloadInfo());
         }
             break;
 

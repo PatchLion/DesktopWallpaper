@@ -135,7 +135,7 @@ FramelessAndMoveableWindow {
         Global.APIRequest = api_request_component.createObject();
         //console.log("1-->", Global.APIRequest);
         Global.APIRequest.downloadingCountChanged.connect(function(count){
-            //console.log("Downloading count:", count);
+            console.log("Downloading count:", count);
             system_menu_panel.downloadCount = count;
         });
         Global.RootView = main_stackView;

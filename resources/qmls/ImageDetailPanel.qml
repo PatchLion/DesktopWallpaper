@@ -19,10 +19,13 @@ Item {
         onItemsDetailResponse: {
             var result = Global.resolveItemsDetailData(data);
 
+
             if(result[0])
             {
                 images_list_model.clear();
                 images_list_model.append(result[1]);
+
+                downloadall_button.enabled = true;
             }
         }
 
@@ -279,6 +282,7 @@ Item {
             width: 80
             height: 20
             buttonText: "下载所有"
+            enabled: false
 
             Component{
                 id: dir_dialog_component
