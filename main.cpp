@@ -3,7 +3,7 @@
 #include <QtGui>
 #include <QtCore>
 #include "APIRequest.h"
-#include "wallpaper.h"
+#include "WallpaperSetter.h"
 
 void loadFontsFromDir(QGuiApplication& app, const QString& path)
 {
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     qDebug() << "Font families loadded!";
 
     qmlRegisterType<APIRequest>("DesktopWallpaper.APIRequest", 1, 0, "APIRequest");
-    qmlRegisterType<Wallpaper>("DesktopWallpaper.Wallpaper", 1, 0, "Wallpaper");
+    qmlRegisterType<WallpaperSetter>("DesktopWallpaper.WallpaperSetter", 1, 0, "WallpaperSetter");
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qmls/main.qml")));
     if (engine.rootObjects().isEmpty())

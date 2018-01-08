@@ -1,9 +1,9 @@
-#include "wallpaper.h"
+#include "WallpaperSetter.h"
 #ifdef Q_OS_MAC
 
 #import <Cocoa/Cocoa.h>
 
-QString Wallpaper::doImageToDesktop(const QString &localfile, Wallpaper::Mode mode)
+QString WallpaperSetter::doImageToDesktop(const QString &localfile, WallpaperSetter::Mode mode)
 {
     @autoreleasepool {
             NSWorkspace *sw = [NSWorkspace sharedWorkspace];

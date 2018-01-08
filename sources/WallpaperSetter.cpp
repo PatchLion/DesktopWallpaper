@@ -1,11 +1,11 @@
-#include "Wallpaper.h"
+#include "WallpaperSetter.h"
 #include <QtNetwork>
 
 QString dirPath(){
     return QStandardPaths::standardLocations(QStandardPaths::PicturesLocation)[0] + "/" + kDirName;
 }
 
-Wallpaper::~Wallpaper()
+WallpaperSetter::~WallpaperSetter()
 {
     if(m_loop)
     {
@@ -13,7 +13,7 @@ Wallpaper::~Wallpaper()
     }
 }
 
-void Wallpaper::setImageToDesktop(const QString& url, Mode mode) {
+void WallpaperSetter::setImageToDesktop(const QString& url, Mode mode) {
     if(url.isEmpty())
     {
         Q_EMIT finished(false, QString::fromLocal8Bit("无效的Url"));
@@ -39,7 +39,7 @@ void Wallpaper::setImageToDesktop(const QString& url, Mode mode) {
     QNetworkReply* reply = network.get(QNetworkRequest(url));
 
     QEventLoop loop;
-    Wallpaper* object = this;
+    WallpaperSetter* object = this;
     connect(reply, &QNetworkReply::downloadProgress, [=, &object](qint64 bytesReceived, qint64 bytesTotal){
         Q_EMIT object->progress((double)bytesReceived/(double)bytesTotal,  tr("Wallpaper downloading..."));
     } );

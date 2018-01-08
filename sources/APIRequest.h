@@ -1,5 +1,5 @@
 #ifndef APIREQUEST_H
-#define APIREQU
+#define APIREQUEST_H
 
 #include <QtCore>
 #include <QtNetwork>

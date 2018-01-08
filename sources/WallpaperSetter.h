@@ -1,12 +1,12 @@
-#ifndef Wallpaper_h__
-#define Wallpaper_h__
+#ifndef WallpaperSetter_h__
+#define WallpaperSetter_h__
 
 #include <QtCore>
 
 
 const static char* kDirName = "beautyfinder_wallpaper";
 
-class Wallpaper : public QObject
+class WallpaperSetter : public QObject
 {
     Q_OBJECT
 public:
@@ -18,9 +18,9 @@ public:
     };
     Q_ENUMS(Mode)
 public:
-    Wallpaper(QObject* parent = 0)
+    WallpaperSetter(QObject* parent = 0)
         :m_loop(0){}
-    ~Wallpaper();
+    ~WallpaperSetter();
 
 public:
     //

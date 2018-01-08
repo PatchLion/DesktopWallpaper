@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
-import DesktopWallpaper.Wallpaper 1.0
+import DesktopWallpaper.WallpaperSetter 1.0
 
 import "../controls"
 import "../controls/PLToast.js" as Toast
@@ -157,7 +157,7 @@ Item {
 
                         //visible: download_button.visible
 
-                        Wallpaper{
+                        WallpaperSetter{
                             id: wallpaper_item
 
                             onProgress: {

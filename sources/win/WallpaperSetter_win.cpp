@@ -5,7 +5,7 @@
 #include <shlobj.h>
 #include <wininet.h>
 
-QString Wallpaper::doImageToDesktop(const QString &localfile, Wallpaper::Mode mode)
+QString WallpaperSetter::doImageToDesktop(const QString &localfile, WallpaperSetter::Mode mode)
 {
     //if (argc > 1) {
         //wchar_t fullPath = reinterpret_cast<wchar_t *>(localfile.utf16());
