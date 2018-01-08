@@ -1,6 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
-import DesktopWallpaper.Functions 1.0
+import DesktopWallpaper.Wallpaper 1.0
 import "./Toast.js" as Toast
 import "./Global.js" as Global
 import  "./CoverPanel.js" as CoverPanel
@@ -151,13 +151,13 @@ Item {
                         property var cover: null
                         onButtonClicked: {
                             cover = CoverPanel.showProgressBarCover(Global.RootPanel);
-                            funcs_item.setImageToDesktop(image_item.source);
+                            wallpaper_item.setImageToDesktop(image_item.source);
                         }
 
                         //visible: download_button.visible
 
-                        Functions{
-                            id: funcs_item
+                        Wallpaper{
+                            id: wallpaper_item
 
                             onProgress: {
                                 if(set_wallpaper_button.cover){

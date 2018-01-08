@@ -1,104 +1,9 @@
-//
-//  wallpaper.m
-//  wallpaper
-//
-//  Copyright © Sindre Sorhus
-//
-#include "Functions.h"
-//@import AppKit;
-//#import <sqlite3.h>
+#include "wallpaper.h"
+#ifdef Q_OS_MAC
+
 #import <Cocoa/Cocoa.h>
-#include <QtNetwork>
 
-const static char* kDirName = "beautyfinder";
-
-QString dirPath(){
-    return QStandardPaths::standardLocations(QStandardPaths::PicturesLocation)[0] + "/" + kDirName;
-}
-
-Functions::~Functions()
-{
-    if(m_loop)
-    {
-        m_loop->quit();
-    }
-}
-
-void Functions::setImageToDesktop(const QString& url, Mode mode) {
-    if(url.isEmpty())
-    {
-        Q_EMIT finished(false, QString::fromLocal8Bit("无效的Url"));
-    }
-
-    const QString fullpath = dirPath() + "/" + url.toUtf8().toBase64() + ".png";
-
-
-    if (QFile().exists(fullpath)){
-        const QString res = doImageToDesktop(fullpath, mode);
-
-        if(res.isEmpty()){
-            Q_EMIT finished(true, "");
-        }
-        else{
-            Q_EMIT finished(false, res);
-        }
-
-        return;
-    }
-
-    QNetworkAccessManager network;
-    QNetworkReply* reply = network.get(QNetworkRequest(url));
-
-    QEventLoop loop;
-    Functions* object = this;
-    connect(reply, &QNetworkReply::downloadProgress, [=, &object](qint64 bytesReceived, qint64 bytesTotal){
-        Q_EMIT object->progress((double)bytesReceived/(double)bytesTotal, QString::fromLocal8Bit("壁纸下载中"));
-    } );
-
-    connect(reply, &QNetworkReply::finished, [=, &loop, &reply, &object](){
-        if (!QDir().exists(dirPath())){
-            QDir().mkpath(dirPath());
-        }
-
-        const QNetworkReply::NetworkError error = reply->error();
-        if(error == QNetworkReply::NoError){
-            const QByteArray data = reply->readAll();
-
-           QFile file(fullpath);
-
-           if(file.open(QIODevice::WriteOnly))
-           {
-               file.write(data);
-               file.close();
-
-               Q_EMIT object->progress(1.0, QString::fromLocal8Bit("壁纸设置中..."));
-                const QString res = doImageToDesktop(fullpath, mode);
-
-                if(res.isEmpty()){
-                    Q_EMIT finished(true, "");
-                    Q_EMIT object->progress(1.0, QString::fromLocal8Bit("壁纸设置完成"));
-                }
-                else{
-                    Q_EMIT finished(false, res);
-                }
-           }
-           else{
-               Q_EMIT finished(false, QString::fromLocal8Bit("写入文件到:")+fullpath+QString::fromLocal8Bit("时发生异常! 异常提示:")+file.errorString());
-           }
-        }
-        else{
-            Q_EMIT finished(false, QString::fromLocal8Bit("网络请求出现异常，错误代码:%1").arg(error));
-        }
-
-        m_loop = 0;
-        loop.quit();
-    });
-
-    m_loop = &loop;
-    loop.exec();
-}
-
-QString Functions::doImageToDesktop(const QString &localfile, Functions::Mode mode)
+QString Wallpaper::doImageToDesktop(const QString &localfile, Wallpaper::Mode mode)
 {
     @autoreleasepool {
             NSWorkspace *sw = [NSWorkspace sharedWorkspace];
@@ -193,3 +98,5 @@ QString Functions::doImageToDesktop(const QString &localfile, Functions::Mode mo
                     return "";
     }
 }
+
+#endif
