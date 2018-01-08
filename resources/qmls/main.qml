@@ -2,11 +2,12 @@ import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
 import DesktopWallpaper.APIRequest 1.0
+import "../controls/"
 import "./Global.js" as Global
-import "./CoverPanel.js" as CoverPanel
+import "../controls/PLCoverPanel.js" as CoverPanel
 import "./DataType.js" as DataType
 
-FramelessAndMoveableWindow {
+PLFrameLessAndMoveableWindow {
     id: root_window
     visible: true
     width: 1200

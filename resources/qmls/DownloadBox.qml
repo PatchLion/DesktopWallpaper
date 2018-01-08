@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import "./Global.js" as Global
+import "../controls"
 
 Rectangle {
     id: root_item
@@ -29,14 +30,14 @@ Rectangle {
 
         height: 50
 
-        DefaultButton{
+        PLTextButton{
             id: back_button
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             width: 60
             height: 20
-            buttonText: "返回"
-            onButtonClicked: {
+            text: "返回"
+            onClicked: {
 
                 Global.RootPanel.back();
 

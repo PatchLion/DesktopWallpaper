@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Window 2.2
 import "./Global.js" as Global
+import "../controls"
 
 Item{
     id: root_item
@@ -15,11 +16,11 @@ Item{
     height: 30
 
     //关闭
-    DefaultButton{
+    PLTextButton{
         id: close_button
-        width: 18
-        height: 18
-        buttonText: "X"
+        width: 22
+        height: 22
+        text: "X"
         anchors.right: parent.right
         anchors.rightMargin: 10
 
@@ -29,17 +30,17 @@ Item{
 
         radius: width/2
 
-        onButtonClicked: {
+        onClicked: {
             Qt.quit();
         }
     }
 
     //最大化
-    DefaultButton{
+    PLTextButton{
         id: max_normal_button
         width: close_button.width
         height: close_button.height
-        buttonText: (root_item.window.visibility === Window.Maximized) ? "=" : "口"
+        text: (root_item.window.visibility === Window.Maximized) ? "=" : "口"
         anchors.right: close_button.left
         anchors.rightMargin: 5
 
@@ -49,7 +50,7 @@ Item{
 
         radius: close_button.radius
 
-        onButtonClicked: {
+        onClicked: {
             if(root_item.window.visibility === Window.Maximized)
             {
                 root_item.window.visibility = Window.Windowed
@@ -62,11 +63,11 @@ Item{
     }
 
     //最小化
-    DefaultButton{
+    PLTextButton{
         id: min_button
         width: max_normal_button.width
         height: max_normal_button.height
-        buttonText: "-"
+        text: "-"
         anchors.right: max_normal_button.left
         anchors.rightMargin: 5
 
@@ -76,7 +77,7 @@ Item{
 
         radius: close_button.radius
 
-        onButtonClicked: {
+        onClicked: {
             root_item.window.visibility = Window.Minimized
         }
     }
@@ -105,11 +106,11 @@ Item{
     }
 
     //下载盒子按钮
-    DefaultButton{
+    PLTextButton{
         id: download_box_button
         width: 60
         height: search_control.height
-        buttonText: "下载盒子"
+        text: "下载盒子"
         anchors.right: search_control.left
         anchors.rightMargin: 10
 
@@ -123,7 +124,7 @@ Item{
 
         //radius: close_button.radius
 
-        onButtonClicked: {
+        onClicked: {
             Global.RootPanel.showDownloadBoxButtonClicked();
         }
 

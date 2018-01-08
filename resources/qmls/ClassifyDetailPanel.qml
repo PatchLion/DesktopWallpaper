@@ -1,8 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
-import "./Toast.js" as Toast
+import "../controls/PLToast.js" as Toast
 import "./Global.js" as Global
-
+import "../controls"
 Item {
     id: root_item
 
@@ -48,24 +48,23 @@ Item {
             anchors.rightMargin: 10
             height: 50
 
-            DefaultButton{
+            PLTextButton{
                 id: back_button
                 anchors.left: parent.left
                 anchors.leftMargin: 5
                 anchors.verticalCenter: parent.verticalCenter
                 width: 60
                 height: 20
-                buttonText: "返回"
-                onButtonClicked: {
+                text: "返回"
+                onClicked: {
                     Global.RootPanel.back();
                 }
             }
 
-            Text{
+            PLTextWithDefaultFamily{
                 id: text_item
 
                 anchors.centerIn: parent
-                font.family: "微软雅黑"
                 font.pointSize: 11
                 color: "white"
                 clip: true

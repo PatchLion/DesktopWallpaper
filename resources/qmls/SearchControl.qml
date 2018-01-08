@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import "./Global.js" as Global
-import "./Toast.js" as Toast
+import "../controls"
+import "../controls/PLToast.js" as Toast
 
 Rectangle{
     id: root_item
@@ -13,7 +14,7 @@ Rectangle{
 
     smooth: true
 
-    Text{
+    PLTextWithDefaultFamily{
         id: default_text_item
         anchors.fill: parent
         anchors.rightMargin: search_button.width
@@ -21,7 +22,6 @@ Rectangle{
         horizontalAlignment: Text.AlignLeft
 
         font.pointSize: 9
-        font.family: "微软雅黑"
         color: "#999999"
 
 
@@ -42,7 +42,6 @@ Rectangle{
         selectByMouse: true
 
         font.pointSize: 9
-        font.family: "微软雅黑"
 
         smooth: true
 
@@ -62,20 +61,20 @@ Rectangle{
 
 
 
-    DefaultButton{
+    PLTextButton{
         id: search_button
         width: 40
         height: root_item.height
-        buttonText: qsTr("搜索")
+        text: qsTr("搜索")
         anchors.right: parent.right
 
         smooth: true
-        buttonTextPointSize: 8
+        textPixelSize: 10
 
         radius: 0
         anchors.verticalCenter: parent.verticalCenter
 
-        onButtonClicked: {
+        onClicked: {
             var keyword = textinput_keyword.text
             if ( keyword.length>0){
                 root_item.startSearch(keyword);

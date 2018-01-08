@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "../controls"
 
 Rectangle {
     id: rectangle
@@ -15,7 +16,7 @@ Rectangle {
 
     radius: 5
 
-    Text {
+    PLTextWithDefaultFamily {
         id: title_item
         text: "下载标题"
         font.pixelSize: 12
@@ -30,7 +31,7 @@ Rectangle {
     }
 
     property int total: downloaded+failed+downloading
-    ProgressBar {
+    PLProgressBar {
         id: progressBar
 
         height: 14
@@ -42,7 +43,7 @@ Rectangle {
         progress: total ===0 ? 0 : (downloaded / total)
     }
 
-    Text
+    PLTextWithDefaultFamily
     {
         id: text_item
 

@@ -2,30 +2,40 @@
     <qresource prefix="/">
         <file>qmls/ClassifyDetailPanel.qml</file>
         <file>qmls/ClassifyGridView.qml</file>
-        <file>qmls/DataCache.js</file>
         <file>qmls/Global.js</file>
         <file>qmls/ImageDetailPanel.qml</file>
         <file>qmls/ImageListInReview.qml</file>
         <file>qmls/ImagesView.qml</file>
-        <file>qmls/main.qml</file>
-        <file>qmls/Toast.js</file>
-        <file>qmls/Toast.qml</file>
         <file>images/icon.png</file>
-        <file>qmls/FramelessAndMoveableWindow.qml</file>
-        <file>qmls/DefaultButton.qml</file>
         <file>qmls/MainPage.qml</file>
         <file>qmls/SearchPage.qml</file>
         <file>qmls/SearchControl.qml</file>
         <file>qmls/SystemMenuPanel.qml</file>
-        <file>qmls/ProgressBar.qml</file>
         <file>qmls/ProgressTooltipPanel.qml</file>
-        <file>qmls/CoverPanel.js</file>
-        <file>qmls/CoverPanel.qml</file>
-        <file>images/loading.gif</file>
-        <file>qmls/LoadingItem.qml</file>
         <file>qmls/DownloadBox.qml</file>
         <file>qmls/DownloadBoxItem.qml</file>
         <file>qmls/CircleTooltip.qml</file>
         <file>qmls/DataType.js</file>
+        <file>qmls/main.qml</file>
+        <file>images/loading.gif</file>
+        <file>controls/PLButtonBase.qml</file>
+        <file>controls/PLCheckButtonBase.qml</file>
+        <file>controls/PLCheckButtonGroup.qml</file>
+        <file>controls/PLCheckTextButton.qml</file>
+        <file>controls/PLComboBoxItem.qml</file>
+        <file>controls/PLCoverPanel.js</file>
+        <file>controls/PLCoverPanel.qml</file>
+        <file>controls/PLFrameLessAndMoveableWindow.qml</file>
+        <file>controls/PLImageButtonItem.qml</file>
+        <file>controls/PLImageCheckButtonItem.qml</file>
+        <file>controls/PLLoadingItem.qml</file>
+        <file>controls/PLMessageBoxItem.js</file>
+        <file>controls/PLMessageBoxItem.qml</file>
+        <file>controls/PLProgressBar.qml</file>
+        <file>controls/PLProgressTooltipPanel.qml</file>
+        <file>controls/PLTextButton.qml</file>
+        <file>controls/PLToast.js</file>
+        <file>controls/PLToast.qml</file>
+        <file>controls/PLTextWithDefaultFamily.qml</file>
     </qresource>
 </RCC>

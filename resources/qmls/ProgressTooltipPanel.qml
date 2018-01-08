@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "../controls"
 
 Item {
     id: root_item
@@ -8,7 +9,7 @@ Item {
     property alias title: title_item.text
     property alias progress: progressBar.progress
 
-    ProgressBar {
+    PLProgressBar {
         id: progressBar
         height: 10
 
@@ -19,7 +20,7 @@ Item {
         width: parent.width
     }
 
-    Text {
+    PLTextWithDefaultFamily {
         color: "#ffffff"
         text: Math.round(root_item.progress*100) + "%"
         font.pixelSize: 8
@@ -34,7 +35,7 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 2
     }
-    Text {
+    PLTextWithDefaultFamily {
         id: title_item
 
         color: "#ffffff"

@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "../controls"
 
 Rectangle{
 
@@ -15,12 +16,11 @@ Rectangle{
     smooth: true
     radius: width/2
 
-    Text{
+    PLTextWithDefaultFamily{
         id: text_item
         anchors.centerIn: parent
         color: "white"
         font.bold: true
-        //font.family: "微软雅黑"
         font.pixelSize: 10
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

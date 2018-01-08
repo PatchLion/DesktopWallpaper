@@ -3,6 +3,7 @@ CONFIG += c++11
 TEMPLATE = app
 CONFIG -= flat
 
+
 INCLUDEPATH += ./sources
 
 # The following define makes your compiler emit warnings if you use
@@ -34,7 +35,7 @@ win32{
 SOURCES += ./sources/APIRequest.cpp  main.cpp \
     ./sources/wallpaper.cpp
 
-RESOURCES += ./resources/qml.qrc
+RESOURCES += ./resources/qml.qrc #qmlcommon/qmlcommon.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

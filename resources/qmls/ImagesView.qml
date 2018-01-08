@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import "./Global.js" as Global
 
+import "../controls"
 Rectangle{
     id: root_item
 
@@ -54,12 +55,11 @@ Rectangle{
 
             color: Qt.rgba(1, 1, 1, 0.3)
 
-            Text{
+            PLTextWithDefaultFamily{
                 id: text_item
                 anchors.fill:parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                font.family: "微软雅黑"
                 font.pointSize: 9
                 color: "white"
                 clip: true

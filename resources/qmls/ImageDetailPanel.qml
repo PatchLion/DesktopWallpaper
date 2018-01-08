@@ -1,9 +1,11 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
 import DesktopWallpaper.Wallpaper 1.0
-import "./Toast.js" as Toast
+
+import "../controls"
+import "../controls/PLToast.js" as Toast
 import "./Global.js" as Global
-import  "./CoverPanel.js" as CoverPanel
+import "../controls/PLCoverPanel.js" as CoverPanel
 
 Item {
     id: root_item
@@ -89,7 +91,7 @@ Item {
                     //border.color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
                     //border.width: 1
 
-                    Text{
+                    PLTextWithDefaultFamily{
                         text: qsTr("Loadding......")
 
                         anchors.centerIn: parent
@@ -99,7 +101,6 @@ Item {
                         color: "white"
 
                         font.pointSize: 11
-                        font.family: "微软雅黑"
 
                     }
 
@@ -138,18 +139,18 @@ Item {
 
                     }
 
-                    DefaultButton{
+                    PLTextButton{
                         id: set_wallpaper_button
 
 
-                        buttonText: "设置为壁纸"
+                        text: "设置为壁纸"
                         width: 130
                         height: download_button.height
                         anchors.right: download_button.left
                         anchors.rightMargin: 10
                         anchors.verticalCenter: download_button.verticalCenter
                         property var cover: null
-                        onButtonClicked: {
+                        onClicked: {
                             cover = CoverPanel.showProgressBarCover(Global.RootPanel);
                             wallpaper_item.setImageToDesktop(image_item.source);
                         }
@@ -183,7 +184,7 @@ Item {
                         }
                     }
 
-                    DefaultButton{
+                    PLTextButton{
 
                         id: download_button
 
@@ -195,7 +196,7 @@ Item {
                         anchors.bottomMargin: 10
                         width: 60
                         height: 20
-                        buttonText: "下载"
+                        text: "下载"
 
                         //visible: (image_mouse_area.containsMouse || download_button.isContainMouse)
 
@@ -221,7 +222,7 @@ Item {
                                 Component.onCompleted: visible=true
                             }
                         }
-                        onButtonClicked: {
+                        onClicked: {
                             var file_dialog = file_dialog_component.createObject(root_item);
                         }
                     }
@@ -241,14 +242,14 @@ Item {
 
         height: 50
 
-        DefaultButton{
+        PLTextButton{
             id: back_button
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             width: 60
             height: 20
-            buttonText: "返回"
-            onButtonClicked: {
+            text: "返回"
+            onClicked: {
 
                 Global.RootPanel.back()
             }
@@ -256,7 +257,7 @@ Item {
 
         }
 
-        DefaultButton{
+        PLTextButton{
 
             id: link_button
 
@@ -265,23 +266,23 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: 100
             height: 20
-            buttonText: "跳转到源网页"
+            text: "跳转到源网页"
 
-            onButtonClicked: {
+            onClicked: {
                 console.log("Jump to", root_item.itemUrl)
                 Qt.openUrlExternally(root_item.itemUrl)
             }
         }
 
 
-        DefaultButton{
+        PLTextButton{
             id: downloadall_button
             anchors.right: parent.right
             anchors.rightMargin: 5
             anchors.verticalCenter: parent.verticalCenter
             width: 80
             height: 20
-            buttonText: "下载所有"
+            text: "下载所有"
             enabled: false
 
             Component{
@@ -319,15 +320,14 @@ Item {
                 }
             }
 
-            onButtonClicked: {
+            onClicked: {
                 var dir_dialog = dir_dialog_component.createObject(root_item);
             }
         }
-        Text{
+        PLTextWithDefaultFamily{
             id: text_item
             height: 30
             font.pointSize: 10
-            font.family: "微软雅黑"
             color: "#EEEEEE"
             text: "Title"
             verticalAlignment:Text.AlignVCenter

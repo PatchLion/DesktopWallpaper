@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import "./Global.js" as Global
 
+import "../controls"
+
 Rectangle{
     id: root_item
     property string classify: ""
@@ -45,7 +47,7 @@ Rectangle{
         height: 40
 
 
-        Text{
+        PLTextWithDefaultFamily{
             id: text_item
             anchors.left: parent.left
             anchors.leftMargin: 15
@@ -53,7 +55,6 @@ Rectangle{
             anchors.rightMargin: 10
             height: 30
             font.pointSize: 13
-            font.family: "微软雅黑"
             font.bold: true
             color: "#EEEEEE"
             text: classify
@@ -61,16 +62,16 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        DefaultButton{
+        PLTextButton{
             anchors.right: parent.right
             anchors.rightMargin: 25
             anchors.verticalCenter: parent.verticalCenter
 
-            buttonText: "更多"
+            text: "更多"
             width: 60
             height: 20
 
-            onButtonClicked: {
+            onClicked: {
                 Global.RootPanel.showAllItemByClassifyPanel(root_item.classify);
             }
         }
