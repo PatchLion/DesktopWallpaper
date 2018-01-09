@@ -1,4 +1,4 @@
-#include "wallpaper.h"
+#include "WallpaperSetter.h"
 
 #ifdef Q_OS_WIN
 #include <windows.h>
