@@ -21,17 +21,11 @@ HEADERS += ./sources/common.h\
     ./sources/APIRequest.h\
     ./sources/WallpaperSetter.h
 
-UI_DIR = ./temp/gens
-MOC_DIR = ./temp/gens
-OBJECTS_DIR = ./temp/gens
-
-win32 {
-    SOURCES += ./sources/win/WallpaperSetter_win.cpp
-    LIBS += User32.lib
-}
 macx{
     OBJECTIVE_SOURCES += ./sources/mac/WallpaperSetter.mm
     QMAKE_LFLAGS += -framework AppKit
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
+    QMAKE_MAC_SDK=macosx10.13
 }
 
 SOURCES += ./sources/APIRequest.cpp  main.cpp \
