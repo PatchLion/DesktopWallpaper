@@ -7,7 +7,7 @@ Item {
     id: root_item
 
     property string classify: ""
-    property int currentPageIndex: 1
+    property int currentPageIndex: 0
     property alias title: text_item.text
 
 

@@ -98,7 +98,7 @@ Item{
 
         onStartSearch: {
             if (keyword.length>0){
-                //console.log("Search keyword =", keyword)
+                 s//console.log("Search keyword =", keyword)
                 Global.RootPanel.showSearchPanel(keyword);
                 //root_item.searchButtonClicked(keyword)
             }

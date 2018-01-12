@@ -15,7 +15,7 @@ Rectangle{
     onClassifyChanged: {
         //console.log("Classify-->", classify);
 
-        Global.APIRequest.requestItemsByClassify(classify, 1);
+        Global.APIRequest.requestItemsByClassify(classify, 0);
     }
 
     Connections{
