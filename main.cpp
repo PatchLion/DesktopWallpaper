@@ -4,6 +4,7 @@
 #include <QtCore>
 #include "APIRequest.h"
 #include "WallpaperSetter.h"
+#include "UserManager.h"
 
 void loadFontsFromDir(QGuiApplication& app, const QString& path)
 {
@@ -50,7 +51,11 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     app.setWindowIcon(QIcon(":/images/icon.png"));
+#ifdef Q_OS_WIN
     const QString path = QGuiApplication::applicationDirPath() + "/fonts";
+#else
+    const QString path = QGuiApplication::applicationDirPath() + "/../resources/fonts";
+#endif
     loadFontsFromDir(app, path);
     /*
     Q_FOREACH(QString f, QFontDatabase().families())
@@ -60,6 +65,7 @@ int main(int argc, char *argv[])
     */
     qDebug() << "Font families loadded!";
 
+    qmlRegisterType<UserManager>("DesktopWallpaper.UserManager", 1, 0, "UserManager");
     qmlRegisterType<APIRequest>("DesktopWallpaper.APIRequest", 1, 0, "APIRequest");
     qmlRegisterType<WallpaperSetter>("DesktopWallpaper.WallpaperSetter", 1, 0, "WallpaperSetter");
     QQmlApplicationEngine engine;

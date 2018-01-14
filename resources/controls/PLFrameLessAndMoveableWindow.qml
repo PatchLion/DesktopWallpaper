@@ -3,9 +3,17 @@ import QtQuick.Window 2.3
 
 Window {
     id: frameless_moveable_window
-    flags: Qt.FramelessWindowHint | Qt.Window
-    visibility: Window.Windowed
     color: "transparent"
+
+    Component.onCompleted: {
+        if(Qt.platform.os === "windows"){
+            flags = (Qt.FramelessWindowHint | Qt.Window);
+            visibility = Window.Maximized;
+        }
+        else{
+            visibility = Window.Maximized;
+        }
+    }
 
     property var dragArea: Qt.rect(0, 0, width, height)
 

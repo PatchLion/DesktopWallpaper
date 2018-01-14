@@ -19,20 +19,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += ./sources/common.h\
     ./sources/APIRequest.h\
-    ./sources/WallpaperSetter.h
-
+    ./sources/WallpaperSetter.h \
+    sources/UserManager.h
+SOURCES += ./sources/APIRequest.cpp  main.cpp \
+    ./sources/WallpaperSetter.cpp \
+    sources/UserManager.cpp
 win32{
     LIBS += User32.lib
 }
 
 macx{
-    OBJECTIVE_SOURCES += ./sources/mac/WallpaperSetter.mm
+    OBJECTIVE_SOURCES += ./sources/mac/WallpaperSetter_mac.mm
     QMAKE_LFLAGS += -framework AppKit
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
     QMAKE_MAC_SDK=macosx10.13
 }
-SOURCES += ./sources/APIRequest.cpp  main.cpp \
-    ./sources/WallpaperSetter.cpp
+
 
 RESOURCES += ./resources/qml.qrc #qmlcommon/qmlcommon.qrc
 

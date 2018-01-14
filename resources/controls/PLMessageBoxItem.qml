@@ -9,13 +9,14 @@ Rectangle
     MouseArea
     {
         anchors.fill: parent
+        hoverEnabled: true
     }
 
-    color: Qt.rgba(0, 0, 0, 0.1)
+    color: Qt.rgba(0, 0, 0, 0.5)
 
     Rectangle{
         id: messagebox
-        color: "#11213a"
+        color: Qt.rgba(0, 0, 0, 0.8)
         height: text_item.height + 60 + buttons_content.height
         radius: 5
         width: 420
@@ -34,7 +35,7 @@ Rectangle
             anchors.rightMargin: 40
             font.pointSize: 16
             wrapMode: Text.Wrap
-            color: "#1ab4be"
+            color: "white"
         }
 
         Item

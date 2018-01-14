@@ -3,6 +3,7 @@
 var RootPanel = null; //根页面
 var RootView = null; //
 var APIRequest = null; //
+var User = null; //用户信息
 
 //函数运行计时
 function runFuncWithUseTime(func, funcname){

@@ -2,12 +2,14 @@ import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
 import DesktopWallpaper.APIRequest 1.0
+import DesktopWallpaper.UserManager 1.0
 import "../controls/"
 import "./Global.js" as Global
 import "../controls/PLCoverPanel.js" as CoverPanel
 import "./DataType.js" as DataType
 
-PLFrameLessAndMoveableWindow {
+PLFrameLessAndMoveableWindow
+{
     id: root_window
     visible: true
     width: 1200
@@ -31,6 +33,9 @@ PLFrameLessAndMoveableWindow {
     //显示下载盒子界面
     signal showDownloadBoxButtonClicked();
 
+    //显示VIP升级对话框
+    signal showVIPUpgradePanel();
+
     //回退
     signal back();
 
@@ -49,7 +54,7 @@ PLFrameLessAndMoveableWindow {
     Rectangle{
         id: bg_rect
         color: "black"
-        radius: 5
+        radius: Qt.platform.os === "windows" ? 5 : 0
         anchors.fill: parent
 
         clip: true
@@ -83,6 +88,8 @@ PLFrameLessAndMoveableWindow {
                 }
 
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.right: parent.right
 
                 enableDownloadBoxButton: main_stackView.lastPage !== DataType.PanelDownloadBox
                 enableSearchControl: main_stackView.lastPage !== DataType.PanelSearchResult
@@ -130,9 +137,16 @@ PLFrameLessAndMoveableWindow {
 
     }
 
+    Component{
+        id: user_component
+
+        UserManager{
+
+        }
+    }
 
     Component.onCompleted: {
-
+        Global.User = user_component.createObject();
         Global.APIRequest = api_request_component.createObject();
         //console.log("1-->", Global.APIRequest);
         Global.APIRequest.downloadingCountChanged.connect(function(count){
@@ -216,6 +230,22 @@ PLFrameLessAndMoveableWindow {
                anchors.margins: 10
            }
        }
+
+
+     Component{
+         id: vipupgrade_component
+         VIPUpgrade{
+
+         }
+     }
+
+    onShowVIPUpgradePanel: {
+         var vippanel = vipupgrade_component.createObject(root_window, {"parent": root_window,
+                                                         "anchors.fill": root_window,
+                                                          "width": root_window.width,
+                                                          "height": root_window.height});
+
+    }
 
     onShowItemDetailsPanel: {
         main_stackView.push(image_detail_panel_component);

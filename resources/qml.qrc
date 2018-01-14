@@ -37,5 +37,7 @@
         <file>controls/PLToast.js</file>
         <file>controls/PLToast.qml</file>
         <file>controls/PLTextWithDefaultFamily.qml</file>
+        <file>qmls/VIPUpgrade.qml</file>
+        <file>images/zs1.png</file>
     </qresource>
 </RCC>

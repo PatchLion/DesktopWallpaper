@@ -18,10 +18,10 @@ public:
     };
     Q_ENUMS(Mode)
 public:
-    WallpaperSetter(QObject* parent = 0)
+    explicit WallpaperSetter(QObject* parent = 0)
         : QObject(parent)
         , m_loop(0){}
-    ~WallpaperSetter();
+    virtual ~WallpaperSetter();
 
 public:
     //

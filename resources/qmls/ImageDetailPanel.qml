@@ -6,6 +6,7 @@ import "../controls"
 import "../controls/PLToast.js" as Toast
 import "./Global.js" as Global
 import "../controls/PLCoverPanel.js" as CoverPanel
+import "../controls/PLMessageBoxItem.js" as MessageBox
 
 Item {
     id: root_item
@@ -285,6 +286,18 @@ Item {
             text: "下载所有"
             enabled: false
 
+
+            CircleTooltip{
+                width: 20
+                height: 20
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.rightMargin: -8
+                anchors.topMargin: -8
+                text:"VIP"
+                visible: !Global.User.isVip
+            }
+
             Component{
                 id: dir_dialog_component
                 FileDialog
@@ -321,7 +334,20 @@ Item {
             }
 
             onClicked: {
-                var dir_dialog = dir_dialog_component.createObject(root_item);
+
+                if(!Global.User.isVip){
+                    var messagebox = MessageBox.showMessageBox(Global.RootPanel, "该功能为VIP功能，如果需要使用请升级为VIP!", function(){
+                        if(messagebox){
+                            messagebox.visible = false;
+                            messagebox.destroy();
+
+                            Global.RootPanel.showVIPUpgradePanel();
+                        }
+                    });
+                }
+                else{
+                    var dir_dialog = dir_dialog_component.createObject(root_item);
+                }
             }
         }
         PLTextWithDefaultFamily{
