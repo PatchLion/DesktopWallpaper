@@ -8,7 +8,7 @@ Window {
     Component.onCompleted: {
         if(Qt.platform.os === "windows"){
             flags = (Qt.FramelessWindowHint | Qt.Window);
-            visibility = Window.Maximized;
+            visibility = Window.Windowed;
         }
         else{
             visibility = Window.Maximized;

@@ -27,7 +27,7 @@ function runFuncWithUseTime(func, funcname){
 //解析api标准格式数据
 function resolveStandardData(standData)
 {
-    //console.log("Resolve standard data:", standData);
+    console.log("Resolve standard data:", standData);
     if(standData !== undefined)
     {
         var json_obj = runFuncWithUseTime(JSON.parse, "JSON.parse", standData);
