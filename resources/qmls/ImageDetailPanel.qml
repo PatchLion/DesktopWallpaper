@@ -31,6 +31,7 @@ Item {
                 images_list_model.append(result[1]);
 
                 downloadall_button.enabled = true;
+                prefer_imagegroup_button.enabled = true;
             }
         }
 
@@ -334,6 +335,7 @@ Item {
             width: 100
             height: back_button.height
             text: "收藏该图片组"
+            enabled: false
 
 
             onClicked: {
