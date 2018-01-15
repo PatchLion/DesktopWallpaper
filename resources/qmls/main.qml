@@ -75,13 +75,13 @@ PLFrameLessAndMoveableWindow
 
     function updateUserInformation(data){
 
-        console.log("nickname ----- > ", data["nickname"])
         Global.User.isVip = data["is_vip"];
         Global.User.userName = data["user"];
-        Global.User.nickName = data["nickname"].length === 0 ? data["user"] : data["nickname"];
+        Global.User.nickName = ((data["nickname"].length === 0) ? data["user"] : data["nickname"]);
         Global.User.token = data["token"];
         Global.User.headerImage = data["headimage_url"];
 
+        console.log("nickname ----- > ", Global.User.nickName)
         Global.User.writeToHistory();
     }
 
@@ -320,7 +320,7 @@ PLFrameLessAndMoveableWindow
                 system_menu_panel.userName = Global.User.nickName;
 
                 if(Global.User.nickName.length > 0){
-                    Toast.showToast(Global.RootPanel, "欢迎你: "+Global.User.userName);
+                    Toast.showToast(Global.RootPanel, "欢迎你: "+Global.User.nickName);
                 }
              }
          }
