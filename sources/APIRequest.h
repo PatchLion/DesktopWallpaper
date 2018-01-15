@@ -23,6 +23,7 @@ private:
         RequestTpye_Login,
         RequestTpye_Regeister,
         RequestTpye_CheckToken,
+        RequestTpye_AddPefer,
     };
 
     //下载状态
@@ -86,6 +87,9 @@ public:
     //发起token校验请求
     Q_INVOKABLE void tryToCheckToken(const QString& token);
 
+    //尝试收藏图片
+    Q_INVOKABLE void tryToPefer(const QString& token, const QList<int>& imageids);
+
 private:
     //发起api请求
     void doRequest(RequestType apitype, const QVariantList& args = QVariantList(), bool post=false);
@@ -121,6 +125,9 @@ Q_SIGNALS:
 
     //注册完成
     void registerFinished(const QByteArray& data);
+
+    //添加收藏完成
+    void addPeferFinished(const QByteArray& data);
 
     //下载完成
     //void downloadFinished(const QString& url);

@@ -234,6 +234,35 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args, bo
         url = kDefaultLoginHost + kAPITokenCheck;
     }
         break;
+
+    case RequestTpye_AddPefer:
+    {
+        Q_ASSERT(args.size() == 2);
+        Q_ASSERT(args[0].isValid());
+        Q_ASSERT(args[1].isValid());
+
+        QVariantMap map;
+        map.insert("token", args[0]);
+
+        QString ids;
+        QList<int> listIDs = args[1].value<QList<int>>();
+        if(listIDs.size() > 0)
+        {
+            ids = QString::number(listIDs[0]);
+
+            for(int i = 1; i<listIDs.size();i++){
+                ids+=",";
+                ids+=QString::number(listIDs[i]);
+            }
+        }
+
+        qDebug() << "Add pefer:" << ids;
+        map.insert("imageids", ids);
+        QJsonDocument doc = QJsonDocument::fromVariant(map);
+        post_param = doc.toJson();
+        url = kDefaultLoginHost + kAPIAddPefer;
+    }
+        break;
     default:
     {
         Q_ASSERT(false);
@@ -352,7 +381,6 @@ void APIRequest::tryToRegeister(const QString &user, const QString &pwd, const Q
     args<<user;
     args<<pwd;
     args<<nickname;
-    //qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
     doRequest(RequestTpye_Regeister, args, true);
 }
 
@@ -360,8 +388,15 @@ void APIRequest::tryToCheckToken(const QString &token)
 {
     QVariantList args;
     args<<token;
-    //qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
     doRequest(RequestTpye_CheckToken, args, true);
+}
+
+void APIRequest::tryToPefer(const QString &token, const QList<int>& imageids)
+{
+    QVariantList args;
+    args<<token;
+    args<<QVariant::fromValue(imageids);
+    doRequest(RequestTpye_AddPefer, args, true);
 }
 
 
@@ -476,6 +511,23 @@ void APIRequest::onReplyFinished()
             }
         }
             break;
+        case RequestTpye_AddPefer:
+         {
+             Q_ASSERT(args.size() == 2);
+             Q_ASSERT(args[0].isValid());
+             Q_ASSERT(args[1].isValid());
+             if(success)
+             {
+                 //qDebug() << "Search result-->" <<data.data();
+                 Q_EMIT addPeferFinished(data);
+             }
+             else
+             {
+
+                 Q_EMIT apiRequestError(kAPIAddPefer, error);
+             }
+         }
+             break;
         case RequestTpye_Regeister:
         {
             Q_ASSERT(args.size() == 3);

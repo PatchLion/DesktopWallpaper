@@ -208,6 +208,9 @@ PLFrameLessAndMoveableWindow
             //CoverPanel.setProgressBarCoverTooltip(cover, "测试进度");
         //}
 
+        system_menu_panel.userName = Global.User.nickName;
+        system_menu_panel.headSource = Global.User.headerImage;
+
 
         if (Global.User.token.length > 0){
             Global.APIRequest.tryToCheckToken(Global.User.token);

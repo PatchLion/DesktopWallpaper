@@ -16,6 +16,8 @@ Item {
 
     property string itemUrl: ""
 
+    property var cover
+
 
     Connections{
         target: Global.APIRequest
@@ -32,6 +34,19 @@ Item {
             }
         }
 
+        onAddPeferFinished:{
+            root_item.cover.visible = false;
+            root_item.cover.destroy();
+
+            var result = Global.resolveAddPeferData(data);
+
+            if(result[0]){
+                Toast.showToast(Global.RootView, "图片收藏成功");
+            }
+            else{
+                Toast.showToast(Global.RootView, "图片收藏失败:" + result[1]);
+            }
+        }
 
         onApiRequestError: {
             console.warn("Catch error when reuqest api:", apiName, "code:", error);
@@ -70,10 +85,15 @@ Item {
 
             delegate: Item{
 
+                id: image_content_item
+
                 height: listview_item.height
                 width: image_item.status === Image.Ready ? image_item.width : loadding_image.width
 
                 visible: !(image_item.status === Image.Error || image_item.status === Image.Null)
+
+                property int currentID: imageid
+
 
                 Rectangle{
                     id: loadding_image
@@ -161,6 +181,9 @@ Item {
                             }
                             else{
                                 //执行收藏操作
+                                Global.APIRequest.tryToPefer(Global.User.token, [image_content_item.currentID]);
+
+                                root_item.cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
                             }
                         }
                     }
@@ -323,6 +346,16 @@ Item {
                 }
                 else{
                     //执行收藏操作
+                    var imageids = []
+                    for (var i= 0; i<images_list_model.count; i++)
+                    {
+                        console.log("Image id---->", images_list_model.get(i)["imageid"]);
+                        imageids.push(images_list_model.get(i)["imageid"]);
+                    }
+
+                    Global.APIRequest.tryToPefer(Global.User.token, imageids);
+
+                    root_item.cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
                 }
             }
         }

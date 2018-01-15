@@ -101,7 +101,7 @@ function resolveTokenCheckData(json_string){
     解析注册数据
 */
 function resolveRegisterData(json_string){
-    console.log("resolveRegisterData:", json_string);
+    //console.log("resolveRegisterData:", json_string);
     var json_obj = resolveStandardData(json_string);
 
     if(json_obj[0])
@@ -115,6 +115,30 @@ function resolveRegisterData(json_string){
         else
         {
             console.warn("Failed request register data: "+msg);
+        }
+    }
+
+    return [false, msg]
+}
+
+/*
+    解析添加收藏数据
+*/
+function resolveAddPeferData(json_string){
+    //console.log("resolveRegisterData:", json_string);
+    var json_obj = resolveStandardData(json_string);
+
+    if(json_obj[0])
+    {
+        var code = json_obj[1]
+        var msg = json_obj[2]
+        if(code === 0)
+        {
+            return [true, json_obj[3]];
+        }
+        else
+        {
+            console.warn("Failed request add pefer data: "+msg);
         }
     }
 
@@ -266,7 +290,7 @@ function resolveItemsDetailData(images_data)
 
 
                 //console.log("image_url:", item);
-                model_data.push({ "image": item});
+                model_data.push({ "image": item.image, "imageid": item.id});
             }
 
             return [true, model_data];

@@ -72,13 +72,13 @@ void UserManager::readHistory()
         dataStream >> headerImage;
         dataStream >> token;
 
-        /*
+
         qDebug() << "History readed:"<<userName << ", "
                  << nickName << ", "
                  << isVip << ", "
                  << headerImage  << ", "
                  << token;
-        */
+
 
         Q_EMIT userNameChanged();
         Q_EMIT nickNameChanged();

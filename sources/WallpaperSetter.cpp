@@ -41,7 +41,7 @@ void WallpaperSetter::setImageToDesktop(const QString& url, Mode mode) {
     QEventLoop loop;
     WallpaperSetter* object = this;
     connect(reply, &QNetworkReply::downloadProgress, [=, &object](qint64 bytesReceived, qint64 bytesTotal){
-        Q_EMIT object->progress((double)bytesReceived/(double)bytesTotal,  tr("Wallpaper downloading..."));
+        Q_EMIT object->progress((double)bytesReceived/(double)bytesTotal,  tr("壁纸下载中..."));
     } );
 
     connect(reply, &QNetworkReply::finished, [=, &loop, &reply, &object](){

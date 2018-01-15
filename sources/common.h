@@ -15,5 +15,6 @@ static const QString kAPISearch = "/search?key=%1"; //搜索
 static const QString kAPILogin = "/login"; //登录
 static const QString kAPIRegister = "/register"; //注册
 static const QString kAPITokenCheck = "/tokencheck"; //token校验
+static const QString kAPIAddPefer = "/addpefer"; //添加收藏
 
 #endif // COMMON_H
