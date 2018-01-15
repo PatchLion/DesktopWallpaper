@@ -8,10 +8,12 @@ function showToast(parent, text) {
     if(com.status === Component.Ready)
     {
         //console.log("Toast debug:", parent.width, parent.height);
-        com.createObject(parent, {"parent": parent,
+        var toast = com.createObject(parent, {"parent": parent,
                                      "width":parent.width,
                                      "height":parent.height,
-                                     "text": text})
+                                     "text": text});
+
+        //toast.show();
     }
     else
     {

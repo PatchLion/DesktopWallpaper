@@ -14,15 +14,18 @@ Rectangle{
 
     smooth: true
 
+
     PLTextWithDefaultFamily{
         id: default_text_item
         anchors.fill: parent
         anchors.rightMargin: search_button.width
+
+
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
 
         font.pointSize: 9
-        color: "#999999"
+        color: "#bbbbbb"
 
 
         smooth: true
@@ -38,12 +41,15 @@ Rectangle{
         id: textinput_keyword
         anchors.fill: parent
         anchors.rightMargin: search_button.width
-        color: "#666666"
+        anchors.leftMargin: 5
+        color: "#333333"
         selectByMouse: true
 
         font.pointSize: 9
 
         smooth: true
+
+        font.family: default_text_item.font.family
 
 
         clip: true
@@ -81,7 +87,7 @@ Rectangle{
                 textinput_keyword.text = "";
             }
             else{
-                 Toast.showToast(Global.RootView, "关键词不能为空")
+                Toast.showToast(Global.RootView, "关键词不能为空")
             }
         }
     }

@@ -27,7 +27,7 @@ function runFuncWithUseTime(func, funcname){
 //解析api标准格式数据
 function resolveStandardData(standData)
 {
-    console.log("Resolve standard data:", standData);
+    //console.log("Resolve standard data:", standData);
     if(standData !== undefined)
     {
         var json_obj = runFuncWithUseTime(JSON.parse, "JSON.parse", standData);
@@ -47,6 +47,78 @@ function resolveStandardData(standData)
     }
 
     return [false];
+}
+
+/*
+    解析登录数据
+*/
+function resolveLoginData(json_string){
+    console.log("resolveLoginData:", json_string);
+    var json_obj = resolveStandardData(json_string);
+
+    if(json_obj[0])
+    {
+        var code = json_obj[1]
+        var msg = json_obj[2]
+        if(code === 0)
+        {
+            return [true, json_obj[3]];
+        }
+        else
+        {
+            console.warn("Failed request user data: "+msg);
+        }
+    }
+
+    return [false, msg]
+}
+
+/*
+    解析token校验数据
+*/
+function resolveTokenCheckData(json_string){
+    console.log("resolveTokenCheckData:", json_string);
+    var json_obj = resolveStandardData(json_string);
+
+    if(json_obj[0])
+    {
+        var code = json_obj[1]
+        var msg = json_obj[2]
+        if(code === 0)
+        {
+            return [true, json_obj[3]];
+        }
+        else
+        {
+            console.warn("Failed request token check data: "+msg);
+        }
+    }
+
+    return [false, msg]
+}
+
+/*
+    解析注册数据
+*/
+function resolveRegisterData(json_string){
+    console.log("resolveRegisterData:", json_string);
+    var json_obj = resolveStandardData(json_string);
+
+    if(json_obj[0])
+    {
+        var code = json_obj[1]
+        var msg = json_obj[2]
+        if(code === 0)
+        {
+            return [true, json_obj[3]];
+        }
+        else
+        {
+            console.warn("Failed request register data: "+msg);
+        }
+    }
+
+    return [false, msg]
 }
 
 /*

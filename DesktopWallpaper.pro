@@ -4,7 +4,7 @@ TEMPLATE = app
 CONFIG -= flat
 
 
-INCLUDEPATH += ./sources
+INCLUDEPATH += ./sources ./sources/aes
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -20,10 +20,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += ./sources/common.h\
     ./sources/APIRequest.h\
     ./sources/WallpaperSetter.h \
-    sources/UserManager.h
+    sources/UserManager.h \
+    sources/Settings.h \
+    sources/aes/aes.h \
+    sources/aes/qaeswrap.h
 SOURCES += ./sources/APIRequest.cpp  main.cpp \
     ./sources/WallpaperSetter.cpp \
-    sources/UserManager.cpp
+    sources/UserManager.cpp \
+    sources/Settings.cpp\
+    sources/aes/aes.c \
+    sources/aes/qaeswrap.cpp
 win32{
     LIBS += User32.lib
 }

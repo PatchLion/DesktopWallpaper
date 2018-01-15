@@ -39,5 +39,26 @@
         <file>controls/PLTextWithDefaultFamily.qml</file>
         <file>qmls/VIPUpgrade.qml</file>
         <file>images/zs1.png</file>
+        <file>images/default_head_icon.jpg</file>
+        <file>qmls/UserSimplePanel.qml</file>
+        <file>qmls/DefaultPopupPanelBase.qml</file>
+        <file>qmls/UserLoginPanel.qml</file>
+        <file>qmls/InputItem.qml</file>
+        <file>images/button_24_0_0.png</file>
+        <file>images/button_24_0_1.png</file>
+        <file>images/button_24_0_2.png</file>
+        <file>images/button_24_1_0.png</file>
+        <file>images/button_24_1_1.png</file>
+        <file>images/button_24_1_2.png</file>
+        <file>images/button_24_2_0.png</file>
+        <file>images/button_24_2_1.png</file>
+        <file>images/button_24_2_2.png</file>
+        <file>images/button_24_3_0.png</file>
+        <file>images/button_24_3_1.png</file>
+        <file>images/button_24_3_2.png</file>
+        <file>images/close_icon_28x28_0_0.png</file>
+        <file>images/close_icon_28x28_0_1.png</file>
+        <file>images/close_icon_28x28_0_2.png</file>
+        <file>qmls/UserRegeisterPanel.qml</file>
     </qresource>
 </RCC>

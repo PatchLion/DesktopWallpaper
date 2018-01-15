@@ -9,10 +9,12 @@ Item{
     property bool enableDownloadBoxButton: true
     property bool enableSearchControl: true
 
+    property alias headSource: user_panel.headSource
+    property alias userName: user_panel.userName
+
     property int downloadCount: 0
 
     onWindowChanged: {
-        max_normal_button.text = ((root_item.window.visibility === Window.Maximized) ? "=" : "口");
         title_text_item.text = root_item.window.title
     }
 
@@ -33,11 +35,16 @@ Item{
     height: 30
 
     //关闭
-    PLTextButton{
+    PLImageButtonItem{
         id: close_button
-        width: Qt.platform.os === "windows" ? 22 : 0
-        height: 22
-        text: "X"
+        width: Qt.platform.os === "windows" ? 24 : 0
+        height: 24
+
+        defaultIcon: "qrc:/images/button_24_0_2.png"
+        pressedIcon: "qrc:/images/button_24_0_1.png"
+        hoverIcon: "qrc:/images/button_24_0_1.png"
+        disableIcon: "qrc:/images/button_24_0_0.png"
+
         anchors.right: parent.right
         anchors.rightMargin: Qt.platform.os === "windows" ? 10 : 0
 
@@ -55,11 +62,16 @@ Item{
     }
 
     //最大化
-    PLTextButton{
+    PLImageButtonItem{
         id: max_normal_button
         width: Qt.platform.os === "windows" ? close_button.width : 0
         height: close_button.height
-        text: (root_item.window.visibility === Window.Maximized) ? "=" : "口"
+
+        defaultIcon: (root_item.window.visibility === Window.Maximized) ? "qrc:/images/button_24_3_2.png" :  "qrc:/images/button_24_2_2.png"
+        pressedIcon: (root_item.window.visibility === Window.Maximized) ? "qrc:/images/button_24_3_1.png" :  "qrc:/images/button_24_2_1.png"
+        hoverIcon: (root_item.window.visibility === Window.Maximized) ? "qrc:/images/button_24_3_1.png" :  "qrc:/images/button_24_2_1.png"
+        disableIcon: (root_item.window.visibility === Window.Maximized) ? "qrc:/images/button_24_3_0.png" :  "qrc:/images/button_24_2_0.png"
+
         anchors.right: close_button.left
         anchors.rightMargin: Qt.platform.os === "windows" ? 5 : 0
 
@@ -84,11 +96,16 @@ Item{
     }
 
     //最小化
-    PLTextButton{
+    PLImageButtonItem{
         id: min_button
         width: Qt.platform.os === "windows" ? close_button.width : 0
         height: max_normal_button.height
-        text: "-"
+
+        defaultIcon: "qrc:/images/button_24_1_2.png"
+        pressedIcon: "qrc:/images/button_24_1_1.png"
+        hoverIcon: "qrc:/images/button_24_1_1.png"
+        disableIcon: "qrc:/images/button_24_1_0.png"
+
         anchors.right: max_normal_button.left
         anchors.rightMargin: Qt.platform.os === "windows" ? 5 : 0
 
@@ -167,5 +184,14 @@ Item{
             fontPixelSize: 9
 
         }
+    }
+
+    //用户信息面板
+    UserSimplePanel{
+        id: user_panel
+        height: 30
+        anchors.right: download_box_button.left
+        anchors.rightMargin: 40
+        anchors.verticalCenter: download_box_button.verticalCenter
     }
 }

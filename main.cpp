@@ -5,6 +5,7 @@
 #include "APIRequest.h"
 #include "WallpaperSetter.h"
 #include "UserManager.h"
+#include "Settings.h"
 
 void loadFontsFromDir(QGuiApplication& app, const QString& path)
 {
@@ -49,6 +50,9 @@ void loadFontsFromDir(QGuiApplication& app, const QString& path)
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    qDebug() << "Application cache root dir:" << Settings::appCacheRootDir();
+    qDebug() << "Application client id:" << Settings::clientID();
+    qDebug() << "Application settings file path:" << Settings::settingsFilePath();
 
     app.setWindowIcon(QIcon(":/images/icon.png"));
 #ifdef Q_OS_WIN

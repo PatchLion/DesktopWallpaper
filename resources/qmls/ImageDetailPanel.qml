@@ -175,7 +175,7 @@ Item {
                                 }
 
                                 if(success){
-                                     Toast.showToast(root_item, "壁纸已设置！")
+                                    Toast.showToast(root_item, "壁纸已设置！")
 
                                 }
                                 else{

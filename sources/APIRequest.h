@@ -20,6 +20,9 @@ private:
         RequestType_Download,
         RequestType_ItemsByClassify,
         RequestType_Search,
+        RequestTpye_Login,
+        RequestTpye_Regeister,
+        RequestTpye_CheckToken,
     };
 
     //下载状态
@@ -73,9 +76,19 @@ public:
 
     //构建下载信息
     Q_INVOKABLE QByteArray buildDownloadInfo();
+
+    //发起登录请求
+    Q_INVOKABLE void tryToLogin(const QString& user, const QString& pwd);
+
+    //发起注册请求
+    Q_INVOKABLE void tryToRegeister(const QString& user, const QString& pwd, const QString& nickname);
+
+    //发起token校验请求
+    Q_INVOKABLE void tryToCheckToken(const QString& token);
+
 private:
     //发起api请求
-    void doRequest(RequestType apitype, const QVariantList& args = QVariantList());
+    void doRequest(RequestType apitype, const QVariantList& args = QVariantList(), bool post=false);
 
     //统计下载中的请求
     int getDownloadingCount();
@@ -99,6 +112,15 @@ Q_SIGNALS:
 
     //搜索完成
     void searchResponse(const QByteArray& data);
+
+    //登录完成
+    void loginFinished(const QByteArray& data);
+
+    //token校验完成
+    void tokenCheckFinished(const QByteArray& data);
+
+    //注册完成
+    void registerFinished(const QByteArray& data);
 
     //下载完成
     //void downloadFinished(const QString& url);

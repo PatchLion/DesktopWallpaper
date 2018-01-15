@@ -33,7 +33,7 @@ Rectangle
             anchors.leftMargin: 40
             anchors.right: parent.right
             anchors.rightMargin: 40
-            font.pointSize: 16
+            font.pixelSize: 16
             wrapMode: Text.Wrap
             color: "white"
         }

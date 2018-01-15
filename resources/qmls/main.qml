@@ -5,6 +5,7 @@ import DesktopWallpaper.APIRequest 1.0
 import DesktopWallpaper.UserManager 1.0
 import "../controls/"
 import "./Global.js" as Global
+import "../controls/PLToast.js" as Toast
 import "../controls/PLCoverPanel.js" as CoverPanel
 import "./DataType.js" as DataType
 
@@ -36,6 +37,10 @@ PLFrameLessAndMoveableWindow
     //显示VIP升级对话框
     signal showVIPUpgradePanel();
 
+    //显示登录对话框
+    signal showLoginPanel();
+
+
     //回退
     signal back();
 
@@ -44,11 +49,41 @@ PLFrameLessAndMoveableWindow
         id: api_request_component
         APIRequest{
             id: api_request
+            onTokenCheckFinished: {
+                var result = Global.resolveTokenCheckData(data);
 
+                if(result[0]){
+                    updateUserInformation(result[1]);
+                }
+                else{
+                    clearUserInformation();
+                    Toast.showToast(Global.RootPanel, "登录信息已过期, 请重新登录!");
+                }
+            }
         }
     }
 
+    function clearUserInformation(){
+        Global.User.isVip = false;
+        Global.User.userName = "";
+        Global.User.nickName = "";
+        Global.User.token = "";
+        Global.User.headerImage ="";
 
+        Global.User.writeToHistory();
+    }
+
+    function updateUserInformation(data){
+
+        console.log("nickname ----- > ", data["nickname"])
+        Global.User.isVip = data["is_vip"];
+        Global.User.userName = data["user"];
+        Global.User.nickName = data["nickname"].length === 0 ? data["user"] : data["nickname"];
+        Global.User.token = data["token"];
+        Global.User.headerImage = data["headimage_url"];
+
+        Global.User.writeToHistory();
+    }
 
 
     Rectangle{
@@ -156,6 +191,9 @@ PLFrameLessAndMoveableWindow
         Global.RootView = main_stackView;
         Global.RootPanel = root_window;
 
+
+        user_connection_component.createObject();
+
         main_stackView.push(mainpage_component);
         main_stackView.panelStackedPanel.push(DataType.PanelMainPage)
         main_stackView.lastPage = DataType.PanelMainPage
@@ -169,6 +207,11 @@ PLFrameLessAndMoveableWindow
             //CoverPanel.setProgressBarCoverProgress(cover, 0.35);
             //CoverPanel.setProgressBarCoverTooltip(cover, "测试进度");
         //}
+
+
+        if (Global.User.token.length > 0){
+            Global.APIRequest.tryToCheckToken(Global.User.token);
+        }
     }
 
     //搜索页面
@@ -231,11 +274,55 @@ PLFrameLessAndMoveableWindow
            }
        }
 
+       Component{
+           id: login_component
+           UserLoginPanel{
+
+           }
+       }
+
+       onShowLoginPanel: {
+           var loginpanel = login_component.createObject(root_window);
+
+           loginpanel.anchors.fill = loginpanel.parent;
+           loginpanel.width = root_window.width;
+           loginpanel.height = loginpanel.height;
+
+       }
 
      Component{
          id: vipupgrade_component
          VIPUpgrade{
 
+         }
+     }
+
+     Component{
+         id: user_connection_component
+         Connections{
+             id: user_connection
+             target: Global.User
+             onIsVipChanged:{
+
+             }
+
+             onTokenChanged:{
+
+             }
+             onHeaderImageChanged:{
+                 system_menu_panel.headSource = Global.User.headerImage;
+             }
+             onUserNameChanged:{
+                 //system_menu_panel.userName = Global.User.userName;
+
+             }
+             onNickNameChanged:{
+                system_menu_panel.userName = Global.User.nickName;
+
+                if(Global.User.nickName.length > 0){
+                    Toast.showToast(Global.RootPanel, "欢迎你: "+Global.User.userName);
+                }
+             }
          }
      }
 

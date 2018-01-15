@@ -6,10 +6,13 @@ Rectangle{
 
     z: 100000
 
-    antialiasing: true
-    smooth: true
 
     color: "transparent"
+    function show(){
+        toast.visible = true;
+        toast.opacity = 1.0;
+        showTimer.restart();
+    }
 
     Rectangle {
         id: toast
@@ -22,13 +25,9 @@ Rectangle{
         anchors.centerIn: parent
         anchors.verticalCenterOffset: parent.height / 4
 
-        smooth: true
 
-        function show(){
-            toast.visible = true;
-            toast.opacity = 1.0;
-            showTimer.running = true;
-        }
+        antialiasing: true
+        smooth: true
 
         PLTextWithDefaultFamily{
             id: toast_text
@@ -55,11 +54,19 @@ Rectangle{
             repeat: false
             running: false
             onTriggered: {
+                //console.log("sdfsdfsdfds---------");
                 opacity_ani.start()
             }
         }
 
-        PropertyAnimation{id: opacity_ani; target: toast; properties: "opacity"; from: 1.0; to: 0.0; duration: 1000}
+        PropertyAnimation{
+            id: opacity_ani
+            target: toast
+            properties: "opacity"
+            from: 1.0
+            to: 0.0
+            duration: 1000
+        }
     }
 }
 

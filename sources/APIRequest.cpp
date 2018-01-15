@@ -132,16 +132,19 @@ QString APIRequest::refererUrl()
     return kDefaultHost + kAPISafe;
 }
 */
-void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
+void APIRequest::doRequest(RequestType requestType, const QVariantList &args, bool post)
 {
+    //qDebug() << "--->" << requestType << " " << args << " " << post;
 
-    QString url = kDefaultHost;
+    QString url;
+
+    QString post_param = "";
 
     switch (requestType)
     {
     case RequestType_Classifies:
     {
-        url += kAPIClassifies;
+        url = kDefaultHost + kAPIClassifies;
     }
         break;
 
@@ -157,7 +160,7 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     {
         Q_ASSERT(args.size() == 1);
         Q_ASSERT(args[0].isValid());
-        url += kAPIItemsDetails.arg(args[0].toString());
+        url = kDefaultHost + kAPIItemsDetails.arg(args[0].toString());
     }
         break;
 
@@ -175,7 +178,7 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     {
         Q_ASSERT(args.size() == 1);
         Q_ASSERT(args[0].isValid());
-        url += kAPISearch.arg(QUrl::toPercentEncoding(args[0].toString()).data());
+        url = kDefaultHost + kAPISearch.arg(QUrl::toPercentEncoding(args[0].toString()).data());
     }
         break;
     case RequestType_ItemsByClassify:
@@ -183,7 +186,52 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
         Q_ASSERT(args.size() == 2);
         Q_ASSERT(args[0].isValid());
         Q_ASSERT(args[1].isValid());
-        url += kAPIItemsByClassifyAndPageIndex.arg(args[0].toString()).arg(args[1].toInt());
+        url = kDefaultHost + kAPIItemsByClassifyAndPageIndex.arg(args[0].toString()).arg(args[1].toInt());
+    }
+        break;
+    case RequestTpye_Login:
+    {
+        Q_ASSERT(args.size() == 2);
+        Q_ASSERT(args[0].isValid());
+        Q_ASSERT(args[1].isValid());
+
+        QVariantMap map;
+        map.insert("user", args[0]);
+        map.insert("password", args[1]);
+        QJsonDocument doc = QJsonDocument::fromVariant(map);
+        post_param = doc.toJson();
+        url = kDefaultLoginHost + kAPILogin;
+    }
+        break;
+    case RequestTpye_Regeister:
+    {
+        Q_ASSERT(args.size() == 3);
+        Q_ASSERT(args[0].isValid());
+        Q_ASSERT(args[1].isValid());
+        Q_ASSERT(args[2].isValid());
+
+        QVariantMap map;
+        map.insert("user", args[0]);
+        map.insert("password", args[1]);
+        if (args[2].toString().size() > 0)
+        {
+            map.insert("nickname", args[2]);
+        }
+        QJsonDocument doc = QJsonDocument::fromVariant(map);
+        post_param = doc.toJson();
+        url = kDefaultLoginHost + kAPIRegister;
+    }
+        break;
+    case RequestTpye_CheckToken:
+    {
+        Q_ASSERT(args.size() == 1);
+        Q_ASSERT(args[0].isValid());
+
+        QVariantMap map;
+        map.insert("token", args[0]);
+        QJsonDocument doc = QJsonDocument::fromVariant(map);
+        post_param = doc.toJson();
+        url = kDefaultLoginHost + kAPITokenCheck;
     }
         break;
     default:
@@ -194,8 +242,19 @@ void APIRequest::doRequest(RequestType requestType, const QVariantList &args)
     }
 
     QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     //request.setRawHeader("Referer", "http://www.mzitu.com/");
-    QNetworkReply* reply = m_network.get(request);
+
+    QNetworkReply* reply = 0;
+    if(post)
+    {
+        reply = m_network.post(request, post_param.toUtf8());
+
+    }
+    else
+    {
+        reply = m_network.get(request);
+    }
 
     reply->setProperty(RequestTypeRole, requestType);
     reply->setProperty(RequestArgsRole, args);
@@ -276,6 +335,33 @@ QByteArray APIRequest::buildDownloadInfo()
     }
     //qDebug() << "Download info json --->" << ret;
     return ret.toLocal8Bit();
+}
+
+void APIRequest::tryToLogin(const QString &user, const QString &pwd)
+{
+    QVariantList args;
+    args<<user;
+    args<<pwd;
+    //qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
+    doRequest(RequestTpye_Login, args, true);
+}
+
+void APIRequest::tryToRegeister(const QString &user, const QString &pwd, const QString &nickname)
+{
+    QVariantList args;
+    args<<user;
+    args<<pwd;
+    args<<nickname;
+    //qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
+    doRequest(RequestTpye_Regeister, args, true);
+}
+
+void APIRequest::tryToCheckToken(const QString &token)
+{
+    QVariantList args;
+    args<<token;
+    //qDebug() << "Request items by classify and pageindex:" << classify << " " << pageindex;
+    doRequest(RequestTpye_CheckToken, args, true);
 }
 
 
@@ -370,6 +456,57 @@ void APIRequest::onReplyFinished()
             {
 
                 Q_EMIT apiRequestError(kAPISearch.arg(args[0].toString().toUtf8().toBase64().data()), error);
+            }
+        }
+            break;
+       case RequestTpye_Login:
+        {
+            Q_ASSERT(args.size() == 2);
+            Q_ASSERT(args[0].isValid());
+            Q_ASSERT(args[1].isValid());
+            if(success)
+            {
+                //qDebug() << "Search result-->" <<data.data();
+                Q_EMIT loginFinished(data);
+            }
+            else
+            {
+
+                Q_EMIT apiRequestError(kAPILogin, error);
+            }
+        }
+            break;
+        case RequestTpye_Regeister:
+        {
+            Q_ASSERT(args.size() == 3);
+            Q_ASSERT(args[0].isValid());
+            Q_ASSERT(args[1].isValid());
+            Q_ASSERT(args[2].isValid());
+            if(success)
+            {
+                //qDebug() << "Search result-->" <<data.data();
+                Q_EMIT registerFinished(data);
+            }
+            else
+            {
+
+                Q_EMIT apiRequestError(kAPIRegister, error);
+            }
+        }
+            break;
+        case RequestTpye_CheckToken:
+        {
+            Q_ASSERT(args.size() == 1);
+            Q_ASSERT(args[0].isValid());
+            if(success)
+            {
+                //qDebug() << "Search result-->" <<data.data();
+                Q_EMIT tokenCheckFinished(data);
+            }
+            else
+            {
+
+                Q_EMIT apiRequestError(kAPITokenCheck, error);
             }
         }
             break;
