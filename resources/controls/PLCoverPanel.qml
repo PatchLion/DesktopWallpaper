@@ -27,7 +27,7 @@ Rectangle {
         anchors.centerIn: parent
 
         width: parent.width *3 /5
-        height: 30
+        height: 40
 
         anchors.verticalCenterOffset: parent.height / 4
         visible: 1 === type

@@ -53,7 +53,7 @@ function resolveStandardData(standData)
     解析登录数据
 */
 function resolveLoginData(json_string){
-    console.log("resolveLoginData:", json_string);
+    //console.log("resolveLoginData:", json_string);
     var json_obj = resolveStandardData(json_string);
 
     if(json_obj[0])
@@ -77,7 +77,7 @@ function resolveLoginData(json_string){
     解析token校验数据
 */
 function resolveTokenCheckData(json_string){
-    console.log("resolveTokenCheckData:", json_string);
+    //console.log("resolveTokenCheckData:", json_string);
     var json_obj = resolveStandardData(json_string);
 
     if(json_obj[0])

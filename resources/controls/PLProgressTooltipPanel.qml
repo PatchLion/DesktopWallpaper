@@ -22,7 +22,8 @@ Item {
     PLTextWithDefaultFamily {
         color: "#ffffff"
         text: Math.round(root_item.progress*100) + "%"
-        font.pixelSize: 8
+        font.pixelSize: 15
+        font.bold: true
         fontSizeMode: Text.Fit
         renderType: Text.NativeRendering
         verticalAlignment: Text.AlignVCenter
@@ -39,7 +40,7 @@ Item {
 
         color: "#ffffff"
         //text: "as"
-        font.pixelSize: 8
+        font.pixelSize: 15
         fontSizeMode: Text.Fit
         renderType: Text.NativeRendering
         verticalAlignment: Text.AlignVCenter

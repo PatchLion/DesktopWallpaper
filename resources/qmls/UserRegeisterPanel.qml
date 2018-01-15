@@ -6,7 +6,7 @@ import "../controls"
 
 DefaultPopupPanelBase {
     id: root_item
-    color: Qt.rgba(0, 0, 0, 0.5)
+    color: Qt.rgba(0, 0, 0, 0.3)
 
     property var cover
 
@@ -104,7 +104,7 @@ DefaultPopupPanelBase {
         parent: bottomArea
         anchors.fill: parent
 
-        PLTextButton{
+        MainTextButton{
             id: regeister_button
             text: "注册"
             width: 80

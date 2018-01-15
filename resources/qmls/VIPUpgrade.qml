@@ -6,6 +6,10 @@ DefaultPopupPanelBase {
     id: root_item
     color: Qt.rgba(0, 0, 0, 0.5)
 
+    onCloseButtonClicked: {
+        root_item.visible = false;
+        root_item.destroy();
+    }
 
     Item{
         parent: titleArea
@@ -16,11 +20,11 @@ DefaultPopupPanelBase {
             id: image_item
             source: "qrc:/images/zs1.png"
             scale: 0.4
-            opacity: 0.9
+            opacity: 0.5
             sourceSize: Qt.size(118,81)
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            anchors.leftMargin: 50
+            anchors.leftMargin: 80
         }
 
         PLTextWithDefaultFamily{
@@ -32,7 +36,6 @@ DefaultPopupPanelBase {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             anchors.centerIn: parent
-            anchors.horizontalCenterOffset: image_item.width * image_item.scale / 2 + 10
         }
     }
 

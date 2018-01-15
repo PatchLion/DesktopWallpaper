@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 2.2
+import QtQuick.Controls 1.4
 
 import "./Global.js" as Global
 import "../controls/PLToast.js" as Toast
@@ -15,7 +15,7 @@ StackView{
     initialItem:Component{
         DefaultPopupPanelBase {
             id: login_panel
-            color: Qt.rgba(0, 0, 0, 0.5)
+            color: Qt.rgba(0, 0, 0, 0.3)
 
             onCloseButtonClicked: {
                 root_item.visible = false;
@@ -38,29 +38,34 @@ StackView{
                 }
             }
 
-            Item{
+            Column{
                 parent: centerArea
-                anchors.fill: parent
+
+                anchors.centerIn: parent
+                width: parent.width * 4 / 7
+                height: parent.height
+
+                spacing: 25
+                Item{
+                    id: empty_item
+                    height: 10
+                    width: parent.width
+                }
 
                 InputItem{
                     id: user_name_item
-                    width: parent.width * 4 / 7
+                    width: parent.width
                     height: 30
-                    anchors.centerIn: parent
-                    anchors.verticalCenterOffset: -parent.height / 6
 
                     tipString: "请输入用户名"
-
 
                     KeyNavigation.tab: password_item.inputItem
                 }
 
                 InputItem{
                     id: password_item
-                    width: parent.width * 4 / 7
+                    width: parent.width
                     height: 30
-                    anchors.centerIn: parent
-                    anchors.verticalCenterOffset: parent.height / 6
 
                     tipString: "请输入密码"
                     echoMode: TextInput.Password
@@ -94,7 +99,7 @@ StackView{
                 parent: bottomArea
                 anchors.fill: parent
 
-                PLTextButton{
+                MainTextButton{
                     id: login_button
                     text: "登录"
                     width: 80

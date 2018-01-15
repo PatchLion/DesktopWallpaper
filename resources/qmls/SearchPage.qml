@@ -21,7 +21,7 @@ Rectangle {
         //Toast.showToast(root_item, "正在搜索中...");
 
 
-        cover = CoverPanel.showLoadingCover(Global.RootView, "加载中");
+        cover = CoverPanel.showLoadingCover(Global.RootPanel, "加载中");
     }
 
     ClassifyDetailPanel{
@@ -86,7 +86,7 @@ Rectangle {
             anchors.leftMargin: 5
             anchors.verticalCenter: parent.verticalCenter
             width: 60
-            height: 20
+            height: 24
             text: "返回"
             onClicked: {
                 Global.RootPanel.back();

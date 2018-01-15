@@ -141,6 +141,31 @@ Item {
                     }
 
                     PLTextButton{
+
+                        id: prefer_button
+
+                        anchors.right: set_wallpaper_button.left
+                        anchors.rightMargin: 10
+                        anchors.verticalCenter: download_button.verticalCenter
+                        width: 130
+                        height: download_button.height
+                        text: "收藏该图片"
+
+                        onClicked: {
+                            if(Global.User.token.length === 0){
+                                var messagebox = MessageBox.showMessageBox(Global.RootPanel, "收藏功能需要登录后才能使用!", function(){
+                                    Global.RootPanel.showLoginPanel();
+                                    messagebox.visible = false;
+                                    messagebox.destroy();
+                                });
+                            }
+                            else{
+                                //执行收藏操作
+                            }
+                        }
+                    }
+
+                    MainTextButton{
                         id: set_wallpaper_button
 
 
@@ -185,7 +210,7 @@ Item {
                         }
                     }
 
-                    PLTextButton{
+                    MainTextButton{
 
                         id: download_button
 
@@ -196,7 +221,7 @@ Item {
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: 10
                         width: 60
-                        height: 20
+                        height: 24
                         text: "下载"
 
                         //visible: (image_mouse_area.containsMouse || download_button.isContainMouse)
@@ -248,7 +273,7 @@ Item {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             width: 60
-            height: 20
+            height: 24
             text: "返回"
             onClicked: {
 
@@ -266,7 +291,7 @@ Item {
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             width: 100
-            height: 20
+            height: back_button.height
             text: "跳转到源网页"
 
             onClicked: {
@@ -277,12 +302,38 @@ Item {
 
 
         PLTextButton{
+
+            id: prefer_imagegroup_button
+
+            anchors.right: link_button.left
+            anchors.rightMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            width: 100
+            height: back_button.height
+            text: "收藏该图片组"
+
+
+            onClicked: {
+                if(Global.User.token.length === 0){
+                    var messagebox = MessageBox.showMessageBox(Global.RootPanel, "收藏功能需要登录后才能使用!", function(){
+                        Global.RootPanel.showLoginPanel();
+                        messagebox.visible = false;
+                        messagebox.destroy();
+                    });
+                }
+                else{
+                    //执行收藏操作
+                }
+            }
+        }
+
+        PLTextButton{
             id: downloadall_button
             anchors.right: parent.right
             anchors.rightMargin: 5
             anchors.verticalCenter: parent.verticalCenter
             width: 80
-            height: 20
+            height: back_button.height
             text: "下载所有"
             enabled: false
 

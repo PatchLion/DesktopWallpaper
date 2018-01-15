@@ -13,6 +13,7 @@ Rectangle {
 
     property alias inputItem: text_item
 
+    radius: 5
 
     TextInput{
         id: text_item

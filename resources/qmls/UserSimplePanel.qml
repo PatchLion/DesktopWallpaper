@@ -46,8 +46,6 @@ Rectangle {
         color: mousearea.containsMouse ? "#00BFFF" : "#ffffff"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
-
-
     }
 
     MouseArea{

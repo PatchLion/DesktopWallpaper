@@ -35,7 +35,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             width: 60
-            height: 20
+            height: 24
             text: "返回"
             onClicked: {
 

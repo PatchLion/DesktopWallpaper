@@ -11,7 +11,6 @@
         <file>qmls/SearchPage.qml</file>
         <file>qmls/SearchControl.qml</file>
         <file>qmls/SystemMenuPanel.qml</file>
-        <file>qmls/ProgressTooltipPanel.qml</file>
         <file>qmls/DownloadBox.qml</file>
         <file>qmls/DownloadBoxItem.qml</file>
         <file>qmls/CircleTooltip.qml</file>
@@ -60,5 +59,6 @@
         <file>images/close_icon_28x28_0_1.png</file>
         <file>images/close_icon_28x28_0_2.png</file>
         <file>qmls/UserRegeisterPanel.qml</file>
+        <file>qmls/MainTextButton.qml</file>
     </qresource>
 </RCC>

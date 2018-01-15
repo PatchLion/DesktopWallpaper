@@ -69,7 +69,7 @@ Rectangle{
 
             text: "更多"
             width: 60
-            height: 20
+            height: 24
 
             onClicked: {
                 Global.RootPanel.showAllItemByClassifyPanel(root_item.classify);

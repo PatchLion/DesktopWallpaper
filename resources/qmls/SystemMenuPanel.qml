@@ -189,7 +189,7 @@ Item{
     //用户信息面板
     UserSimplePanel{
         id: user_panel
-        height: 30
+        height: 40
         anchors.right: download_box_button.left
         anchors.rightMargin: 40
         anchors.verticalCenter: download_box_button.verticalCenter
