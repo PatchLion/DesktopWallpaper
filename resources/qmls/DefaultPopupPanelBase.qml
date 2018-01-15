@@ -55,7 +55,7 @@ Rectangle {
                     }
                     else if (Qt.platform.os === "osx"){
                         anchors.left = parent.left;
-                        anchors.left = 10;
+                        anchors.leftMargin = 10;
                         anchors.top = parent.top;
                         anchors.topMargin = 10;
                     }
