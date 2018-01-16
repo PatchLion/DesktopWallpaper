@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import "../controls"
 import "../qmls/Global.js" as Global
-
+import "../controls/PLToast.js" as Toast
 
 Rectangle {
 
@@ -16,7 +16,7 @@ Rectangle {
 
     color: "transparent"
 
-    width: head_image_item.width + user_name_item.width + 20
+    width: head_image_item.width + user_name_item.width + logout_item.width + 25
 
 
     Image{
@@ -59,6 +59,34 @@ Rectangle {
             if(Global.User.token.length===0){
                 Global.RootPanel.showLoginPanel();
             }
+        }
+    }
+
+    PLTextButton{
+        id: logout_item
+        anchors.left:user_name_item.right
+        anchors.leftMargin: 5
+        anchors.verticalCenter: parent.verticalCenter
+        text: "注销"
+        textPixelSize: 11
+        visible: root_item.userName.length > 0
+        width: 30
+        height: user_name_item.height
+
+        defaultColor: "transparent"
+        hoverColor: "transparent"
+        pressedColor: "transparent"
+        disabledColor: "transparent"
+
+        textDefaultColor: "#1E90FF"
+        textPressedColor: "#00BFFF"
+        textHoverColor: "#00BFFF"
+        textDisabledColor: "#B0C4DE"
+
+        onClicked: {
+            Toast.showToast(Global.RootPanel, "用户"+Global.User.nickName+"登出")
+            Global.RootPanel.clearUserInformation();
+            //visible = false
         }
     }
 }

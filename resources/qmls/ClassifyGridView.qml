@@ -9,7 +9,6 @@ GridView{
 
     clip: true
 
-
     cellWidth: width/columnCount
     cellHeight: height/rowCount
 

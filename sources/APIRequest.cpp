@@ -377,6 +377,7 @@ void APIRequest::tryToLogin(const QString &user, const QString &pwd)
 
 void APIRequest::tryToRegeister(const QString &user, const QString &pwd, const QString &nickname)
 {
+    qDebug() << "Regeister --- >" <<user << pwd <<nickname;
     QVariantList args;
     args<<user;
     args<<pwd;

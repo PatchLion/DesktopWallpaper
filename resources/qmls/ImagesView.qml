@@ -11,6 +11,7 @@ Rectangle{
     property string itemUrl: ""
     property bool isNew: false
 
+
     Item{
         width: parent.width * 0.95
         height: parent.height * 0.95

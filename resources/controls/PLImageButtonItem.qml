@@ -21,10 +21,10 @@ PLButtonBase
 
     Image
     {
-        z: 0
+        //z: 0
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit
-        source: !enabled ? disableIcon :
+        source: !root_item.enabled ? disableIcon :
                            (root_item.mouseArea.pressed ? pressedIcon :
                                                  (root_item.mouseArea.containsMouse ? hoverIcon : defaultIcon))
 

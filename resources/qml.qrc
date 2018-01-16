@@ -60,5 +60,14 @@
         <file>images/close_icon_28x28_0_2.png</file>
         <file>qmls/UserRegeisterPanel.qml</file>
         <file>qmls/MainTextButton.qml</file>
+        <file>controls/PLTooltip.qml</file>
+        <file>images/download_default.png</file>
+        <file>images/download_hover.png</file>
+        <file>images/no_pefer_default.png</file>
+        <file>images/no_pefer_hover.png</file>
+        <file>images/pefer_default.png</file>
+        <file>images/pefer_hover.png</file>
+        <file>images/set_wallpaper_default.png</file>
+        <file>images/set_wallpaper_hover.png</file>
     </qresource>
 </RCC>

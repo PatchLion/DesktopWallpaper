@@ -135,6 +135,8 @@ PLFrameLessAndMoveableWindow
         StackView{
             id: main_stackView
 
+            z: 0
+
             //页面栈
             property var panelStackedPanel: []
             property int lastPage: -1

@@ -18,55 +18,51 @@ Item {
 
     property var cover
 
-
-    Connections{
+    Connections {
         target: Global.APIRequest
         onItemsDetailResponse: {
-            var result = Global.resolveItemsDetailData(data);
+            var result = Global.resolveItemsDetailData(data)
 
+            if (result[0]) {
+                images_list_model.clear()
+                images_list_model.append(result[1])
 
-            if(result[0])
-            {
-                images_list_model.clear();
-                images_list_model.append(result[1]);
-
-                downloadall_button.enabled = true;
-                prefer_imagegroup_button.enabled = true;
+                downloadall_button.enabled = true
+                prefer_imagegroup_button.enabled = true
             }
         }
 
-        onAddPeferFinished:{
-            root_item.cover.visible = false;
-            root_item.cover.destroy();
+        onAddPeferFinished: {
+            root_item.cover.visible = false
+            root_item.cover.destroy()
 
-            var result = Global.resolveAddPeferData(data);
+            var result = Global.resolveAddPeferData(data)
 
-            if(result[0]){
-                Toast.showToast(Global.RootView, "图片收藏成功");
-            }
-            else{
-                Toast.showToast(Global.RootView, "图片收藏失败:" + result[1]);
+            if (result[0]) {
+                Toast.showToast(Global.RootView, "图片收藏成功")
+            } else {
+                Toast.showToast(Global.RootView, "图片收藏失败:" + result[1])
             }
         }
 
         onApiRequestError: {
-            console.warn("Catch error when reuqest api:", apiName, "code:", error);
+            console.warn("Catch error when reuqest api:", apiName,
+                         "code:", error)
         }
     }
 
     onItemIDChanged: {
-        Global.APIRequest.requestItemsDetailData(itemID);
+        Global.APIRequest.requestItemsDetailData(itemID)
     }
 
-    Rectangle{
+    Rectangle {
         id: image_area
 
         anchors.fill: parent
 
-
         color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
-        ListView{
+        ListView {
             id: listview_item
             anchors.fill: parent
             anchors.leftMargin: 10
@@ -80,28 +76,28 @@ Item {
 
             orientation: ListView.Horizontal
 
-            model: ListModel{
+            model: ListModel {
                 id: images_list_model
             }
 
-            delegate: Item{
+            delegate: Item {
 
                 id: image_content_item
 
                 height: listview_item.height
                 width: image_item.status === Image.Ready ? image_item.width : loadding_image.width
 
-                visible: !(image_item.status === Image.Error || image_item.status === Image.Null)
+                visible: !(image_item.status === Image.Error
+                           || image_item.status === Image.Null)
 
                 property int currentID: imageid
 
-
-                Rectangle{
+                Rectangle {
                     id: loadding_image
 
                     anchors.bottom: parent.bottom
-                    //anchors.bottomMargin: 10
 
+                    //anchors.bottomMargin: 10
                     height: image_item.height
 
                     visible: !image_item.visible
@@ -110,10 +106,10 @@ Item {
 
                     color: Qt.rgba(0.3, 0.3, 0.3, 0.3)
 
+
                     //border.color: Qt.rgba(0.6, 0.6, 0.6, 0.3)
                     //border.width: 1
-
-                    PLTextWithDefaultFamily{
+                    PLTextWithDefaultFamily {
                         text: qsTr("Loadding......")
 
                         anchors.centerIn: parent
@@ -123,24 +119,20 @@ Item {
                         color: "white"
 
                         font.pointSize: 11
-
                     }
-
-
                 }
 
-                Image{
+                Image {
 
                     id: image_item
                     //anchors.centerIn: parent
                     anchors.bottom: parent.bottom
-                    //anchors.bottomMargin: 10
 
+                    //anchors.bottomMargin: 10
                     cache: true
 
                     smooth: false
                     mipmap: false
-
 
                     height: parent.height * 0.93
 
@@ -152,136 +144,183 @@ Item {
 
                     source: image
 
-                    MouseArea{
+                    MouseArea {
                         id: image_mouse_area
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-
-
                     }
 
-                    PLTextButton{
-
-                        id: prefer_button
-
-                        anchors.right: set_wallpaper_button.left
-                        anchors.rightMargin: 10
-                        anchors.verticalCenter: download_button.verticalCenter
-                        width: 130
-                        height: download_button.height
-                        text: "收藏该图片"
-
-                        onClicked: {
-                            if(Global.User.token.length === 0){
-                                var messagebox = MessageBox.showMessageBox(Global.RootPanel, "收藏功能需要登录后才能使用!", function(){
-                                    Global.RootPanel.showLoginPanel();
-                                    messagebox.visible = false;
-                                    messagebox.destroy();
-                                });
-                            }
-                            else{
-                                //执行收藏操作
-                                Global.APIRequest.tryToPefer(Global.User.token, [image_content_item.currentID]);
-
-                                root_item.cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
-                            }
-                        }
-                    }
-
-                    MainTextButton{
-                        id: set_wallpaper_button
-
-
-                        text: "设置为壁纸"
-                        width: 130
-                        height: download_button.height
-                        anchors.right: download_button.left
-                        anchors.rightMargin: 10
-                        anchors.verticalCenter: download_button.verticalCenter
-                        property var cover: null
-                        onClicked: {
-                            cover = CoverPanel.showProgressBarCover(Global.RootPanel);
-                            wallpaper_item.setImageToDesktop(image_item.source);
-                        }
-
-                        //visible: download_button.visible
-
-                        WallpaperSetter{
-                            id: wallpaper_item
-
-                            onProgress: {
-                                if(set_wallpaper_button.cover){
-                                    CoverPanel.setProgressBarCoverProgress(set_wallpaper_button.cover, progress);
-                                    CoverPanel.setProgressBarCoverTooltip(set_wallpaper_button.cover, text);
-                                }
-                            }
-
-                            onFinished: {
-
-                                if(set_wallpaper_button.cover){
-                                    set_wallpaper_button.cover.visible = false;
-                                }
-
-                                if(success){
-                                    Toast.showToast(root_item, "壁纸已设置！")
-
-                                }
-                                else{
-                                    Toast.showToast(root_item, "壁纸设置失败,"+msg)
-                                }
-                            }
-                        }
-                    }
-
-                    MainTextButton{
-
-                        id: download_button
-
-
-
+                    Rectangle{
                         anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 10
-                        width: 60
-                        height: 24
-                        text: "下载"
+                        anchors.rightMargin: 20
+                        anchors.top: parent.top
+                        anchors.topMargin: 25
+                        radius: 5
+                        color: Qt.rgba(1, 1, 1, 0.6)
+                        height: 40
+                        width: 133
 
-                        //visible: (image_mouse_area.containsMouse || download_button.isContainMouse)
+                        Row{
+                            anchors.left: parent.left
+                            anchors.leftMargin: 15
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width
+                            height: 24
 
-                        Component{
-                            id: file_dialog_component
-                            FileDialog
-                            {
-                                id: file_dialog
-                                nameFilters: [ "PNG(*.png)", "JPG(*.jpg)" ]
-                                selectMultiple: false
+                            spacing: 15
 
-                                title: "Please choose a directory"
-                                selectFolder: true
-                                selectExisting: true
-                                folder: shortcuts.pictures
+                            PLImageCheckButtonItem {
 
-                                onAccepted: {
-                                    var source = image_item.source;
+                                id: prefer_button
 
-                                    Global.APIRequest.addDownload(fileUrl, Global.fixedDirName(root_item.title), [source]);
+                                width: 24
+                                height: 24
+
+                                defaultIcon: isChecked ? "qrc:/images/pefer_default.png": "qrc:/images/no_pefer_default.png"
+                                pressedIcon: isChecked ? "qrc:/images/pefer_hover.png": "qrc:/images/no_pefer_hover.png"
+                                hoverIcon: isChecked ? "qrc:/images/pefer_hover.png": "qrc:/images/no_pefer_hover.png"
+                                disableIcon: isChecked ? "qrc:/images/pefer_default.png": "qrc:/images/no_pefer_default.png"
+
+                                PLTooltip {
+                                    target: parent
+                                    text: "收藏图片"
+                                    mouseArea: prefer_button.mouseArea
+                                    tipPosMode: 1
                                 }
 
-                                Component.onCompleted: visible=true
+                                onClicked: {
+                                    if (Global.User.token.length === 0) {
+                                        var messagebox = MessageBox.showMessageBox(
+                                                    Global.RootPanel, "收藏功能需要登录后才能使用!",
+                                                    function () {
+                                                        Global.RootPanel.showLoginPanel(
+                                                                    )
+                                                        messagebox.visible = false
+                                                        messagebox.destroy()
+                                                    })
+                                    } else {
+                                        //执行收藏操作
+                                        Global.APIRequest.tryToPefer(
+                                                    Global.User.token,
+                                                    [image_content_item.currentID])
+
+                                        root_item.cover = CoverPanel.showLoadingCover(
+                                                    Global.RootPanel, "添加收藏中...")
+                                    }
+                                }
                             }
-                        }
-                        onClicked: {
-                            var file_dialog = file_dialog_component.createObject(root_item);
+
+                            PLImageButtonItem {
+                                id: set_wallpaper_button
+
+                                width: 24
+                                height: 24
+
+                                property var cover: null
+                                onClicked: {
+                                    cover = CoverPanel.showProgressBarCover(
+                                                Global.RootPanel)
+                                    wallpaper_item.setImageToDesktop(image_item.source)
+                                }
+                                PLTooltip {
+                                    target: parent
+                                    text: "设置壁纸"
+                                    mouseArea: set_wallpaper_button.mouseArea
+                                    tipPosMode: 1
+                                }
+                                defaultIcon: "qrc:/images/set_wallpaper_default.png"
+                                pressedIcon: "qrc:/images/set_wallpaper_hover.png"
+                                hoverIcon: "qrc:/images/set_wallpaper_hover.png"
+                                disableIcon: "qrc:/images/set_wallpaper_default.png"
+                                //visible: download_button.visible
+                                WallpaperSetter {
+                                    id: wallpaper_item
+
+                                    onProgress: {
+                                        if (set_wallpaper_button.cover) {
+                                            CoverPanel.setProgressBarCoverProgress(
+                                                        set_wallpaper_button.cover,
+                                                        progress)
+                                            CoverPanel.setProgressBarCoverTooltip(
+                                                        set_wallpaper_button.cover,
+                                                        text)
+                                        }
+                                    }
+
+                                    onFinished: {
+
+                                        if (set_wallpaper_button.cover) {
+                                            set_wallpaper_button.cover.visible = false
+                                        }
+
+                                        if (success) {
+                                            Toast.showToast(root_item, "壁纸已设置！")
+                                        } else {
+                                            Toast.showToast(root_item, "壁纸设置失败," + msg)
+                                        }
+                                    }
+                                }
+                            }
+
+                            PLImageButtonItem {
+
+                                id: download_button
+
+                                width: 24
+                                height: 24
+
+                                PLTooltip {
+                                    target: parent
+                                    text: "下载"
+                                    mouseArea: download_button.mouseArea
+                                    tipPosMode: 1
+                                }
+                                defaultIcon: "qrc:/images/download_default.png"
+                                pressedIcon: "qrc:/images/download_hover.png"
+                                hoverIcon: "qrc:/images/download_hover.png"
+                                disableIcon: "qrc:/images/download_default.png"
+
+
+                                //visible: (image_mouse_area.containsMouse || download_button.isContainMouse)
+                                Component {
+                                    id: file_dialog_component
+                                    FileDialog {
+                                        id: file_dialog
+                                        nameFilters: ["PNG(*.png)", "JPG(*.jpg)"]
+                                        selectMultiple: false
+
+                                        title: "Please choose a directory"
+                                        selectFolder: true
+                                        selectExisting: true
+                                        folder: shortcuts.pictures
+
+                                        onAccepted: {
+                                            var source = image_item.source
+
+                                            Global.APIRequest.addDownload(
+                                                        fileUrl, Global.fixedDirName(
+                                                            root_item.title), [source])
+                                        }
+
+                                        Component.onCompleted: visible = true
+                                    }
+                                }
+                                onClicked: {
+                                    var file_dialog = file_dialog_component.createObject(
+                                                root_item)
+                                }
+                            }
+
                         }
                     }
+
                 }
             }
         }
     }
 
-    Item{
+    Item {
         id: top_area
 
         anchors.left: parent.left
@@ -292,7 +331,7 @@ Item {
 
         height: 50
 
-        PLTextButton{
+        PLTextButton {
             id: back_button
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -303,11 +342,9 @@ Item {
 
                 Global.RootPanel.back()
             }
-
-
         }
 
-        PLTextButton{
+        PLTextButton {
 
             id: link_button
 
@@ -324,8 +361,7 @@ Item {
             }
         }
 
-
-        PLTextButton{
+        PLTextButton {
 
             id: prefer_imagegroup_button
 
@@ -337,32 +373,33 @@ Item {
             text: "收藏该图片组"
             enabled: false
 
-
             onClicked: {
-                if(Global.User.token.length === 0){
-                    var messagebox = MessageBox.showMessageBox(Global.RootPanel, "收藏功能需要登录后才能使用!", function(){
-                        Global.RootPanel.showLoginPanel();
-                        messagebox.visible = false;
-                        messagebox.destroy();
-                    });
-                }
-                else{
+                if (Global.User.token.length === 0) {
+                    var messagebox = MessageBox.showMessageBox(
+                                Global.RootPanel, "收藏功能需要登录后才能使用!",
+                                function () {
+                                    Global.RootPanel.showLoginPanel()
+                                    messagebox.visible = false
+                                    messagebox.destroy()
+                                })
+                } else {
                     //执行收藏操作
                     var imageids = []
-                    for (var i= 0; i<images_list_model.count; i++)
-                    {
-                        console.log("Image id---->", images_list_model.get(i)["imageid"]);
-                        imageids.push(images_list_model.get(i)["imageid"]);
+                    for (var i = 0; i < images_list_model.count; i++) {
+                        console.log("Image id---->",
+                                    images_list_model.get(i)["imageid"])
+                        imageids.push(images_list_model.get(i)["imageid"])
                     }
 
-                    Global.APIRequest.tryToPefer(Global.User.token, imageids);
+                    Global.APIRequest.tryToPefer(Global.User.token, imageids)
 
-                    root_item.cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
+                    root_item.cover = CoverPanel.showLoadingCover(
+                                Global.RootPanel, "添加收藏中...")
                 }
             }
         }
 
-        PLTextButton{
+        PLTextButton {
             id: downloadall_button
             anchors.right: parent.right
             anchors.rightMargin: 5
@@ -372,22 +409,20 @@ Item {
             text: "下载所有"
             enabled: false
 
-
-            CircleTooltip{
+            CircleTooltip {
                 width: 20
                 height: 20
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.rightMargin: -8
                 anchors.topMargin: -8
-                text:"VIP"
+                text: "VIP"
                 visible: !Global.User.isVip
             }
 
-            Component{
+            Component {
                 id: dir_dialog_component
-                FileDialog
-                {
+                FileDialog {
                     id: dir_dialog
 
                     title: "Please choose a directory"
@@ -399,56 +434,56 @@ Item {
                     onAccepted: {
                         //var dest = fileUrl;
                         var urls = []
-                        for(var i = 0; i<images_list_model.count; i++)
-                        {
-                            var obj = images_list_model.get(i);
-                            if(obj)
-                            {
-                                var image = obj["image"];
-                                urls.push(image);
+                        for (var i = 0; i < images_list_model.count; i++) {
+                            var obj = images_list_model.get(i)
+                            if (obj) {
+                                var image = obj["image"]
+                                urls.push(image)
                                 //console.log(image, urls.length)
                             }
-
                         }
 
                         //console.log(fileUrl, Global.fixedDirName(root_item.title))
-                        Global.APIRequest.addDownload(fileUrl, Global.fixedDirName(root_item.title), urls)
+                        Global.APIRequest.addDownload(fileUrl,
+                                                      Global.fixedDirName(
+                                                          root_item.title),
+                                                      urls)
                     }
 
-                    Component.onCompleted: visible=true
+                    Component.onCompleted: visible = true
                 }
             }
 
             onClicked: {
 
-                if(!Global.User.isVip){
-                    var messagebox = MessageBox.showMessageBox(Global.RootPanel, "该功能为VIP功能，如果需要使用请升级为VIP!", function(){
-                        if(messagebox){
-                            messagebox.visible = false;
-                            messagebox.destroy();
+                if (!Global.User.isVip) {
+                    var messagebox = MessageBox.showMessageBox(
+                                Global.RootPanel, "该功能为VIP功能，如果需要使用请升级为VIP!",
+                                function () {
+                                    if (messagebox) {
+                                        messagebox.visible = false
+                                        messagebox.destroy()
 
-                            Global.RootPanel.showVIPUpgradePanel();
-                        }
-                    });
-                }
-                else{
-                    var dir_dialog = dir_dialog_component.createObject(root_item);
+                                        Global.RootPanel.showVIPUpgradePanel()
+                                    }
+                                })
+                } else {
+                    var dir_dialog = dir_dialog_component.createObject(
+                                root_item)
                 }
             }
         }
-        PLTextWithDefaultFamily{
+        PLTextWithDefaultFamily {
             id: text_item
             height: 30
             font.pointSize: 10
             color: "#EEEEEE"
             text: "Title"
-            verticalAlignment:Text.AlignVCenter
+            verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
 
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: back_button.verticalCenter
         }
-
     }
 }
-

@@ -193,5 +193,7 @@ Item{
         anchors.right: download_box_button.left
         anchors.rightMargin: 40
         anchors.verticalCenter: download_box_button.verticalCenter
+
+
     }
 }

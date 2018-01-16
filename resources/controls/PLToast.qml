@@ -18,9 +18,9 @@ Rectangle{
         id: toast
         width: toast_text.width + 40
         height: 36
-        border.color: "#AAAAAA"
+        border.color: "#CCCCCC"
         radius: 8
-        color: "#606060"
+        color: "#808080"
 
         anchors.centerIn: parent
         anchors.verticalCenterOffset: parent.height / 4

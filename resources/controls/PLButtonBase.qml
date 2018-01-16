@@ -29,7 +29,7 @@ Rectangle{
 
     MouseArea{
         id: mouse_area
-        z: 99999
+        //z: 99999
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor

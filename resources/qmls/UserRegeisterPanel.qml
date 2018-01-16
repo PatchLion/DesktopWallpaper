@@ -114,22 +114,66 @@ DefaultPopupPanelBase {
             anchors.horizontalCenterOffset: parent.width / 6
 
             anchors.verticalCenter: parent.verticalCenter
+            function trimStr(str){
+                return str.replace(/(^\s*)|(\s*$)/g,"");
+            }
+            function checkUserName(userName){
+                if(userName.split(" ").length > 1){
+                    return "名称中包含空格";
+                }
+                var chars = '~!@#$^&*()=|{}\"\':;\',\\[\\].<>/?~！@#￥……&*（）——|{}【】'
+                for(var c in chars){
+                    if(userName.split(c).length > 1){
+                        return "名称中包含特殊字符("+chars+")";
+                    }
+                }
+
+                if (userName.length < 4){
+                    return "用户名必须大于4位"
+                }
+                return ""
+            }
+            function checkPWD(pwd){
+                if (pwd.length < 6){
+                    return "密码必须大于6位"
+                }
+
+                return ""
+            }
+
+
             onClicked: {
-                var user = user_name_item.text
-                var pwd = password_item.text
+                var user = trimStr(user_name_item.text)
+                var pwd = trimStr(password_item.text)
                 var confirm = password_confirm_item.text
                 var nickname = nickname_item.text
 
                 if(user.length === 0 || pwd.length === 0 || confirm.length === 0){
                     Toast.showToast(root_item, "用户名或密码为空");
+                    return;
                 }
-                else if(user !== confirm){
+
+
+                var res = checkUserName(user)
+
+                if (res.length > 0){
+                    Toast.showToast(root_item, "用户名格式不符合要求:"+res);
+                    return;
+                }
+                var res1 = checkPWD(pwd)
+
+                if (res1.length > 0){
+                    Toast.showToast(root_item, "密码格式不符合要求:"+res1);
+                    return;
+                }
+                if(user !== confirm){
                     Toast.showToast(root_item, "两次输入的密码不一致");
+                    return;
                 }
-                else{
-                    root_item.cover = Cover.showLoadingCover(root_item, "注册中...");
-                    Global.APIRequest.tryToRegeister(user, pwd, nickname);
-                }
+
+                root_item.cover = Cover.showLoadingCover(root_item, "注册中...");
+                Global.APIRequest.tryToRegeister(user, pwd, nickname);
+
             }
 
             Keys.onPressed: {

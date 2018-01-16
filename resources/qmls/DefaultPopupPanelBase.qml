@@ -18,7 +18,7 @@ Rectangle {
         hoverEnabled: true
     }
 
-    z: 10000
+    //z: 10000
 
     Rectangle{
         width: 560

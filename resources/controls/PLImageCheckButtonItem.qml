@@ -21,12 +21,11 @@ PLCheckButtonBase
 
     Image
     {
-        z: 0
+        //z: 0
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit
         source: !root_item.enabled ? disableIcon :
-                           (isChecked ? pressedIcon : defaultIcon)
-
-
+                           (root_item.mouseArea.pressed ? pressedIcon :
+                                                 (root_item.mouseArea.containsMouse ? hoverIcon : defaultIcon))
     }
 }
