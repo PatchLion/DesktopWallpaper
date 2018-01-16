@@ -1,0 +1,1 @@
+C:\Qt\Qt5.9.2\5.9.2\winrt_x64_msvc2015\bin\qmake -tp vc DesktopWallpaper.pro "CONFIG+=windeployqt"
