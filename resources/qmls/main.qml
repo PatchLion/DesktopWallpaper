@@ -183,8 +183,8 @@ PLFrameLessAndMoveableWindow
 
                         user_information.updateUserInfo(info.is_vip,
                                                         info.user,
-                                                        info.headerimage,
                                                         info.headimage_url,
+                                                        info.token,
                                                         info.nickname);
 
                         Toast.showToast(root_window, "欢迎您:" + info.nickname);

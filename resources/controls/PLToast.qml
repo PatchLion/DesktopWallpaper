@@ -50,7 +50,7 @@ Rectangle{
         }
         Timer{
             id: showTimer
-            interval: 2000
+            interval: 1300
             repeat: false
             running: false
             onTriggered: {

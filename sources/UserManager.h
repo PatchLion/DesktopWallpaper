@@ -3,6 +3,20 @@
 
 #include <QObject>
 
+class UserManagerPrivate : public QObject
+{
+    Q_OBJECT
+public:
+    UserManagerPrivate(QObject* parent=0);
+
+Q_SIGNALS:
+    void isVipChanged();
+    void tokenChanged();
+    void headerImageChanged();
+    void userNameChanged();
+    void nickNameChanged();
+};
+
 class UserManager : public QObject
 {
     Q_OBJECT
@@ -31,17 +45,17 @@ public:
     QString getNickName() const;
     void setNickName(const QString &value);
 
-    Q_INVOKABLE void updateUserInfo(bool isVip,
+    Q_INVOKABLE static void updateUserInfo(bool isVip,
                                     const QString& user,
                                     const QString& image,
                                     const QString& token,
                                     const QString& nickName);
 
-    Q_INVOKABLE void clearUserInfo();
+    Q_INVOKABLE static void clearUserInfo();
 
-    Q_INVOKABLE void writeToHistory();
+    Q_INVOKABLE static void writeToHistory();
 private:
-    void readHistory();
+    static void readHistory();
 
     static QString cacheFilePath();
 
@@ -59,6 +73,7 @@ private:
     static QString nickName; //昵称
     static QString headerImage; //头像
     static QString token; //token
+    static UserManagerPrivate* userPrivate;
 };
 
 #endif // USERMANAGER_H

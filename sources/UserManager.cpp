@@ -11,65 +11,76 @@ QString UserManager::userName = ""; //用户名
 QString UserManager::nickName = ""; //昵称
 QString UserManager::headerImage = ""; //头像
 QString UserManager::token = ""; //token
+UserManagerPrivate* UserManager::userPrivate = 0; //
+
 UserManager::UserManager(QObject *parent)
     : QObject(parent)
 {
     if(!UserManager::isInited)
     {
+       UserManager::userPrivate = new UserManagerPrivate;
+
        readHistory();
+
        UserManager::isInited = true;
     }
+
+    connect(UserManager::userPrivate, &UserManagerPrivate::isVipChanged, this, &UserManager::isVipChanged);
+    connect(UserManager::userPrivate, &UserManagerPrivate::tokenChanged, this, &UserManager::tokenChanged);
+    connect(UserManager::userPrivate, &UserManagerPrivate::headerImageChanged, this, &UserManager::headerImageChanged);
+    connect(UserManager::userPrivate, &UserManagerPrivate::userNameChanged, this, &UserManager::userNameChanged);
+    connect(UserManager::userPrivate, &UserManagerPrivate::nickNameChanged, this, &UserManager::nickNameChanged);
 }
 
 bool UserManager::getIsVip() const
 {
-    return isVip;
+    return UserManager::isVip;
 }
 
 void UserManager::setIsVip(bool isVip)
 {
-    this->isVip = isVip;
+    UserManager::isVip = isVip;
     writeToHistory();
-    Q_EMIT isVipChanged();
+    Q_EMIT UserManager::userPrivate->isVipChanged();
 }
 
 QString UserManager::getToken() const
 {
-    return token;
+    return UserManager::token;
 }
 
 void UserManager::setToken(const QString &value)
 {
-    this->token = value;
+    UserManager::token = value;
     writeToHistory();
-    Q_EMIT tokenChanged();
+    Q_EMIT UserManager::userPrivate->tokenChanged();
 }
 
 QString UserManager::getNickName() const
 {
-    return nickName;
+    return UserManager::nickName;
 }
 
 void UserManager::setNickName(const QString &value)
 {
-    nickName = value;
+    UserManager::nickName = value;
     writeToHistory();
-    Q_EMIT nickNameChanged();
+    Q_EMIT UserManager::userPrivate->nickNameChanged();
 }
 
 void UserManager::updateUserInfo(bool isVip, const QString &user, const QString &image, const QString &token, const QString &nickName)
 {
     qDebug() << "Update user information: " << isVip << user << image << token << nickName;
-    this->isVip = isVip;
-    this->userName = user;
-    this->headerImage = image;
-    this->token = token;
-    this->nickName = nickName;
-    Q_EMIT isVipChanged();
-    Q_EMIT userNameChanged();
-    Q_EMIT headerImageChanged();
-    Q_EMIT tokenChanged();
-    Q_EMIT nickNameChanged();
+    UserManager::isVip = isVip;
+    UserManager::userName = user;
+    UserManager::headerImage = image;
+    UserManager::token = token;
+    UserManager::nickName = nickName;
+    Q_EMIT UserManager::userPrivate->isVipChanged();
+    Q_EMIT UserManager::userPrivate->userNameChanged();
+    Q_EMIT UserManager::userPrivate->headerImageChanged();
+    Q_EMIT UserManager::userPrivate->tokenChanged();
+    Q_EMIT UserManager::userPrivate->nickNameChanged();
     writeToHistory();
 }
 
@@ -93,25 +104,25 @@ void UserManager::readHistory()
         aes.decrypt(data,out,QAesWrap::AES_CTR,QAesWrap::PKCS7);
 
         QDataStream dataStream(out);
-        dataStream >> userName;
-        dataStream >> nickName;
-        dataStream >> isVip;
-        dataStream >> headerImage;
-        dataStream >> token;
+        dataStream >> UserManager::userName;
+        dataStream >> UserManager::nickName;
+        dataStream >> UserManager::isVip;
+        dataStream >> UserManager::headerImage;
+        dataStream >> UserManager::token;
 
 
-        qDebug() << "History readed:"<<userName << ", "
-                 << nickName << ", "
-                 << isVip << ", "
-                 << headerImage  << ", "
-                 << token;
+        qDebug() << "History readed:"<<UserManager::userName << ", "
+                 << UserManager::nickName << ", "
+                 << UserManager::isVip << ", "
+                 << UserManager::headerImage  << ", "
+                 << UserManager::token;
 
 
-        Q_EMIT userNameChanged();
-        Q_EMIT nickNameChanged();
-        Q_EMIT isVipChanged();
-        Q_EMIT headerImageChanged();
-        Q_EMIT tokenChanged();
+        Q_EMIT UserManager::userPrivate->userNameChanged();
+        Q_EMIT UserManager::userPrivate->nickNameChanged();
+        Q_EMIT UserManager::userPrivate->isVipChanged();
+        Q_EMIT UserManager::userPrivate->headerImageChanged();
+        Q_EMIT UserManager::userPrivate->tokenChanged();
     }
 
 }
@@ -127,11 +138,11 @@ void UserManager::writeToHistory()
         QBuffer buffer;
         buffer.open(QIODevice::WriteOnly);
         QDataStream dataStream(&buffer);
-        dataStream << userName;
-        dataStream << nickName;
-        dataStream << isVip;
-        dataStream << headerImage;
-        dataStream << token;
+        dataStream << UserManager::userName;
+        dataStream << UserManager::nickName;
+        dataStream << UserManager::isVip;
+        dataStream << UserManager::headerImage;
+        dataStream << UserManager::token;
 
 
         QAesWrap aes(clientid.toUtf8(), clientid.toUtf8(), QAesWrap::AES_256);
@@ -149,28 +160,34 @@ QString UserManager::cacheFilePath()
 
 QString UserManager::getHeaderImage() const
 {
-    return headerImage;
+    return UserManager::headerImage;
 }
 
 void UserManager::setHeaderImage(const QString &value)
 {
 
-    this->headerImage = value;
+    UserManager::headerImage = value;
     writeToHistory();
-    Q_EMIT headerImageChanged();
+    Q_EMIT UserManager::userPrivate->headerImageChanged();
 
 }
 
 QString UserManager::getUserName() const
 {
-    return userName;
+    return UserManager::userName;
 }
 
 void UserManager::setUserName(const QString &value)
 {
 
-    userName = value;
+    UserManager::userName = value;
     writeToHistory();
-    Q_EMIT userNameChanged();
+    Q_EMIT UserManager::userPrivate->userNameChanged();
+
+}
+
+UserManagerPrivate::UserManagerPrivate(QObject *parent)
+    : QObject(parent)
+{
 
 }

@@ -113,8 +113,8 @@ StackView{
                                         var info=result[3];
                                         user_information.updateUserInfo(info.is_vip,
                                                                         info.user,
-                                                                        info.headerimage,
                                                                         info.headimage_url,
+                                                                        info.token,
                                                                         info.nickname);
 
                                         Toast.showToast(Global.RootPanel, "欢迎您: "+info.nickname);
