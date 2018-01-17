@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include <QtNetwork>
-
+#include <QJSValue>
 
 static const QString kImagesHost = "http://www.patchlion.cn:5000";
 static const QString kAuthHost = "http://www.patchlion.cn:8200";
@@ -24,35 +24,35 @@ class APIRequestEX : public QObject
     Q_OBJECT
 public:
     //获取分类数据
-    Q_INVOKABLE static void classifiesRequest(Functor functor) ;
+    Q_INVOKABLE static void classifiesRequest(QVariant jsFunc) ;
 
     //获取分类下的所有分组
-    Q_INVOKABLE static void pageRequest(const QString& classify, int pageindex, Functor functor);
+    Q_INVOKABLE static void pageRequest(const QString& classify, int pageindex, QVariant jsFunc);
 
     //获取单个图片分组数据
-    Q_INVOKABLE static void itemRequest(const QString& itemID, Functor functor);
+    Q_INVOKABLE static void itemRequest(const QString& itemID, QVariant jsFunc);
 
     //搜索关键词
-    Q_INVOKABLE static void searchRequest(const QString& key, Functor functor);
+    Q_INVOKABLE static void searchRequest(const QString& key, QVariant jsFunc);
 
     //发起登录请求
-    Q_INVOKABLE static void loginRequest(const QString& user, const QString& pwd, Functor functor);
+    Q_INVOKABLE static void loginRequest(const QString& user, const QString& pwd, QVariant jsFunc);
 
     //发起注册请求
-    Q_INVOKABLE static void regeisterRequest(const QString& user, const QString& pwd, const QString& nickname, Functor functor);
+    Q_INVOKABLE static void regeisterRequest(const QString& user, const QString& pwd, const QString& nickname, QVariant jsFunc);
 
     //发起token校验请求
-    Q_INVOKABLE static void checkTokenRequest(const QString& token, Functor functor);
+    Q_INVOKABLE static void checkTokenRequest(const QString& token, QVariant jsFunc);
 
     //尝试收藏图片
-    Q_INVOKABLE static void addPeferRequest(const QString& token, const QList<int>& imageids, Functor functor);
+    Q_INVOKABLE static void addPeferRequest(const QString& token, const QList<int>& imageids, QVariant jsFunc);
 
     //尝试收藏图片
-    Q_INVOKABLE static void getPefersRequest(const QString& toke, Functor functorn);
+    Q_INVOKABLE static void getPefersRequest(const QString& toke, QVariant jsFunc);
 
 private:
     //发起api请求
-    static void post(const QString& apiurl, const QString& param, Functor functor);
+    static void post(const QString& apiurl, const QString& param, QVariant jsFunc);
 
 private:
     static QNetworkAccessManager *network();

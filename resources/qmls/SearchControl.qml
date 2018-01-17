@@ -87,7 +87,7 @@ Rectangle{
                 textinput_keyword.text = "";
             }
             else{
-                Toast.showToast(Global.RootView, "关键词不能为空")
+                Toast.showToast(Global.RootPanel, "关键词不能为空")
             }
         }
     }

@@ -5,11 +5,20 @@
 
 const static char* kUserInfoCacheFileName = "ucache.dat";
 
+bool UserManager::isInited = false; //是否已初始化
+bool UserManager::isVip = false; //是否是vip
+QString UserManager::userName = ""; //用户名
+QString UserManager::nickName = ""; //昵称
+QString UserManager::headerImage = ""; //头像
+QString UserManager::token = ""; //token
 UserManager::UserManager(QObject *parent)
     : QObject(parent)
-    , isVip(false)
 {
-    readHistory();
+    if(!UserManager::isInited)
+    {
+       readHistory();
+       UserManager::isInited = true;
+    }
 }
 
 bool UserManager::getIsVip() const
@@ -19,11 +28,9 @@ bool UserManager::getIsVip() const
 
 void UserManager::setIsVip(bool isVip)
 {
-    //if(isVip != this->isVip)
-    {
-        this->isVip = isVip;
-        Q_EMIT isVipChanged();
-    }
+    this->isVip = isVip;
+    writeToHistory();
+    Q_EMIT isVipChanged();
 }
 
 QString UserManager::getToken() const
@@ -33,11 +40,9 @@ QString UserManager::getToken() const
 
 void UserManager::setToken(const QString &value)
 {
-    //if(value != this->token)
-    {
-        this->token = value;
-        Q_EMIT tokenChanged();
-    }
+    this->token = value;
+    writeToHistory();
+    Q_EMIT tokenChanged();
 }
 
 QString UserManager::getNickName() const
@@ -48,7 +53,29 @@ QString UserManager::getNickName() const
 void UserManager::setNickName(const QString &value)
 {
     nickName = value;
+    writeToHistory();
     Q_EMIT nickNameChanged();
+}
+
+void UserManager::updateUserInfo(bool isVip, const QString &user, const QString &image, const QString &token, const QString &nickName)
+{
+    qDebug() << "Update user information: " << isVip << user << image << token << nickName;
+    this->isVip = isVip;
+    this->userName = user;
+    this->headerImage = image;
+    this->token = token;
+    this->nickName = nickName;
+    Q_EMIT isVipChanged();
+    Q_EMIT userNameChanged();
+    Q_EMIT headerImageChanged();
+    Q_EMIT tokenChanged();
+    Q_EMIT nickNameChanged();
+    writeToHistory();
+}
+
+void UserManager::clearUserInfo()
+{
+    updateUserInfo(false, "", "", "", "");
 }
 
 void UserManager::readHistory()
@@ -127,11 +154,11 @@ QString UserManager::getHeaderImage() const
 
 void UserManager::setHeaderImage(const QString &value)
 {
-    //if(value != this->headerImage)
-    {
-        this->headerImage = value;
-        Q_EMIT headerImageChanged();
-     }
+
+    this->headerImage = value;
+    writeToHistory();
+    Q_EMIT headerImageChanged();
+
 }
 
 QString UserManager::getUserName() const
@@ -141,9 +168,9 @@ QString UserManager::getUserName() const
 
 void UserManager::setUserName(const QString &value)
 {
-    //if(value != this->userName)
-    {
-        userName = value;
-        Q_EMIT userNameChanged();
-    }
+
+    userName = value;
+    writeToHistory();
+    Q_EMIT userNameChanged();
+
 }

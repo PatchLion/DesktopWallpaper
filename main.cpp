@@ -70,8 +70,7 @@ int main(int argc, char *argv[])
     */
     qDebug() << "Font families loadded!";
     qmlRegisterType<UserManager>("DesktopWallpaper.UserManager", 1, 0, "UserManager");
-
-    qmlRegisterType<APIRequestEX>("DesktopWallpaper.APIRequestEX", 1, 0, "APIRequestEX");
+    qmlRegisterType<APIRequestEX>("DesktopWallpaper.APIRequestEx", 1, 0, "APIRequestEx");
     qmlRegisterType<WallpaperSetter>("DesktopWallpaper.WallpaperSetter", 1, 0, "WallpaperSetter");
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qmls/main.qml")));

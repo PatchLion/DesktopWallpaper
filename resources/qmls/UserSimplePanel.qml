@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import DesktopWallpaper.UserManager 1.0
 import "../controls"
 import "../qmls/Global.js" as Global
 import "../controls/PLToast.js" as Toast
@@ -9,12 +10,13 @@ Rectangle {
 
     height: 40
 
-    property string headSource: ""
-    property string userName: ""
-
     radius: 5
 
     color: "transparent"
+
+    UserManager{
+        id: user_information
+    }
 
     width: head_image_item.width + user_name_item.width + logout_item.width + 25
 
@@ -29,7 +31,7 @@ Rectangle {
         anchors.leftMargin: 10
 
 
-        source: (headSource.length === 0 ) ? "qrc:/images/default_head_icon.jpg" : headSource
+        source: (user_information.headerImage.length === 0) ? "qrc:/images/default_head_icon.jpg" : user_information.headerImage
 
         smooth: true
         antialiasing: true
@@ -41,7 +43,7 @@ Rectangle {
         anchors.left:head_image_item.right
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
-        text: userName.length === 0 ? "点击登录" : userName
+        text: user_information.token.length === 0 ? "点击登录" : (user_information.nickName.length === 0 ? user_information.userName : user_information.nickName)
         font.pixelSize: 13
         color: mousearea.containsMouse ? "#00BFFF" : "#ffffff"
         verticalAlignment: Text.AlignVCenter
@@ -56,7 +58,7 @@ Rectangle {
         cursorShape: Qt.PointingHandCursor
 
         onClicked: {
-            if(Global.User.token.length===0){
+            if(user_information.token.length===0){
                 Global.RootPanel.showLoginPanel();
             }
         }
@@ -69,7 +71,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         text: "注销"
         textPixelSize: 11
-        visible: Global.User.token.length>0
+        visible: user_information.token.length>0
         width: 30
         height: user_name_item.height
 
@@ -84,9 +86,8 @@ Rectangle {
         textDisabledColor: "#B0C4DE"
 
         onClicked: {
-            Toast.showToast(Global.RootPanel, "用户"+Global.User.nickName+"登出")
-            Global.RootPanel.clearUserInformation();
-            //visible = false
+            Toast.showToast(Global.RootPanel, "用户"+user_information.nickName+"登出")
+            user_information.clearUserInfo();
         }
     }
 }

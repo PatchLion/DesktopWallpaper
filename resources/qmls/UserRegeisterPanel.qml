@@ -84,7 +84,7 @@ DefaultPopupPanelBase {
         }
     }
     Connections{
-        target: Global.APIRequest
+        target: Global.APIRequestEx
         onRegisterFinished:{
             root_item.cover.visible =false;
             root_item.cover.destroy();
@@ -180,7 +180,7 @@ DefaultPopupPanelBase {
                 }
 
                 root_item.cover = Cover.showLoadingCover(root_item, "注册中...");
-                Global.APIRequest.tryToRegeister(user, pwd, nickname);
+                Global.APIRequestEx.tryToRegeister(user, pwd, nickname);
 
             }
 

@@ -1,9 +1,6 @@
 .pragma library
 
 var RootPanel = null; //根页面
-var RootView = null; //
-var APIRequest = null; //
-var User = null; //用户信息
 
 //函数运行计时
 function runFuncWithUseTime(func, funcname){
@@ -12,177 +9,32 @@ function runFuncWithUseTime(func, funcname){
     for (var i = 0; i<arguments.length; i++){
         pars.push(arguments[i]);
     }
-
-    //console.log("runFuncWithUseTime arguments:", pars, typeof(pars), arguments.length);
     pars.splice(0, 2);
-
-    //console.log("runFuncWithUseTime->pars:", pars);
     var result = func.apply(this, pars);
-    var end = new Date().getTime();//接受时间
+    var end = new Date().getTime();//结束时间
 
     console.log("===> Run", "<"+funcname+">", "use time(s):", (end-start)/1000,"(", start/1000, ",", end/1000, ")");
-    return result
+    return result;
 }
 
 //解析api标准格式数据
-function resolveStandardData(standData)
-{
-    //console.log("Resolve standard data:", standData);
-    if(standData !== undefined)
-    {
-        var json_obj = runFuncWithUseTime(JSON.parse, "JSON.parse", standData);
+function resolveStandardData(ori_data){
+    if(ori_data !== null){
+        console.log("接收到API返回数据:" + ori_data);
 
-        if(json_obj !== null)
-        {
-            return [true, json_obj.code, json_obj.msg, json_obj.data];
-        }
-        else
-        {
-            console.warn("Failed resolve standard data! Invalid json data!")
-        }
-    }
-    else
-    {
-        console.warn("Failed resolve standard data! Invalid data!")
-    }
+        var obj = runFuncWithUseTime(JSON.parse, "JSON.parse", ori_data);
+        var code = obj.code;
+        var msg = obj.msg;
+        var data = obj.data;
 
-    return [false];
-}
+        console.log(code,msg, data)
 
-/*
-    解析登录数据
-*/
-function resolveLoginData(json_string){
-    //console.log("resolveLoginData:", json_string);
-    var json_obj = resolveStandardData(json_string);
-
-    if(json_obj[0])
-    {
-        var code = json_obj[1]
-        var msg = json_obj[2]
-        if(code === 0)
-        {
-            return [true, json_obj[3]];
-        }
-        else
-        {
-            console.warn("Failed request user data: "+msg);
+        if(code !== null && msg !== null){
+            return [true, obj.code, obj.msg, obj.data];
         }
     }
 
-    return [false, msg]
-}
-
-/*
-    解析token校验数据
-*/
-function resolveTokenCheckData(json_string){
-    //console.log("resolveTokenCheckData:", json_string);
-    var json_obj = resolveStandardData(json_string);
-
-    if(json_obj[0])
-    {
-        var code = json_obj[1]
-        var msg = json_obj[2]
-        if(code === 0)
-        {
-            return [true, json_obj[3]];
-        }
-        else
-        {
-            console.warn("Failed request token check data: "+msg);
-        }
-    }
-
-    return [false, msg]
-}
-
-/*
-    解析注册数据
-*/
-function resolveRegisterData(json_string){
-    //console.log("resolveRegisterData:", json_string);
-    var json_obj = resolveStandardData(json_string);
-
-    if(json_obj[0])
-    {
-        var code = json_obj[1]
-        var msg = json_obj[2]
-        if(code === 0)
-        {
-            return [true, json_obj[3]];
-        }
-        else
-        {
-            console.warn("Failed request register data: "+msg);
-        }
-    }
-
-    return [false, msg]
-}
-
-/*
-    解析添加收藏数据
-*/
-function resolveAddPeferData(json_string){
-    //console.log("resolveRegisterData:", json_string);
-    var json_obj = resolveStandardData(json_string);
-
-    if(json_obj[0])
-    {
-        var code = json_obj[1]
-        var msg = json_obj[2]
-        if(code === 0)
-        {
-            return [true, json_obj[3]];
-        }
-        else
-        {
-            console.warn("Failed request add pefer data: "+msg);
-        }
-    }
-
-    return [false, msg]
-}
-
-/*
-    解析分类数据
-    return: [成功标志, 分类信息数组]
-          例如[true, [{"name":"分组1"}, {"name":"分组2"}]]
-*/
-function resolveClassifiesData(json_string)
-{
-
-    var json_obj = resolveStandardData(json_string);
-
-    if(json_obj[0])
-    {
-        var code = json_obj[1]
-        var msg = json_obj[2]
-        if(code === 0)
-        {
-            var model_data = [];
-
-            var childlist = json_obj[3].list;
-
-            for(var j = 0; j<childlist.length; j++)
-            {
-                var classify = childlist[j];
-
-                //console.log(classify.name);
-
-                model_data.push({"name":classify});
-            }
-
-            return [true, model_data];
-        }
-        else
-        {
-            console.warn("Failed request classifies data: "+msg);
-        }
-    }
-
-    return [false, []];
+    return [false, -1, "不能解析数据格式", null];
 }
 
 function resolveSearchResult(data)
@@ -216,53 +68,6 @@ function resolveSearchResult(data)
     }
 
     return [false]
-}
-
-/*
-  解析图片分组数据
-*/
-function resolvePageData(items_data)
-{
-    //console.log("---->", items_data)
-    var json_obj = resolveStandardData(items_data);
-
-    if(json_obj[0])
-    {
-        var code = json_obj[1]
-        var msg = json_obj[2]
-        if(code === 0)
-        {
-            var model_data = [];
-            var childlist = json_obj[3].items;
-
-            var limit = arguments[1] ? arguments[1] : -1
-
-            //console.log("Limit ------->", limit)
-
-            for(var j = 0; j<childlist.length; j++)
-            {
-                var item = childlist[j];
-
-
-
-                model_data.push({"itemID": item.id, "newOne": item.new, "image": item.image, "title": item.title, "sourcePage":item.source});
-
-                if (limit > 0 && j>=(limit-1))
-                {
-                    break;
-                }
-            }
-
-            //console.log("-----", model_data.length)
-            return [true, model_data];
-        }
-        else
-        {
-            console.warn("Failed request classifies data: "+msg);
-        }
-    }
-
-    return [false, []];
 }
 
 /*

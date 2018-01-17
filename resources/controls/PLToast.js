@@ -3,7 +3,7 @@
 //Toast窗体显示
 var com = 0
 function showToast(parent, text) {
-    //console.log("New toast --------------------");
+    console.log("Toast Message: --- " + text);
     com = Qt.createComponent("PLToast.qml")
     if(com.status === Component.Ready)
     {

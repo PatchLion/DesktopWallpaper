@@ -4,92 +4,91 @@
 
 
 QNetworkAccessManager *APIRequestEX::g_network = 0;
-void APIRequestEX::classifiesRequest(Functor functor)
+
+void APIRequestEX::classifiesRequest(QVariant jsFunc)
 {
-    return APIRequestEX::post(kAPIClassifies, "", functor);
+    return APIRequestEX::post(kAPIClassifies, "", jsFunc);
 }
 
-void APIRequestEX::pageRequest(const QString &classify, int pageindex, Functor functor)
+void APIRequestEX::pageRequest(const QString &classify, int pageindex, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("classify", classify);
     param.insert("pageindex", pageindex);
 
-    return post(kAPIPage, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPIPage, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::itemRequest(const QString &itemID, Functor functor)
+void APIRequestEX::itemRequest(const QString &itemID, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("itemid", itemID);
 
-    return post(kAPIItem, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPIItem, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::searchRequest(const QString &key, Functor functor)
+void APIRequestEX::searchRequest(const QString &key, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("key", key);
 
-    return post(kAPISearch, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPISearch, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::loginRequest(const QString &user, const QString &pwd, Functor functor)
+void APIRequestEX::loginRequest(const QString &user, const QString &pwd, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("user", user);
     param.insert("password", pwd);
 
-    return post(kAPILogin, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPILogin, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::regeisterRequest(const QString &user, const QString &pwd, const QString &nickname, Functor functor)
+void APIRequestEX::regeisterRequest(const QString &user, const QString &pwd, const QString &nickname, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("user", user);
     param.insert("nickname", nickname);
     param.insert("password", pwd);
 
-    return post(kAPIRegister, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPIRegister, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::checkTokenRequest(const QString &token, Functor functor)
+void APIRequestEX::checkTokenRequest(const QString &token, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("token", token);
 
-    return post(kAPITokenCheck, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPITokenCheck, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::addPeferRequest(const QString &token, const QList<int> &imageids, Functor functor)
+void APIRequestEX::addPeferRequest(const QString &token, const QList<int> &imageids, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("token", token);
     //param.insert("imageids", imageids);
 
-    return post(kAPIAddPefer, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPIAddPefer, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::getPefersRequest(const QString &token, Functor functor)
+void APIRequestEX::getPefersRequest(const QString &token, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("token", token);
 
-    return post(kAPIGetPefer, QJsonDocument::fromVariant(param).toJson(), functor);
+    return post(kAPIGetPefer, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::post(const QString &apiurl, const QString &param, Functor functor)
+void APIRequestEX::post(const QString &apiurl, const QString &param, QVariant jsFunc)
 {
+    Q_ASSERT(jsFunc.canConvert<QJSValue>());
+
     QNetworkRequest request(apiurl);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     QNetworkReply* reply = APIRequestEX::network()->post(request, param.toUtf8());
 
-    APIRequestPrivate* p = new APIRequestPrivate(reply, APIRequestEX::network());
-
-    connect(p, &APIRequestPrivate::replyFinished, functor);
-
-    return reply;
+    APIRequestPrivate* p = new APIRequestPrivate(reply, jsFunc.value<QJSValue>(), APIRequestEX::network());
 }
 
 QNetworkAccessManager *APIRequestEX::network()

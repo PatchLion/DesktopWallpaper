@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.4
-
+import DesktopWallpaper.APIRequestEx 1.0
+import DesktopWallpaper.UserManager 1.0
 import "./Global.js" as Global
 import "../controls/PLToast.js" as Toast
 import "../controls/PLCoverPanel.js" as Cover
@@ -8,9 +9,11 @@ import "../controls"
 
 StackView{
     id: root_item
-    property var cover
-
     anchors.fill: parent
+
+    APIRequestEx{ id: api_request } //api请求对象
+    UserManager {id: user_information } //用户信息对象
+
 
     initialItem:Component{
         DefaultPopupPanelBase {
@@ -75,26 +78,7 @@ StackView{
 
                 }
             }
-            Connections{
-                target: Global.APIRequest
-                onLoginFinished:{
-                    root_item.cover.visible =false;
-                    root_item.cover.destroy();
-                    root_item.cover = null;
-                    var result = Global.resolveLoginData(data);
-                    if(result[0]){
-                        //console.log("IsVIP:", result[1]["is_vip"]);
 
-
-                        Global.RootPanel.updateUserInformation(result[1]);
-                        root_item.visible = false;
-                        root_item.destroy();
-                    }
-                    else{
-                        Toast.showToast(root_item, "登录失败: "+result[1]);
-                    }
-                }
-            }
             Item{
                 parent: bottomArea
                 anchors.fill: parent
@@ -114,11 +98,39 @@ StackView{
                         var pwd = password_item.text
 
                         if(user.length === 0 || pwd.length === 0){
-                            Toast.showToast(root_item, "用户名或密码为空");
+                            Toast.showToast(Global.RootPanel, "用户名或密码为空");
                         }
                         else{
-                            root_item.cover = Cover.showLoadingCover(root_item, "登录中...");
-                            Global.APIRequest.tryToLogin(user, pwd);
+                            var cover = Cover.showLoadingCover(root_item, "登录中...");
+                            api_request.loginRequest(user, pwd, function(suc, msg, data){
+                                cover.visible =false;
+                                cover.destroy();
+                                cover = null;
+
+                                var result = Global.resolveStandardData(data);
+                                if(suc){
+                                    if(result[0] && result[1] === 0){
+                                        var info=result[3];
+                                        user_information.updateUserInfo(info.is_vip,
+                                                                        info.user,
+                                                                        info.headerimage,
+                                                                        info.headimage_url,
+                                                                        info.nickname);
+
+                                        Toast.showToast(Global.RootPanel, "欢迎您: "+info.nickname);
+
+                                        root_item.visible = false;
+                                        root_item.destroy();
+                                    }
+                                    else{
+                                        Toast.showToast(Global.RootPanel, "登录失败: "+result[2]);
+                                    }
+
+                                }
+                                else{
+                                    Toast.showToast(Global.RootPanel, "登录失败: "+msg);
+                                }
+                            });
                         }
                     }
 

@@ -11,7 +11,7 @@ Rectangle {
     color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
     Component.onCompleted: {
-        var data = Global.APIRequest.buildDownloadInfo();
+        var data = Global.APIRequestEx.buildDownloadInfo();
 
         var jsonData = JSON.parse(data)
 
@@ -50,7 +50,7 @@ Rectangle {
 
     Connections{
         //id:api_request
-        target: Global.APIRequest
+        target: Global.APIRequestEx
 
         onDownloadInfosChanged:{
             //console.log("onDownloadInfosChanged:", downloads)

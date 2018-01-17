@@ -31,6 +31,13 @@ public:
     QString getNickName() const;
     void setNickName(const QString &value);
 
+    Q_INVOKABLE void updateUserInfo(bool isVip,
+                                    const QString& user,
+                                    const QString& image,
+                                    const QString& token,
+                                    const QString& nickName);
+
+    Q_INVOKABLE void clearUserInfo();
 
     Q_INVOKABLE void writeToHistory();
 private:
@@ -46,11 +53,12 @@ Q_SIGNALS:
     void nickNameChanged();
 
 private:
-    bool isVip; //是否是vip
-    QString userName; //用户名
-    QString nickName; //昵称
-    QString headerImage; //头像
-    QString token; //token
+    static bool isInited;
+    static bool isVip; //是否是vip
+    static QString userName; //用户名
+    static QString nickName; //昵称
+    static QString headerImage; //头像
+    static QString token; //token
 };
 
 #endif // USERMANAGER_H

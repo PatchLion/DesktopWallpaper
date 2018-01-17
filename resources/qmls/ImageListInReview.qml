@@ -1,6 +1,7 @@
 import QtQuick 2.0
+import DesktopWallpaper.APIRequestEx 1.0
 import "./Global.js" as Global
-
+import "../controls/PLToast.js" as Toast
 import "../controls"
 
 Rectangle{
@@ -11,31 +12,45 @@ Rectangle{
 
     radius: 3
 
+    APIRequestEx{id: api_request}
 
     onClassifyChanged: {
-        //console.log("Classify-->", classify);
+        api_request.pageRequest(classify, 0, function(suc, msg, data){
 
-        Global.APIRequest.requestItemsByClassify(classify, 0);
-    }
+            if (suc){
+                var result = Global.resolveStandardData(data);
 
-    Connections{
-        target: Global.APIRequest
+                if(result[0] && result[1] === 0){
 
-        onItemsByClassifyResponse: {
-            if(root_item.classify == classify)
-            {
-                var result = Global.resolvePageData(data, grid_view_item.rowCount*grid_view_item.columnCount);
 
-                if(result[0])
-                {
+                    var model_data = [];
+                    var childlist = result[3].items;
+
+                    var limit = grid_view_item.rowCount*grid_view_item.columnCount //限制个数
+
+                    for(var j = 0; j<childlist.length; j++)
+                    {
+                        var item = childlist[j];
+
+                        model_data.push({"itemID": item.id, "newOne": item.new, "image": item.image, "title": item.title, "sourcePage":item.source});
+
+                        if (limit > 0 && j>=(limit-1))
+                        {
+                            break;
+                        }
+                    }
+
                     grid_view_model.clear();
-                    grid_view_model.append(result[1]);
+                    grid_view_model.append(model_data);
+                }
+                else{
+                    Toast.showToast(Global.RootPanel, "获取分页数据失败: "+result[2]);
                 }
             }
-        }
-        onApiRequestError: {
-            console.warn("Catch error when reuqest api:", apiName, "code:", error);
-        }
+            else{
+                Toast.showToast(Global.RootPanel, "获取分页数据失败: "+msg);
+            }
+       });
     }
 
     Item{

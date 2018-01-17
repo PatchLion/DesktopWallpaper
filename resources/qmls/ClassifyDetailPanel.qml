@@ -12,7 +12,7 @@ Item {
 
 
     Connections{
-        target: Global.APIRequest
+        target: Global.APIRequestEx
         onItemsByClassifyResponse: {
             var result = Global.resolvePageData(data)
             if(result[0])
@@ -26,7 +26,7 @@ Item {
 
     onClassifyChanged: {
         //console.log("xxxxxxxxxxxxxxxxxxxxxx")
-        Global.APIRequest.requestItemsByClassify(classify, currentPageIndex);
+        Global.APIRequestEx.requestItemsByClassify(classify, currentPageIndex);
     }
 
     Rectangle{
@@ -98,7 +98,7 @@ Item {
                 if (contentX >= temp)
                 {
                     root_item.currentPageIndex += 1
-                    Global.APIRequest.requestItemsByClassify(root_item.classify, root_item.currentPageIndex);
+                    Global.APIRequestEx.requestItemsByClassify(root_item.classify, root_item.currentPageIndex);
                 }
             }
         }

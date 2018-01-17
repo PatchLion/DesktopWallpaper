@@ -1,11 +1,14 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
+import DesktopWallpaper.APIRequestEx 1.0
 import "./Global.js" as Global
+import "../controls/PLToast.js" as Toast
 
 Item {
     id: root_item
 
 
+    APIRequestEx {id:api_request}
 
     ListView{
         id: imageClassifyList
@@ -28,34 +31,6 @@ Item {
             height: imageClassifyList.height
         }
 
-        Connections{
-            //id: classifies_request
-
-            target: Global.APIRequest
-
-            onClassifiesResponse: {
-                //console.log("Classifies data:", data);
-
-                var result = Global.runFuncWithUseTime(Global.resolveClassifiesData, "Global.resolveClassifiesData", data);
-
-                //console.log("UseTime:", start, end,  end-start);
-
-                if(result[0])
-                {
-                    imageClassifyListModel.clear();
-                    imageClassifyListModel.append(result[1]);
-                }
-            }
-
-
-
-            onApiRequestError: {
-                console.warn("Catch error when reuqest api:", apiName, "code:", error);
-            }
-        }
-
-
-
         Component.onCompleted: {
             timer.start();
         }
@@ -66,8 +41,44 @@ Item {
             interval: 1
             repeat: false
             running: false
+
+            function toModelData(data){
+                var childlist = data;
+
+                var model_data = [];
+                for(var j = 0; j<data.length; j++)
+                {
+                    var classify = data[j];
+
+                    model_data.push({"name":classify});
+                }
+
+                return model_data;
+            }
+
             onTriggered: {
-                Global.APIRequest.requestClassifiesData();
+               api_request.classifiesRequest(function(suc, msg, data){
+
+                   if (suc){
+                       var result = Global.resolveStandardData(data);
+
+                       if(result[0] && result[1] === 0)
+                       {
+                           imageClassifyListModel.clear();
+                           imageClassifyListModel.append(toModelData(result[3]));
+                       }
+                       else
+                       {
+                            Toast.showToast(Global.RootPanel, "获取分类信息失败:"+result[2]);
+                       }
+                   }
+                   else
+                   {
+                       Toast.showToast(Global.RootPanel, "获取分类信息失败:"+msg);
+                   }
+
+
+              });
             }
         }
 

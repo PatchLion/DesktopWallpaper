@@ -19,7 +19,7 @@ Item {
     property var cover
 
     Connections {
-        target: Global.APIRequest
+        target: Global.APIRequestEx
         onItemsDetailResponse: {
             var result = Global.resolveItemsDetailData(data)
 
@@ -39,9 +39,9 @@ Item {
             var result = Global.resolveAddPeferData(data)
 
             if (result[0]) {
-                Toast.showToast(Global.RootView, "图片收藏成功")
+                Toast.showToast(Global.RootPanel, "图片收藏成功")
             } else {
-                Toast.showToast(Global.RootView, "图片收藏失败:" + result[1])
+                Toast.showToast(Global.RootPanel, "图片收藏失败:" + result[1])
             }
         }
 
@@ -52,7 +52,7 @@ Item {
     }
 
     onItemIDChanged: {
-        Global.APIRequest.requestItemsDetailData(itemID)
+        Global.APIRequestEx.requestItemsDetailData(itemID)
     }
 
     Rectangle {
@@ -201,7 +201,7 @@ Item {
                                                     })
                                     } else {
                                         //执行收藏操作
-                                        Global.APIRequest.tryToPefer(
+                                        Global.APIRequestEx.tryToPefer(
                                                     Global.User.token,
                                                     [image_content_item.currentID])
 
@@ -298,7 +298,7 @@ Item {
                                         onAccepted: {
                                             var source = image_item.source
 
-                                            Global.APIRequest.addDownload(
+                                            Global.APIRequestEx.addDownload(
                                                         fileUrl, Global.fixedDirName(
                                                             root_item.title), [source])
                                         }
@@ -391,7 +391,7 @@ Item {
                         imageids.push(images_list_model.get(i)["imageid"])
                     }
 
-                    Global.APIRequest.tryToPefer(Global.User.token, imageids)
+                    Global.APIRequestEx.tryToPefer(Global.User.token, imageids)
 
                     root_item.cover = CoverPanel.showLoadingCover(
                                 Global.RootPanel, "添加收藏中...")
@@ -444,7 +444,7 @@ Item {
                         }
 
                         //console.log(fileUrl, Global.fixedDirName(root_item.title))
-                        Global.APIRequest.addDownload(fileUrl,
+                        Global.APIRequestEx.addDownload(fileUrl,
                                                       Global.fixedDirName(
                                                           root_item.title),
                                                       urls)

@@ -16,7 +16,7 @@ Rectangle {
     function startToSearch(keyword){
         root_item.keyword = keyword
         console.log("keyword change to:", keyword);
-        Global.APIRequest.searchKeyWord(keyword);
+        Global.APIRequestEx.searchKeyWord(keyword);
 
         //Toast.showToast(root_item, "正在搜索中...");
 
@@ -30,7 +30,7 @@ Rectangle {
 
     Connections{
         //id:api_request
-        target: Global.APIRequest
+        target: Global.APIRequestEx
 
         onApiRequestError: {
             console.warn("Failed to search: ", apiName, "|", error)
@@ -153,7 +153,7 @@ Rectangle {
             if (contentX >= temp)
             {
                 root_item.currentPageIndex += 1
-                Global.APIRequest.requestItemsByClassify(root_item.classifyID, root_item.currentPageIndex);
+                Global.APIRequestEx.requestItemsByClassify(root_item.classifyID, root_item.currentPageIndex);
             }
         }
     }
