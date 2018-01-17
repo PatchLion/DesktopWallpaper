@@ -69,7 +69,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         text: "注销"
         textPixelSize: 11
-        visible: root_item.userName.length > 0
+        visible: Global.User.token.length>0
         width: 30
         height: user_name_item.height
 

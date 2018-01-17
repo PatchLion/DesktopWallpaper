@@ -122,11 +122,13 @@ StackView{
                         }
                     }
 
+                    focus: true
+
                     Keys.onPressed: {
                         switch(event.key){
                         case Qt.Key_Enter:
                         case Qt.Key_Return:
-                            clicked();
+                            login_button.clicked();
                         }
                     }
                 }

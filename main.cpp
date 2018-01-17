@@ -2,7 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QtGui>
 #include <QtCore>
-#include "APIRequest.h"
+#include <QtNetwork>
+#include "APIRequestEx.h"
 #include "WallpaperSetter.h"
 #include "UserManager.h"
 #include "Settings.h"
@@ -68,9 +69,9 @@ int main(int argc, char *argv[])
     }
     */
     qDebug() << "Font families loadded!";
-
     qmlRegisterType<UserManager>("DesktopWallpaper.UserManager", 1, 0, "UserManager");
-    qmlRegisterType<APIRequest>("DesktopWallpaper.APIRequest", 1, 0, "APIRequest");
+
+    qmlRegisterType<APIRequestEX>("DesktopWallpaper.APIRequestEX", 1, 0, "APIRequestEX");
     qmlRegisterType<WallpaperSetter>("DesktopWallpaper.WallpaperSetter", 1, 0, "WallpaperSetter");
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qmls/main.qml")));

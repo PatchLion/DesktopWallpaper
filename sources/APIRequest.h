@@ -52,7 +52,7 @@ public:
 
 public:
     //获取分类数据
-    Q_INVOKABLE void requestClassifiesData();
+    Q_INVOKABLE static void requestClassifiesData();
 
     //获取分组数据
     //Q_INVOKABLE void requestItemsData();

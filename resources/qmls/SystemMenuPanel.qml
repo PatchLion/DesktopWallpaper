@@ -9,6 +9,7 @@ Item{
     property bool enableDownloadBoxButton: true
     property bool enableSearchControl: true
 
+    property alias userPanelEnable: user_panel.enabled
     property alias headSource: user_panel.headSource
     property alias userName: user_panel.userName
 

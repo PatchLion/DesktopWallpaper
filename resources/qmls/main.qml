@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
-import DesktopWallpaper.APIRequest 1.0
+import DesktopWallpaper.APIRequestEX 1.0
 import DesktopWallpaper.UserManager 1.0
 import "../controls/"
 import "./Global.js" as Global
@@ -20,7 +20,15 @@ PLFrameLessAndMoveableWindow
     dragArea: Qt.rect(0, 0, width, 50)
     //visibility: Window.Windowed
 
+    APIRequestEX{
+        Component.onCompleted: {
+            loginRequest("admin", "admin", function(suc, msg, data){
+                console.log(suc, msg, data);
+            });
+        }
+    }
 
+    /*
 
     //分类下更多的items classifyID：分类ID
     signal showAllItemByClassifyPanel(string title);
@@ -50,7 +58,11 @@ PLFrameLessAndMoveableWindow
         APIRequest{
             id: api_request
             onTokenCheckFinished: {
+
+                console.log("check finished!!!")
                 var result = Global.resolveTokenCheckData(data);
+
+                system_menu_panel.userPanelEnable = true;
 
                 if(result[0]){
                     updateUserInformation(result[1]);
@@ -64,6 +76,9 @@ PLFrameLessAndMoveableWindow
     }
 
     function clearUserInformation(){
+
+        system_menu_panel.userName = "";
+        system_menu_panel.headSource = "";
         Global.User.isVip = false;
         Global.User.userName = "";
         Global.User.nickName = "";
@@ -81,8 +96,10 @@ PLFrameLessAndMoveableWindow
         Global.User.token = data["token"];
         Global.User.headerImage = data["headimage_url"];
 
-        console.log("nickname ----- > ", Global.User.nickName)
+        console.log("update  ----- > ", Global.User.nickName, Global.User.headerImage)
         Global.User.writeToHistory();
+
+
     }
 
 
@@ -120,6 +137,7 @@ PLFrameLessAndMoveableWindow
                         //anchors.left = parent.left;
                         //anchors.leftMargin = 10;
                     //}
+
                 }
 
                 anchors.verticalCenter: parent.verticalCenter
@@ -210,11 +228,12 @@ PLFrameLessAndMoveableWindow
             //CoverPanel.setProgressBarCoverTooltip(cover, "测试进度");
         //}
 
+        console.log("init --->", Global.User.nickName, Global.User.headerImage)
         system_menu_panel.userName = Global.User.nickName;
         system_menu_panel.headSource = Global.User.headerImage;
 
-
         if (Global.User.token.length > 0){
+            system_menu_panel.userPanelEnable = false;
             Global.APIRequest.tryToCheckToken(Global.User.token);
         }
     }
@@ -347,5 +366,5 @@ PLFrameLessAndMoveableWindow
         main_stackView.panelStackedPanel.push(DataType.PanelImageDetails)
         main_stackView.lastPage = DataType.PanelImageDetails
     }
-
+*/
 }

@@ -18,18 +18,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += ./sources/common.h\
-    ./sources/APIRequest.h\
+    ./sources/APIRequestEx.h\
     ./sources/WallpaperSetter.h \
     sources/UserManager.h \
     sources/Settings.h \
     sources/aes/aes.h \
-    sources/aes/qaeswrap.h
-SOURCES += ./sources/APIRequest.cpp  main.cpp \
+    sources/aes/qaeswrap.h \
+    sources/APIRequestPrivate.h
+SOURCES += ./sources/APIRequestEx.cpp  main.cpp \
     ./sources/WallpaperSetter.cpp \
     sources/UserManager.cpp \
     sources/Settings.cpp\
     sources/aes/aes.c \
-    sources/aes/qaeswrap.cpp
+    sources/aes/qaeswrap.cpp \
+    sources/APIRequestPrivate.cpp
 win32{
     LIBS += User32.lib
 }

@@ -140,7 +140,15 @@ DefaultPopupPanelBase {
 
                 return ""
             }
+            focus: true
 
+            Keys.onPressed: {
+                switch(event.key){
+                case Qt.Key_Enter:
+                case Qt.Key_Return:
+                    regeister_button.clicked();
+                }
+            }
 
             onClicked: {
                 var user = trimStr(user_name_item.text)
@@ -176,13 +184,7 @@ DefaultPopupPanelBase {
 
             }
 
-            Keys.onPressed: {
-                switch(event.key){
-                case Qt.Key_Enter:
-                case Qt.Key_Return:
-                    clicked();
-                }
-            }
+
         }
 
         PLTextButton{
