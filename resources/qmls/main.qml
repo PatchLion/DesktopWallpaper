@@ -173,30 +173,23 @@ PLFrameLessAndMoveableWindow
         if (user_information.token.length > 0){
             //console.log("开始验证Token!")
             api_request.checkTokenRequest(user_information.token, function(suc, msg, data){
+                var result = Global.resolveAPIResponse(suc, msg, data);
 
-                //console.log("验证Token完成!")
-                if (suc){
-                    var result = Global.resolveStandardData(data);
+                if(result[0]){
+                    var info = result[1];
 
-                    if(result[0] && result[1] === 0){
-                        var info = result[3];
+                    user_information.updateUserInfo(info.is_vip,
+                                                    info.user,
+                                                    info.headimage_url,
+                                                    info.token,
+                                                    info.nickname);
 
-                        user_information.updateUserInfo(info.is_vip,
-                                                        info.user,
-                                                        info.headimage_url,
-                                                        info.token,
-                                                        info.nickname);
-
-                        Toast.showToast(root_window, "欢迎您:" + info.nickname);
-                    }
-                    else{
-
-                        Toast.showToast(root_window, "检测账户信息失败: " + result[2]);
-                        user_information.clearUserInfo();
-                    }
+                    Toast.showToast(root_window, "欢迎您:" + info.nickname);
                 }
                 else{
-                    Toast.showToast(root_window, "检测账户信息失败: " + msg)
+
+                    Toast.showToast(root_window, "检测账户信息失败: " + result[1]);
+                    user_information.clearUserInfo();
                 }
             });
         }

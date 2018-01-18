@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import DesktopWallpaper.APIRequestEx 1.0
 import "./Global.js" as Global
 import "../controls"
 import "../controls/PLCoverPanel.js" as CoverPanel
@@ -10,63 +11,15 @@ Rectangle {
     color: Qt.rgba(0.3, 0.3, 0.3, 0.3)
 
     property string keyword: ""
-    property var cover: null
-
 
     function startToSearch(keyword){
-        root_item.keyword = keyword
-        console.log("keyword change to:", keyword);
-        Global.APIRequestEx.searchKeyWord(keyword);
-
-        //Toast.showToast(root_item, "正在搜索中...");
-
-
-        cover = CoverPanel.showLoadingCover(Global.RootPanel, "加载中");
+        search_button.startSearch(keyword);
     }
+
+    APIRequestEx{id: api_request}
 
     ClassifyDetailPanel{
         anchors.fill: parent
-    }
-
-    Connections{
-        //id:api_request
-        target: Global.APIRequestEx
-
-        onApiRequestError: {
-            console.warn("Failed to search: ", apiName, "|", error)
-
-
-            Toast.showToast(root_item, "搜索失败! 错误代码:"+error);
-
-
-            if(root_item.cover)
-            {
-                root_item.cover.visible = false;
-                root_item.cover.destroy();
-            }
-        }
-
-        onSearchResponse: {
-
-            var result = Global.resolveSearchResult(data);
-
-            if(result[0])
-            {
-                var items = result[1];
-
-                grid_view_model.clear();
-                grid_view_model.append(items);
-            }
-
-
-            //Toast.showToast(root_item, "搜索完成");
-
-            if(root_item.cover)
-            {
-                root_item.cover.visible = false;
-                root_item.cover.destroy();
-            }
-        }
     }
 
 
@@ -117,10 +70,31 @@ Rectangle {
 
             onStartSearch: {
                 if (keyword.length>0){
+                    console.log("开始搜索关键词: " + keyword)
                     grid_view_model.clear();
-                    root_item.startToSearch(keyword);
-                    //cover = CoverPanel.showLoadingCover(root_item, "加载中...");
-                    //console.log("Cover-->", cover)
+                    root_item.keyword = keyword
+                    var cover = CoverPanel.showLoadingCover(Global.RootPanel, "搜索中...");
+                    api_request.searchRequest(keyword, function(suc, msg, data){
+                        Global.destroyPanel(cover);
+                        var result = Global.resolveAPIResponse(suc, msg, data, true);
+
+                        console.log("搜索结果: " + result[0]);
+
+                        if(result[0]){
+                            var model_data = Global.toPageModelData(result[1]);
+                            if (model_data.length > 0){
+                                console.log("Search result length: " + model_data.length);
+                                grid_view_model.append(model_data);
+                            }
+                            else{
+                                Toast.showToast(Global.RootPanel, "抱歉!按照您提供的关键词，我们没有搜索到任何结果!");
+                            }
+
+                        }
+                        else{
+                            Toast.showToast(Global.RootPanel, result[1]);
+                        }
+                    });
                 }
             }
         }
@@ -144,17 +118,6 @@ Rectangle {
 
         model: ListModel{
             id: grid_view_model
-        }
-
-
-        onContentXChanged: {
-            console.log(contentX, contentWidth, width)
-            var temp = contentWidth - width - 100
-            if (contentX >= temp)
-            {
-                root_item.currentPageIndex += 1
-                Global.APIRequestEx.requestItemsByClassify(root_item.classifyID, root_item.currentPageIndex);
-            }
         }
     }
 }

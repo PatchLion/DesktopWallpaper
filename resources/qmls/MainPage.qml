@@ -42,42 +42,19 @@ Item {
             repeat: false
             running: false
 
-            function toModelData(data){
-                var childlist = data;
-
-                var model_data = [];
-                for(var j = 0; j<data.length; j++)
-                {
-                    var classify = data[j];
-
-                    model_data.push({"name":classify});
-                }
-
-                return model_data;
-            }
-
             onTriggered: {
                api_request.classifiesRequest(function(suc, msg, data){
+                   //console.log("classifies:", suc, msg, data)
+                   var result = Global.resolveAPIResponse(suc, msg, data);
 
-                   if (suc){
-                       var result = Global.resolveStandardData(data);
-
-                       if(result[0] && result[1] === 0)
-                       {
-                           imageClassifyListModel.clear();
-                           imageClassifyListModel.append(toModelData(result[3]));
-                       }
-                       else
-                       {
-                            Toast.showToast(Global.RootPanel, "获取分类信息失败:"+result[2]);
-                       }
+                   if (result[0]){
+                       imageClassifyListModel.clear();
+                       imageClassifyListModel.append(Global.toClassifiesModelData(result[1]));
                    }
                    else
                    {
-                       Toast.showToast(Global.RootPanel, "获取分类信息失败:"+msg);
+                        Toast.showToast(Global.RootPanel, "获取分类信息失败:"+result[1]);
                    }
-
-
               });
             }
         }

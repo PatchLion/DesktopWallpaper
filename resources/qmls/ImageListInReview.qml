@@ -16,39 +16,15 @@ Rectangle{
 
     onClassifyChanged: {
         api_request.pageRequest(classify, 0, function(suc, msg, data){
+            var result = Global.resolveAPIResponse(suc, msg, data);
 
-            if (suc){
-                var result = Global.resolveStandardData(data);
-
-                if(result[0] && result[1] === 0){
-
-
-                    var model_data = [];
-                    var childlist = result[3].items;
-
-                    var limit = grid_view_item.rowCount*grid_view_item.columnCount //限制个数
-
-                    for(var j = 0; j<childlist.length; j++)
-                    {
-                        var item = childlist[j];
-
-                        model_data.push({"itemID": item.id, "newOne": item.new, "image": item.image, "title": item.title, "sourcePage":item.source});
-
-                        if (limit > 0 && j>=(limit-1))
-                        {
-                            break;
-                        }
-                    }
-
-                    grid_view_model.clear();
-                    grid_view_model.append(model_data);
-                }
-                else{
-                    Toast.showToast(Global.RootPanel, "获取分页数据失败: "+result[2]);
-                }
+            if (result[0]){
+                var model_data = Global.toPageModelData(result[1], grid_view_item.rowCount * grid_view_item.columnCount);
+                grid_view_model.clear();
+                grid_view_model.append(model_data);
             }
             else{
-                Toast.showToast(Global.RootPanel, "获取分页数据失败: "+msg);
+                Toast.showToast(Global.RootPanel, result[1]);
             }
        });
     }
@@ -103,9 +79,6 @@ Rectangle{
         anchors.top: top_area.bottom
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 5
-
-        rowCount: 3
-        columnCount: 2
 
         model: ListModel{
             id: grid_view_model

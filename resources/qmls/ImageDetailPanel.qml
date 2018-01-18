@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Dialogs 1.2
+import DesktopWallpaper.APIRequestEx 1.0
 import DesktopWallpaper.WallpaperSetter 1.0
 
 import "../controls"
@@ -16,20 +17,12 @@ Item {
 
     property string itemUrl: ""
 
-    property var cover
+    APIRequestEx{id:api_request}
 
     Connections {
         target: Global.APIRequestEx
         onItemsDetailResponse: {
-            var result = Global.resolveItemsDetailData(data)
 
-            if (result[0]) {
-                images_list_model.clear()
-                images_list_model.append(result[1])
-
-                downloadall_button.enabled = true
-                prefer_imagegroup_button.enabled = true
-            }
         }
 
         onAddPeferFinished: {
@@ -51,8 +44,38 @@ Item {
         }
     }
 
+    function toModelData(data){
+        var model_data = [];
+
+        var childlist = data.images;
+
+        for(var j = 0; j<childlist.length; j++)
+        {
+            var item = childlist[j];
+            model_data.push({ "image": item.image, "imageid": item.id});
+        }
+
+        return model_data;
+    }
+
     onItemIDChanged: {
-        Global.APIRequestEx.requestItemsDetailData(itemID)
+
+
+        api_request.itemRequest(itemID, function(suc, msg, data){
+
+
+
+
+            var result = Global.resolveItemsDetailData(data)
+
+            if (result[0]) {
+                images_list_model.clear()
+                images_list_model.append(result[1])
+
+                downloadall_button.enabled = true
+                prefer_imagegroup_button.enabled = true
+            }
+        });
     }
 
     Rectangle {
@@ -190,23 +213,22 @@ Item {
                                 }
 
                                 onClicked: {
-                                    if (Global.User.token.length === 0) {
+                                    if (Global.User.token.length === 0)
+                                    {
                                         var messagebox = MessageBox.showMessageBox(
                                                     Global.RootPanel, "收藏功能需要登录后才能使用!",
                                                     function () {
-                                                        Global.RootPanel.showLoginPanel(
-                                                                    )
-                                                        messagebox.visible = false
-                                                        messagebox.destroy()
+                                                        Global.RootPanel.showLoginPanel();
+                                                        messagebox.visible = false;
+                                                        messagebox.destroy();
                                                     })
                                     } else {
-                                        //执行收藏操作
-                                        Global.APIRequestEx.tryToPefer(
-                                                    Global.User.token,
-                                                    [image_content_item.currentID])
 
-                                        root_item.cover = CoverPanel.showLoadingCover(
+                                        var cover = CoverPanel.showLoadingCover(
                                                     Global.RootPanel, "添加收藏中...")
+                                        //执行收藏操作
+                                        api_request.addPeferRequest(Global.User.token, [image_content_item.currentID])
+
                                     }
                                 }
                             }

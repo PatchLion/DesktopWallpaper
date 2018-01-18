@@ -94,8 +94,8 @@ StackView{
 
                     anchors.verticalCenter: parent.verticalCenter
                     onClicked: {
-                        var user = user_name_item.text
-                        var pwd = password_item.text
+                        var user = user_name_item.text;
+                        var pwd = password_item.text;
 
                         if(user.length === 0 || pwd.length === 0){
                             Toast.showToast(Global.RootPanel, "用户名或密码为空");
@@ -107,28 +107,23 @@ StackView{
                                 cover.destroy();
                                 cover = null;
 
-                                var result = Global.resolveStandardData(data);
-                                if(suc){
-                                    if(result[0] && result[1] === 0){
-                                        var info=result[3];
-                                        user_information.updateUserInfo(info.is_vip,
-                                                                        info.user,
-                                                                        info.headimage_url,
-                                                                        info.token,
-                                                                        info.nickname);
+                                var result = Global.resolveAPIResponse(suc, msg, data);
 
-                                        Toast.showToast(Global.RootPanel, "欢迎您: "+info.nickname);
+                                if(result[0]){
+                                    var info=result[1];
+                                    user_information.updateUserInfo(info.is_vip,
+                                                                    info.user,
+                                                                    info.headimage_url,
+                                                                    info.token,
+                                                                    info.nickname);
 
-                                        root_item.visible = false;
-                                        root_item.destroy();
-                                    }
-                                    else{
-                                        Toast.showToast(Global.RootPanel, "登录失败: "+result[2]);
-                                    }
+                                    Toast.showToast(Global.RootPanel, "欢迎您: "+info.nickname);
 
+                                    root_item.visible = false;
+                                    root_item.destroy();
                                 }
                                 else{
-                                    Toast.showToast(Global.RootPanel, "登录失败: "+msg);
+                                    Toast.showToast(Global.RootPanel, "登录失败: "+result[1]);
                                 }
                             });
                         }

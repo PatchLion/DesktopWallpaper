@@ -70,7 +70,7 @@ void UserManager::setNickName(const QString &value)
 
 void UserManager::updateUserInfo(bool isVip, const QString &user, const QString &image, const QString &token, const QString &nickName)
 {
-    qDebug() << "Update user information: " << isVip << user << image << token << nickName;
+    //qDebug() << "Update user information: " << isVip << user << image << token << nickName;
     UserManager::isVip = isVip;
     UserManager::userName = user;
     UserManager::headerImage = image;

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
+import DesktopWallpaper.APIRequestEx 1.0
 import "../controls/PLToast.js" as Toast
 import "./Global.js" as Global
 import "../controls"
@@ -10,23 +11,25 @@ Item {
     property int currentPageIndex: 0
     property alias title: text_item.text
 
+    APIRequestEx{id: api_request}
 
-    Connections{
-        target: Global.APIRequestEx
-        onItemsByClassifyResponse: {
-            var result = Global.resolvePageData(data)
-            if(result[0])
-            {
-                //grid_view_model.clear();
-                grid_view_model.append(result[1]);
+    function onClassifyOrIndexChanged(classify, index){
+        api_request.pageRequest(classify, index, function(suc, msg, data){
+            var result = Global.resolveAPIResponse(suc, msg, data);
+            if(result[0]){
+                grid_view_model.append(Global.toPageModelData(result[1]));
             }
-
-        }
+            else{
+                Toast.showToast(Global.RootPanel, "获取分页数据失败: " + result[1]);
+            }
+        });
     }
 
     onClassifyChanged: {
-        //console.log("xxxxxxxxxxxxxxxxxxxxxx")
-        Global.APIRequestEx.requestItemsByClassify(classify, currentPageIndex);
+        grid_view_model.clear();
+        if(classify){
+            onClassifyOrIndexChanged(classify, 0);
+        }
     }
 
     Rectangle{
@@ -97,8 +100,8 @@ Item {
                 var temp = contentWidth - width - 100
                 if (contentX >= temp)
                 {
-                    root_item.currentPageIndex += 1
-                    Global.APIRequestEx.requestItemsByClassify(root_item.classify, root_item.currentPageIndex);
+                    root_item.currentPageIndex += 1;
+                    onClassifyOrIndexChanged(root_item.classify, root_item.currentPageIndex);
                 }
             }
         }

@@ -22,7 +22,7 @@ Item {
         id: text_item
         color: "#ffffff"
         text: "Loading......"
-        font.pixelSize: 10
+        font.pixelSize: 14
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: image_item.horizontalCenter

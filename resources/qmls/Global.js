@@ -17,97 +17,109 @@ function runFuncWithUseTime(func, funcname){
     return result;
 }
 
-//解析api标准格式数据
-function resolveStandardData(ori_data){
-    if(ori_data !== null){
-        console.log("接收到API返回数据:" + ori_data);
+/*
+  解析生成API回调后结果
+  返回值[true, 数据]或[false, 错误消息]
+*/
+function resolveAPIResponse(suc, msg, data){
+    var isPrintDebug = arguments[3] ? arguments[3] : false;//默认值为false 不打印Debug信息
+    if(suc){
+        return resolveStandardData(data, isPrintDebug);
+    }
+    else{
+        return [false, msg];
+    }
+}
 
+/*
+  解析api标准格式数据
+  返回值[true, 数据]或[false, 错误消息]
+*/
+function resolveStandardData(ori_data){
+    var result = [false, "不能解析数据格式"];
+    var isPrintDebug = arguments[1] ? arguments[1] : false;//默认值为false 不打印Debug信息
+    if(isPrintDebug){
+        console.log("接收到API返回数据:" + ori_data);
+    }
+    if(ori_data !== null){
         var obj = runFuncWithUseTime(JSON.parse, "JSON.parse", ori_data);
         var code = obj.code;
         var msg = obj.msg;
         var data = obj.data;
 
-        console.log(code,msg, data)
+        //console.log(code,msg, data)
 
         if(code !== null && msg !== null){
-            return [true, obj.code, obj.msg, obj.data];
-        }
-    }
-
-    return [false, -1, "不能解析数据格式", null];
-}
-
-function resolveSearchResult(data)
-{
-    //console.log("Search result-->", data);
-    var json_obj = resolveStandardData(data);
-
-    if(json_obj[0])
-    {
-        var code = json_obj[1];
-        var msg = json_obj[2];
-        if(code === 0)
-        {
-            var items = json_obj[3];
-            var model_data = [];
-            for(var i = 0; i<items.length; i++)
-            {
-                //console.log(items[i]);
-                var item = items[i];
-
-
-                //console.log(item.id, item.image, item.new, item.source);
-
-                model_data.push({"itemID": item.id, "newOne": item.new, "image": item.image, "title": item.title, "sourcePage":item.source});
-
-
+            if (code === 0){
+                result = [true, data];
+            }
+            else{
+                result = [false, msg];
             }
 
-            return [true, model_data]
         }
     }
 
-    return [false]
+    if(isPrintDebug){
+        console.log("解析结果:", result[0], (!result[0] ? result[1] : "<data>"));
+    }
+    return result;
+}
+
+//根据返回数据生成Model数据源
+/*
+  分类Model数据
+*/
+function toClassifiesModelData(data){
+    var childlist = data;
+
+    var model_data = [];
+    for(var j = 0; j<data.length; j++)
+    {
+        var classify = data[j];
+
+        model_data.push({"name":classify});
+    }
+
+    return model_data;
 }
 
 /*
-  解析图片分组中的图片数据
+  分页Model数据
 */
-function resolveItemsDetailData(images_data)
-{
+function toPageModelData(data){
 
+    var model_data = [];
+    var childlist = data.items;
+    var limit = arguments[1] ? arguments[1] : -1;//默认值为-1
 
-    var json_obj = resolveStandardData(images_data);
+    //console.log("Page model limit =", limit, arguments[0], arguments[1]);
 
-    if(json_obj[0])
-    {
-        var code = json_obj[1]
-        var msg = json_obj[2]
-        if(code === 0)
-        {
-            var model_data = [];
+    for(var j = 0; j<childlist.length; j++){
+        var item = childlist[j];
 
-            var childlist = json_obj[3].images;
+        model_data.push({"itemID": item.id,
+                            "newOne": item.new,
+                            "image": item.image,
+                            "title": item.title,
+                            "sourcePage":item.source});
 
-            for(var j = 0; j<childlist.length; j++)
-            {
-                var item = childlist[j];
-
-
-                //console.log("image_url:", item);
-                model_data.push({ "image": item.image, "imageid": item.id});
-            }
-
-            return [true, model_data];
-        }
-        else
-        {
-            console.warn("Failed request classifies data: "+msg);
+        if (limit > 0 && j>=(limit-1)){
+            //console.log("BBBBBBBBBreak!!!!!!!!!!!!!!!")
+            break;
         }
     }
 
-    return [false, []];
+    return model_data;
 }
+
+//关闭临时面板
+function destroyPanel(panel){
+    panel.visible = false;
+    panel.destroy();
+    panel = null;
+}
+
 //替换文件或目录名中无效的字符
 function fixedDirName(old)
 {
