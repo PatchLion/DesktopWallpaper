@@ -28,9 +28,11 @@ class UserManager : public QObject
     Q_PROPERTY(QString token READ getToken WRITE setToken NOTIFY tokenChanged)
     Q_PROPERTY(QString nickName READ getNickName WRITE setNickName NOTIFY nickNameChanged)
     Q_PROPERTY(QStringList peferItemIDs READ getPeferItemIDs NOTIFY pefersChanged)
-    Q_PROPERTY(QStringList peferImageIDs READ getPeferImageIDs NOTIFY pefersChanged)
+    Q_PROPERTY(QList< int > peferImageIDs READ getPeferImageIDs NOTIFY pefersChanged)
+    //Q_PROPERTY(int peferCountByItemID READ getPeferCountByItemID NOTIFY pefersChanged)
+    //Q_PROPERTY(QList< int > testIDs READ getTestIDs NOTIFY pefersChanged)
 
-    typedef QMap<QString, QStringList> MapItemIDToImageIDs;
+    typedef QMap<QString, QList< int >> MapItemIDToImageIDs;
 public:
     explicit UserManager(QObject *parent = nullptr);
 
@@ -52,7 +54,17 @@ public:
 
     QStringList getPeferItemIDs() const;
 
-    QStringList getPeferImageIDs() const;
+    QList< int > getPeferImageIDs() const;
+
+    Q_INVOKABLE int getPeferCountByItemID(const QString& itemID);
+
+    /*
+    Q_INVOKABLE QList< int > getTestIDs() const {
+        QList< int > list ;
+        list.append( 10159)  ;
+        list.append( 5555)  ;
+        return list;
+    }*/
 
     Q_INVOKABLE static void setPefers(const MapItemIDToImageIDs& pefers);
 
@@ -62,9 +74,9 @@ public:
                                     const QString& token,
                                     const QString& nickName);
 
-    Q_INVOKABLE static void addPefer(const QString& itemID, const QStringList& imageIDs);
+    Q_INVOKABLE static void addPefer(const QString& itemID, const QList< int >& imageIDs);
     Q_INVOKABLE static void removePeferByItemID(const QString& itemID);
-    Q_INVOKABLE static void removePeferByImageID(const QString& itemID, const QString& imageID);
+    Q_INVOKABLE static void removePeferByImageID(const QString& itemID, const QList< int >& imageIDs);
 
     Q_INVOKABLE static void clearUserInfo();
 

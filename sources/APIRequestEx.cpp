@@ -81,6 +81,17 @@ void APIRequestEX::getPefersRequest(const QString &token, QVariant jsFunc)
     return post(kAPIGetPefer, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
+void APIRequestEX::removePefersRequest(const QString &token, const QVariantList &imageids, QVariant jsFunc)
+{
+    QVariantMap param;
+    param.insert("token", token);
+    param.insert("imageids", imageids);
+
+    //qDebug() << "|||||||||||||addPeferRequest: " << QJsonDocument::fromVariant(param).toJson();
+
+    return post(kAPIRemovePefer, QJsonDocument::fromVariant(param).toJson(), jsFunc);
+}
+
 void APIRequestEX::post(const QString &apiurl, const QString &param, QVariant jsFunc)
 {
     Q_ASSERT(jsFunc.canConvert<QJSValue>());

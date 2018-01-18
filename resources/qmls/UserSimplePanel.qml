@@ -14,6 +14,8 @@ Rectangle {
 
     color: "transparent"
 
+    property bool enableUserPanel: true
+
     UserManager{
         id: user_information
     }
@@ -55,7 +57,9 @@ Rectangle {
 
         anchors.fill: parent
         hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
+        cursorShape: enableUserPanel ? Qt.PointingHandCursor : Qt.ArrowCursor
+
+        enabled: enableUserPanel
 
         onClicked: {
             if(user_information.token.length===0){

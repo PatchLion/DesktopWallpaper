@@ -75,15 +75,24 @@ QStringList UserManager::getPeferItemIDs() const
     return UserManager::pefers.keys();
 }
 
-QStringList UserManager::getPeferImageIDs() const
+QList< int > UserManager::getPeferImageIDs() const
 {
-    QStringList listIDs;
-    Q_FOREACH(QStringList ids, UserManager::pefers.values())
+    QList< int > listIDs;
+    Q_FOREACH(QList< int > ids, UserManager::pefers.values())
     {
         listIDs += ids;
     }
 
     return listIDs;
+}
+
+int UserManager::getPeferCountByItemID(const QString &itemID)
+{
+    if(!itemID.isEmpty() && UserManager::pefers.contains(itemID)){
+        return UserManager::pefers[itemID].size();
+    }
+
+    return 0;
 }
 
 void UserManager::setPefers(const UserManager::MapItemIDToImageIDs &pefers)
@@ -116,15 +125,22 @@ void UserManager::updateUserInfo(bool isVip,
     writeToHistory();
 }
 
-void UserManager::addPefer(const QString &itemID, const QStringList &imageIDs)
+void UserManager::addPefer(const QString &itemID, const QList< int > &imageIDs)
 {
+    //qDebug() << "Add pefer1: " << itemID << imageIDs;
+
     if(itemID.isEmpty() || imageIDs.isEmpty()){
         return;
     }
 
-    //qDebug() << "Add pefer: " << itemID << imageIDs;
 
-    UserManager::pefers[itemID] += imageIDs;
+    if(UserManager::pefers.contains(itemID)){
+        UserManager::pefers[itemID] += imageIDs;
+    }
+    else{
+        UserManager::pefers[itemID] = imageIDs;
+    }
+    //qDebug() << "Add pefer2: " << UserManager::pefers[itemID].size();
 
     Q_EMIT UserManager::userPrivate->pefersChanged();
 
@@ -140,14 +156,20 @@ void UserManager::removePeferByItemID(const QString &itemID)
     Q_EMIT UserManager::userPrivate->pefersChanged();
 }
 
-void UserManager::removePeferByImageID(const QString& itemID, const QString &imageID)
+void UserManager::removePeferByImageID(const QString& itemID, const QList< int >& imageIDs)
 {
-    if(itemID.isEmpty() || imageID.isEmpty()){
+    if(itemID.isEmpty() || imageIDs.isEmpty()){
         return;
     }
 
+
     if(UserManager::pefers.contains(itemID)){
-        UserManager::pefers[itemID].removeOne(imageID);
+        Q_FOREACH(int imageID, imageIDs){
+            UserManager::pefers[itemID].removeOne(imageID);
+        }
+    }
+    if(UserManager::pefers[itemID].isEmpty()){
+        UserManager::pefers.remove(itemID);
     }
     Q_EMIT UserManager::userPrivate->pefersChanged();
 }

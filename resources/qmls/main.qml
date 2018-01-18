@@ -20,6 +20,8 @@ PLFrameLessAndMoveableWindow
     dragArea: Qt.rect(0, 0, width, 50)
     //visibility: Window.Windowed
 
+
+
     //分类下更多的items classifyID：分类ID
     function showAllItemByClassifyPanel(title){
         main_stackView.push(classify_more_panel_componet);
@@ -114,8 +116,7 @@ PLFrameLessAndMoveableWindow
 
                 }
 
-                //console.log("Test1->", user_information.peferItemIDs)
-                //console.log("Test2->", user_information.peferImageIDs)
+
             }
         });
 
@@ -210,6 +211,17 @@ PLFrameLessAndMoveableWindow
 
 
     Component.onCompleted: {
+
+        Array.prototype.contains = function (obj) {
+            var i = this.length;
+            while (i--) {
+                if (this[i] === obj) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         Global.RootPanel = root_window;
 
         if (user_information.token.length > 0){

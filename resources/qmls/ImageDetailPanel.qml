@@ -20,11 +20,24 @@ Item {
     property string itemUrl: ""
 
     APIRequestEx{id:api_request}
-    UserManager{id: user_information}
+    UserManager{
+        id: user_information
+        onPefersChanged: {
+            updatePeferCount();
+        }
+    }
+
+    function updatePeferCount(){
+        root_item.peferCountByItem = user_information.getPeferCountByItemID(itemID);
+        console.log("onPefersChanged||||||||||||------>", root_item.peferCountByItem);
+    }
+
+    property int peferCountByItem: 0
     DownloadBox {id: downloader }
 
 
     onItemIDChanged: {
+        updatePeferCount();
         api_request.itemRequest(itemID, function(suc, msg, data){
 
             var result = Global.resolveAPIResponse(suc, msg, data);
@@ -130,7 +143,6 @@ Item {
                     sourceSize.height: height
 
                     source: image
-
                     MouseArea {
                         id: image_mouse_area
                         anchors.fill: parent
@@ -148,6 +160,8 @@ Item {
                         height: 40
                         width: 133
 
+                        border.color:  Qt.rgba(0, 0, 0, 0.3)
+
                         Row{
                             anchors.left: parent.left
                             anchors.leftMargin: 15
@@ -157,27 +171,32 @@ Item {
 
                             spacing: 15
 
-                            PLImageCheckButtonItem {
+                            PLImageButtonItem {
 
                                 id: prefer_button
 
                                 width: 24
                                 height: 24
 
-                                defaultIcon: isChecked ? "qrc:/images/pefer_default.png": "qrc:/images/no_pefer_default.png"
-                                pressedIcon: isChecked ? "qrc:/images/pefer_hover.png": "qrc:/images/no_pefer_hover.png"
-                                hoverIcon: isChecked ? "qrc:/images/pefer_hover.png": "qrc:/images/no_pefer_hover.png"
-                                disableIcon: isChecked ? "qrc:/images/pefer_default.png": "qrc:/images/no_pefer_default.png"
+                                defaultIcon: user_information.peferImageIDs.contains(image_content_item.currentID) ? "qrc:/images/pefer_default.png": "qrc:/images/no_pefer_default.png"
+                                pressedIcon: user_information.peferImageIDs.contains(image_content_item.currentID) ? "qrc:/images/pefer_hover.png": "qrc:/images/no_pefer_hover.png"
+                                hoverIcon: user_information.peferImageIDs.contains(image_content_item.currentID) ? "qrc:/images/pefer_hover.png": "qrc:/images/no_pefer_hover.png"
+                                disableIcon: user_information.peferImageIDs.contains(image_content_item.currentID) ? "qrc:/images/pefer_default.png": "qrc:/images/no_pefer_default.png"
 
                                 PLTooltip {
                                     target: parent
                                     text: "收藏图片"
                                     mouseArea: prefer_button.mouseArea
-                                    tipPosMode: 1
+                                    tipPosMode: 0
                                 }
 
                                 onClicked: {
+
+
+                                    //console.log("Image clicked! ID=", image_content_item.currentID, typeof(image_content_item.currentID), user_information.peferImageIDs.contains(image_content_item.currentID))
+                                    //console.log("Image clicked! ID=", image_content_item.currentID, typeof(image_content_item.currentID), user_information.peferImageIDs.contains(image_content_item.currentID))
                                     if (user_information.token.length === 0){
+                                        prefer_button.isChecked = !prefer_button.isChecked;
                                         var messagebox = MessageBox.showMessageBox(Global.RootPanel, "收藏功能需要登录后才能使用!", function () {
                                             Global.RootPanel.showLoginPanel();
                                             Global.destroyPanel(messagebox);
@@ -185,18 +204,41 @@ Item {
 
                                     } else {
 
-                                        var cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
-                                        //执行收藏操作
-                                        api_request.addPeferRequest(user_information.token, [image_content_item.currentID], function(suc, msg ,data){
-                                            Global.destroyPanel(cover);
+                                        if (user_information.peferImageIDs.contains(image_content_item.currentID)){
+                                           //已收藏
 
-                                            var result = Global.resolveAPIResponse(suc, msg, data);
-                                            if (result[0]) {
-                                                Toast.showToast(Global.RootPanel, "图片收藏成功")
-                                            } else {
-                                                Toast.showToast(Global.RootPanel, "图片收藏失败:" + result[1])
-                                            }
-                                        });
+                                            var cover = CoverPanel.showLoadingCover(Global.RootPanel, "移除收藏中...");
+                                            //执行收藏操作
+                                            api_request.removePefersRequest(user_information.token, [image_content_item.currentID], function(suc, msg ,data){
+                                                Global.destroyPanel(cover);
+
+                                                var result = Global.resolveAPIResponse(suc, msg, data);
+                                                if (result[0]) {
+                                                    Toast.showToast(Global.RootPanel, "移除收藏成功")
+                                                    user_information.removePeferByImageID(root_item.itemID, [image_content_item.currentID]);
+                                                } else {
+                                                    Toast.showToast(Global.RootPanel, result[1])
+                                                }
+                                            });
+
+                                        }
+                                        else{
+                                            //未收藏
+                                            var cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
+                                            //执行收藏操作
+                                            api_request.addPeferRequest(user_information.token, [image_content_item.currentID], function(suc, msg ,data){
+                                                Global.destroyPanel(cover);
+
+                                                var result = Global.resolveAPIResponse(suc, msg, data);
+                                                if (result[0]) {
+                                                    Toast.showToast(Global.RootPanel, "图片收藏成功")
+                                                    user_information.addPefer(root_item.itemID, [image_content_item.currentID]);
+                                                } else {
+                                                    Toast.showToast(Global.RootPanel, result[1])
+                                                }
+                                            });
+
+                                        }
 
                                     }
                                 }
@@ -226,7 +268,7 @@ Item {
                                     target: parent
                                     text: "设置壁纸"
                                     mouseArea: set_wallpaper_button.mouseArea
-                                    tipPosMode: 1
+                                    tipPosMode: 0
                                 }
                                 defaultIcon: "qrc:/images/set_wallpaper_default.png"
                                 pressedIcon: "qrc:/images/set_wallpaper_hover.png"
@@ -246,7 +288,7 @@ Item {
                                     target: parent
                                     text: "下载"
                                     mouseArea: download_button.mouseArea
-                                    tipPosMode: 1
+                                    tipPosMode: 0
                                 }
                                 defaultIcon: "qrc:/images/download_default.png"
                                 pressedIcon: "qrc:/images/download_hover.png"
@@ -339,8 +381,21 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: 100
             height: back_button.height
-            text: "收藏该图片组"
+            text: user_information.peferItemIDs.contains(root_item.itemID) ? "移除该图片组收藏" : "收藏该图片组"
             enabled: false
+
+            CircleTooltip {
+                width: 20
+                height: 20
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.rightMargin: -8
+                anchors.topMargin: -8
+                text: root_item.peferCountByItem > 9 ? "9+" : root_item.peferCountByItem
+
+                visible: user_information.peferItemIDs.contains(root_item.itemID)
+            }
+
 
             onClicked: {
 
@@ -352,8 +407,6 @@ Item {
 
                 } else {
 
-                    var cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
-
 
                     var imageids = []
                     for (var i = 0; i < images_list_model.count; i++) {
@@ -361,17 +414,43 @@ Item {
                         imageids.push(images_list_model.get(i)["imageid"])
                     }
 
-                    //执行收藏操作
-                    api_request.addPeferRequest(user_information.token, imageids, function(suc, msg ,data){
-                        Global.destroyPanel(cover);
+                    if (user_information.peferItemIDs.contains(root_item.itemID)){
+                        var cover = CoverPanel.showLoadingCover(Global.RootPanel, "移除图片组收藏中...");
 
-                        var result = Global.resolveAPIResponse(suc, msg, data);
-                        if (result[0]) {
-                            Toast.showToast(Global.RootPanel, "图片收藏成功")
-                        } else {
-                            Toast.showToast(Global.RootPanel, "图片收藏失败:" + result[1])
-                        }
-                    });
+
+                        //执行收藏操作
+                        api_request.removePefersRequest(user_information.token, imageids, function(suc, msg ,data){
+                            Global.destroyPanel(cover);
+
+                            var result = Global.resolveAPIResponse(suc, msg, data);
+                            if (result[0]) {
+                                user_information.removePeferByItemID(root_item.itemID);
+                                Toast.showToast(Global.RootPanel, "移除图片组收藏成功");
+                            } else {
+                                Toast.showToast(Global.RootPanel, result[1]);
+                            }
+                        });
+
+                    }
+                    else{
+                        var cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
+
+
+                        //执行收藏操作
+                        api_request.addPeferRequest(user_information.token, imageids, function(suc, msg ,data){
+                            Global.destroyPanel(cover);
+
+                            var result = Global.resolveAPIResponse(suc, msg, data);
+                            if (result[0]) {
+                                user_information.addPefer(root_item.itemID, imageids);
+                                Toast.showToast(Global.RootPanel, "图片收藏成功");
+                            } else {
+                                Toast.showToast(Global.RootPanel, result[1]);
+                            }
+                        });
+
+                    }
+
 
                 }
 

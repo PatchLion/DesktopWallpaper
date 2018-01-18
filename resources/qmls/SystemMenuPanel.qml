@@ -194,7 +194,7 @@ Item{
         anchors.rightMargin: 40
         anchors.verticalCenter: download_box_button.verticalCenter
 
-        enabled: enableUserPanel
+        enableUserPanel: root_item.enableUserPanel
 
     }
 }
