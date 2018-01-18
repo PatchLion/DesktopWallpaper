@@ -79,6 +79,48 @@ PLFrameLessAndMoveableWindow
         }
     }
 
+    //更新用户信息
+    function updateUserInfo(userinfo){
+        user_information.updateUserInfo(userinfo.is_vip,
+                                        userinfo.user,
+                                        userinfo.headimage_url,
+                                        userinfo.token,
+                                        userinfo.nickname);
+
+        Toast.showToast(root_window, "欢迎您:" + userinfo.nickname);
+
+        api_request.getPefersRequest(userinfo.token, function(suc, msg, data){
+            var result = Global.resolveAPIResponse(suc, msg, data);
+            if(result[0]){
+                user_information.clearPefers();
+
+                //console.log("----------1");
+                var pefers = result[1];
+                //console.log("----------2");
+
+                var keys = Object.keys(pefers);
+                //console.log("ssss", keys);
+
+                //console.log("----------3");
+                for (var i = 0; i < keys.length; i++){
+
+                    var key = keys[i];
+                    //console.log("----------5");
+                    //console.log("Addddddddddddddd: ", key, pefers[key]);
+                    var imageIDs = pefers[key];
+
+                    user_information.addPefer(key, imageIDs);
+
+
+                }
+
+                //console.log("Test1->", user_information.peferItemIDs)
+                //console.log("Test2->", user_information.peferImageIDs)
+            }
+        });
+
+    }
+
     //组件
     Component{ id: download_box_component; DownloadBox{}} //下载盒子组件
     Component{ id: mainpage_component; MainPage{}} //主页面组件
@@ -172,19 +214,16 @@ PLFrameLessAndMoveableWindow
 
         if (user_information.token.length > 0){
             //console.log("开始验证Token!")
+
+            system_menu_panel.enableUserPanel = false;
             api_request.checkTokenRequest(user_information.token, function(suc, msg, data){
                 var result = Global.resolveAPIResponse(suc, msg, data);
-
+                system_menu_panel.enableUserPanel = true;
                 if(result[0]){
                     var info = result[1];
 
-                    user_information.updateUserInfo(info.is_vip,
-                                                    info.user,
-                                                    info.headimage_url,
-                                                    info.token,
-                                                    info.nickname);
+                   updateUserInfo(info);
 
-                    Toast.showToast(root_window, "欢迎您:" + info.nickname);
                 }
                 else{
 

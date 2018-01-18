@@ -103,24 +103,14 @@ StackView{
                         else{
                             var cover = Cover.showLoadingCover(root_item, "登录中...");
                             api_request.loginRequest(user, pwd, function(suc, msg, data){
-                                cover.visible =false;
-                                cover.destroy();
-                                cover = null;
+                                Global.destroyPanel(cover);
 
                                 var result = Global.resolveAPIResponse(suc, msg, data);
 
                                 if(result[0]){
                                     var info=result[1];
-                                    user_information.updateUserInfo(info.is_vip,
-                                                                    info.user,
-                                                                    info.headimage_url,
-                                                                    info.token,
-                                                                    info.nickname);
-
-                                    Toast.showToast(Global.RootPanel, "欢迎您: "+info.nickname);
-
-                                    root_item.visible = false;
-                                    root_item.destroy();
+                                    Global.RootPanel.updateUserInfo(info);
+                                    Global.destroyPanel(root_item);
                                 }
                                 else{
                                     Toast.showToast(Global.RootPanel, "登录失败: "+result[1]);

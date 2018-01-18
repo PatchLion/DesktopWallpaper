@@ -208,6 +208,8 @@ Item {
                                 width: 24
                                 height: 24
 
+
+
                                 WallpaperSetter {id: wallpaper_item }
                                 onClicked: {
                                     var cover = CoverPanel.showProgressBarCover(Global.RootPanel);

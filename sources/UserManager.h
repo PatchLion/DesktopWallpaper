@@ -6,6 +6,7 @@
 class UserManagerPrivate : public QObject
 {
     Q_OBJECT
+
 public:
     UserManagerPrivate(QObject* parent=0);
 
@@ -15,6 +16,7 @@ Q_SIGNALS:
     void headerImageChanged();
     void userNameChanged();
     void nickNameChanged();
+    void pefersChanged();
 };
 
 class UserManager : public QObject
@@ -25,7 +27,10 @@ class UserManager : public QObject
     Q_PROPERTY(QString headerImage READ getHeaderImage WRITE setHeaderImage NOTIFY headerImageChanged)
     Q_PROPERTY(QString token READ getToken WRITE setToken NOTIFY tokenChanged)
     Q_PROPERTY(QString nickName READ getNickName WRITE setNickName NOTIFY nickNameChanged)
+    Q_PROPERTY(QStringList peferItemIDs READ getPeferItemIDs NOTIFY pefersChanged)
+    Q_PROPERTY(QStringList peferImageIDs READ getPeferImageIDs NOTIFY pefersChanged)
 
+    typedef QMap<QString, QStringList> MapItemIDToImageIDs;
 public:
     explicit UserManager(QObject *parent = nullptr);
 
@@ -45,15 +50,28 @@ public:
     QString getNickName() const;
     void setNickName(const QString &value);
 
+    QStringList getPeferItemIDs() const;
+
+    QStringList getPeferImageIDs() const;
+
+    Q_INVOKABLE static void setPefers(const MapItemIDToImageIDs& pefers);
+
     Q_INVOKABLE static void updateUserInfo(bool isVip,
                                     const QString& user,
                                     const QString& image,
                                     const QString& token,
                                     const QString& nickName);
 
+    Q_INVOKABLE static void addPefer(const QString& itemID, const QStringList& imageIDs);
+    Q_INVOKABLE static void removePeferByItemID(const QString& itemID);
+    Q_INVOKABLE static void removePeferByImageID(const QString& itemID, const QString& imageID);
+
     Q_INVOKABLE static void clearUserInfo();
 
     Q_INVOKABLE static void writeToHistory();
+
+
+    Q_INVOKABLE static void clearPefers();
 private:
     static void readHistory();
 
@@ -65,6 +83,7 @@ Q_SIGNALS:
     void headerImageChanged();
     void userNameChanged();
     void nickNameChanged();
+    void pefersChanged();
 
 private:
     static bool isInited;
@@ -74,6 +93,7 @@ private:
     static QString headerImage; //头像
     static QString token; //token
     static UserManagerPrivate* userPrivate;
+    static MapItemIDToImageIDs pefers; //收藏
 };
 
 #endif // USERMANAGER_H

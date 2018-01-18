@@ -12,6 +12,7 @@ QString UserManager::nickName = ""; //昵称
 QString UserManager::headerImage = ""; //头像
 QString UserManager::token = ""; //token
 UserManagerPrivate* UserManager::userPrivate = 0; //
+UserManager::MapItemIDToImageIDs UserManager::pefers = UserManager::MapItemIDToImageIDs(); //
 
 UserManager::UserManager(QObject *parent)
     : QObject(parent)
@@ -30,6 +31,7 @@ UserManager::UserManager(QObject *parent)
     connect(UserManager::userPrivate, &UserManagerPrivate::headerImageChanged, this, &UserManager::headerImageChanged);
     connect(UserManager::userPrivate, &UserManagerPrivate::userNameChanged, this, &UserManager::userNameChanged);
     connect(UserManager::userPrivate, &UserManagerPrivate::nickNameChanged, this, &UserManager::nickNameChanged);
+    connect(UserManager::userPrivate, &UserManagerPrivate::pefersChanged, this, &UserManager::pefersChanged);
 }
 
 bool UserManager::getIsVip() const
@@ -68,9 +70,39 @@ void UserManager::setNickName(const QString &value)
     Q_EMIT UserManager::userPrivate->nickNameChanged();
 }
 
-void UserManager::updateUserInfo(bool isVip, const QString &user, const QString &image, const QString &token, const QString &nickName)
+QStringList UserManager::getPeferItemIDs() const
 {
-    //qDebug() << "Update user information: " << isVip << user << image << token << nickName;
+    return UserManager::pefers.keys();
+}
+
+QStringList UserManager::getPeferImageIDs() const
+{
+    QStringList listIDs;
+    Q_FOREACH(QStringList ids, UserManager::pefers.values())
+    {
+        listIDs += ids;
+    }
+
+    return listIDs;
+}
+
+void UserManager::setPefers(const UserManager::MapItemIDToImageIDs &pefers)
+{
+    UserManager::pefers = pefers;
+
+    Q_EMIT UserManager::userPrivate->pefersChanged();
+
+    writeToHistory();
+
+}
+
+void UserManager::updateUserInfo(bool isVip,
+                                 const QString &user,
+                                 const QString &image,
+                                 const QString &token,
+                                 const QString &nickName)
+{
+    qDebug() << "Update user information: " << isVip << user << image << token << nickName;
     UserManager::isVip = isVip;
     UserManager::userName = user;
     UserManager::headerImage = image;
@@ -84,9 +116,47 @@ void UserManager::updateUserInfo(bool isVip, const QString &user, const QString 
     writeToHistory();
 }
 
+void UserManager::addPefer(const QString &itemID, const QStringList &imageIDs)
+{
+    if(itemID.isEmpty() || imageIDs.isEmpty()){
+        return;
+    }
+
+    //qDebug() << "Add pefer: " << itemID << imageIDs;
+
+    UserManager::pefers[itemID] += imageIDs;
+
+    Q_EMIT UserManager::userPrivate->pefersChanged();
+
+    writeToHistory();
+}
+
+void UserManager::removePeferByItemID(const QString &itemID)
+{
+    if(itemID.isEmpty()){
+        return;
+    }
+    UserManager::pefers.remove(itemID);
+    Q_EMIT UserManager::userPrivate->pefersChanged();
+}
+
+void UserManager::removePeferByImageID(const QString& itemID, const QString &imageID)
+{
+    if(itemID.isEmpty() || imageID.isEmpty()){
+        return;
+    }
+
+    if(UserManager::pefers.contains(itemID)){
+        UserManager::pefers[itemID].removeOne(imageID);
+    }
+    Q_EMIT UserManager::userPrivate->pefersChanged();
+}
+
 void UserManager::clearUserInfo()
 {
     updateUserInfo(false, "", "", "", "");
+
+    clearPefers();
 }
 
 void UserManager::readHistory()
@@ -109,13 +179,15 @@ void UserManager::readHistory()
         dataStream >> UserManager::isVip;
         dataStream >> UserManager::headerImage;
         dataStream >> UserManager::token;
+        dataStream >> UserManager::pefers;
 
 
         qDebug() << "History readed:"<<UserManager::userName << ", "
                  << UserManager::nickName << ", "
                  << UserManager::isVip << ", "
                  << UserManager::headerImage  << ", "
-                 << UserManager::token;
+                 << UserManager::token << ", "
+                 << UserManager::pefers;
 
 
         Q_EMIT UserManager::userPrivate->userNameChanged();
@@ -123,7 +195,22 @@ void UserManager::readHistory()
         Q_EMIT UserManager::userPrivate->isVipChanged();
         Q_EMIT UserManager::userPrivate->headerImageChanged();
         Q_EMIT UserManager::userPrivate->tokenChanged();
+        Q_EMIT UserManager::userPrivate->pefersChanged();
     }
+
+}
+
+void UserManager::clearPefers()
+{
+    qDebug() << "Clear pefers";
+
+    UserManager::pefers =  MapItemIDToImageIDs();
+
+    writeToHistory();
+
+    Q_EMIT UserManager::userPrivate->pefersChanged();
+
+    qDebug() << "After clear pefers";
 
 }
 
@@ -143,6 +230,7 @@ void UserManager::writeToHistory()
         dataStream << UserManager::isVip;
         dataStream << UserManager::headerImage;
         dataStream << UserManager::token;
+        dataStream << UserManager::pefers;
 
 
         QAesWrap aes(clientid.toUtf8(), clientid.toUtf8(), QAesWrap::AES_256);

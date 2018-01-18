@@ -9,6 +9,7 @@ Item{
     property var window
     property bool enableDownloadBoxButton: true
     property bool enableSearchControl: true
+    property bool enableUserPanel: true
 
     DownloadBox{
         id: downloader
@@ -193,6 +194,7 @@ Item{
         anchors.rightMargin: 40
         anchors.verticalCenter: download_box_button.verticalCenter
 
+        enabled: enableUserPanel
 
     }
 }
