@@ -1,22 +1,44 @@
 #include "WallpaperSetter.h"
 #include <QtNetwork>
 
+#define FullPathRole "FullPathRole"
+#define ModeRole "ModeRole"
+
 QString dirPath(){
     return QStandardPaths::standardLocations(QStandardPaths::PicturesLocation)[0] + "/" + kDirName;
 }
-
+QNetworkAccessManager *WallpaperSetter::g_network = 0;
 WallpaperSetter::~WallpaperSetter()
 {
+    /*
     if(m_loop)
     {
         m_loop->quit();
     }
+    */
 }
 
-void WallpaperSetter::setImageToDesktop(const QString& url, Mode mode) {
+void WallpaperSetter::setImageToDesktop(const QString& url, QVariant processfunc, QVariant finishedfunc, Mode mode) {
+
+    m_jsProcessFunc = processfunc.value<QJSValue>();
+    m_jsFinshedFunc = finishedfunc.value<QJSValue>();
+
+
+    Q_ASSERT(m_jsProcessFunc.isCallable());
+    Q_ASSERT(m_jsFinshedFunc.isCallable());
+
+    QJSValueList listParam;
+
     if(url.isEmpty())
     {
-        Q_EMIT finished(false, QString::fromLocal8Bit("无效的Url"));
+        //Q_EMIT finished(false, QString::fromLocal8Bit("无效的Url"));
+        listParam.clear();
+        listParam << false;
+        listParam << QString::fromLocal8Bit("无效的Url");
+
+        m_jsFinshedFunc.call(listParam);
+
+        return;
     }
 
     const QString fullpath = dirPath() + "/" + url.toUtf8().toBase64() + ".png";
@@ -25,67 +47,106 @@ void WallpaperSetter::setImageToDesktop(const QString& url, Mode mode) {
     if (QFile().exists(fullpath)){
         const QString res = doImageToDesktop(fullpath, mode);
 
-        if(res.isEmpty()){
-            Q_EMIT finished(true, "");
-        }
-        else{
-            Q_EMIT finished(false, res);
-        }
+        listParam.clear();
+        listParam << res.isEmpty();
+        listParam << res;
+
+        m_jsFinshedFunc.call(listParam);
 
         return;
     }
 
-    QNetworkAccessManager network;
-    QNetworkReply* reply = network.get(QNetworkRequest(url));
-
-    QEventLoop loop;
-    WallpaperSetter* object = this;
-    connect(reply, &QNetworkReply::downloadProgress, [=, &object](qint64 bytesReceived, qint64 bytesTotal){
-        Q_EMIT object->progress((double)bytesReceived/(double)bytesTotal,  tr("壁纸下载中..."));
-    } );
-
-    connect(reply, &QNetworkReply::finished, [=, &loop, &reply, &object](){
-        if (!QDir().exists(dirPath())){
-            QDir().mkpath(dirPath());
-        }
-
-        const QNetworkReply::NetworkError error = reply->error();
-        if(error == QNetworkReply::NoError){
-            const QByteArray data = reply->readAll();
-
-           QFile file(fullpath);
-
-           if(file.open(QIODevice::WriteOnly))
-           {
-               file.write(data);
-               file.close();
-
-               Q_EMIT object->progress(1.0, QString::fromLocal8Bit("壁纸设置中..."));
-                const QString res = doImageToDesktop(fullpath, mode);
-
-                if(res.isEmpty()){
-                    Q_EMIT finished(true, "");
-                    Q_EMIT object->progress(1.0, QString::fromLocal8Bit("壁纸设置完成"));
-                }
-                else{
-                    Q_EMIT finished(false, res);
-                }
-           }
-           else{
-               Q_EMIT finished(false, QString::fromLocal8Bit("写入文件到:")+fullpath+QString::fromLocal8Bit("时发生异常! 异常提示:")+file.errorString());
-           }
-        }
-        else{
-            Q_EMIT finished(false, QString::fromLocal8Bit("网络请求出现异常，错误代码:%1").arg(error));
-        }
-
-        m_loop = 0;
-        loop.quit();
-    });
-
-    m_loop = &loop;
-    loop.exec();
+    QNetworkReply* reply = network()->get(QNetworkRequest(url));
+    reply->setProperty(FullPathRole, fullpath);
+    reply->setProperty(ModeRole, mode);
+    connect(reply, &QNetworkReply::finished, this, &WallpaperSetter::onReplyFinished);
+    connect(reply, &QNetworkReply::downloadProgress, this, &WallpaperSetter::onDownloadProgress);
 }
+
+
+
+QNetworkAccessManager *WallpaperSetter::network()
+{
+    if(!WallpaperSetter::g_network){
+        WallpaperSetter::g_network = new QNetworkAccessManager;
+    }
+
+    return WallpaperSetter::g_network;
+}
+
+void WallpaperSetter::onReplyFinished()
+{
+    if (!QDir().exists(dirPath())){
+        QDir().mkpath(dirPath());
+    }
+
+    QNetworkReply *reply = dynamic_cast<QNetworkReply*>(sender());
+
+    Q_ASSERT(m_jsProcessFunc.isCallable());
+    Q_ASSERT(m_jsFinshedFunc.isCallable());
+    Q_ASSERT(reply);
+
+    QJSValueList listParam;
+
+
+
+    const QNetworkReply::NetworkError error = reply->error();
+    if(error == QNetworkReply::NoError){
+        const QByteArray data = reply->readAll();
+
+        const QString fullpath = reply->property(FullPathRole).toString();
+
+       QFile file(fullpath);
+
+       if(file.open(QIODevice::WriteOnly))
+       {
+           file.write(data);
+           file.close();
+
+           listParam.clear();
+           listParam << 0.5;
+           listParam << QString::fromLocal8Bit("壁纸设置中...");
+
+           m_jsProcessFunc.call(listParam);
+
+           WallpaperSetter::Mode mode = static_cast<WallpaperSetter::Mode>(reply->property(ModeRole).toInt());
+
+            const QString res = doImageToDesktop(fullpath, mode);
+
+            listParam.clear();
+            listParam << res.isEmpty();
+            listParam << res;
+       }
+       else{
+           listParam.clear();
+           listParam << false;
+           listParam << QString::fromLocal8Bit("写入文件到:")+fullpath+QString::fromLocal8Bit("时发生异常! 异常提示:")+file.errorString();
+       }
+    }
+    else{
+        listParam.clear();
+        listParam << false;
+        listParam << QString::fromLocal8Bit("网络请求出现异常，错误代码:%1").arg(error);
+    }
+
+    m_jsFinshedFunc.call(listParam);
+}
+
+void WallpaperSetter::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
+    Q_ASSERT(m_jsProcessFunc.isCallable());
+
+    qDebug() << "Wallpaper downloading: " << (double)bytesReceived/(double)bytesTotal << bytesReceived << bytesTotal;
+
+    QJSValueList listParam;
+
+    listParam.clear();
+    listParam << 0.5 * (double)bytesReceived/(double)bytesTotal;
+    listParam << QString::fromLocal8Bit("壁纸下载中...");
+
+    m_jsProcessFunc.call(listParam);
+}
+
 #ifdef Q_OS_WINRT
 QString WallpaperSetter::doImageToDesktop(const QString &localfile, WallpaperSetter::Mode mode) {
 	return QString::fromLocal8Bit("Not implemented!");
@@ -124,8 +185,9 @@ QString WallpaperSetter::doImageToDesktop(const QString &localfile, WallpaperSet
 	}
 	*/
 
-	return "";
+    return "";
 }
+
 
 #endif
 

@@ -1,9 +1,9 @@
 //.pragma library
 
 //带Loadding遮罩窗体显示
-var com = 0
+var com = null
 function showLoadingCover(parent, text) {
-    if (0 === com) {
+    if (null === com) {
         com = Qt.createComponent("PLCoverPanel.qml")
     }
 
@@ -20,12 +20,12 @@ function showLoadingCover(parent, text) {
         console.log("创建CoverPanel失败")
     }
 
-    return 0;
+    return null;
 }
 
 //带进度条遮罩窗体显示
 function showProgressBarCover(parent){
-    if (0 === com) {
+    if (null === com) {
         com = Qt.createComponent("PLCoverPanel.qml")
     }
 
@@ -41,19 +41,15 @@ function showProgressBarCover(parent){
         console.log("创建CoverPanel失败")
     }
 
-    return 0;
+    return null;
 }
 
 //设置进度条遮罩提示文字
 function setProgressBarCoverTooltip(cover, tooltip){
-    if(0 === cover) return;
-
     cover.text = tooltip;
 }
 
 //设置进度条遮罩进度
 function setProgressBarCoverProgress(cover, progress){
-    if(0 === cover) return;
-
     cover.progress = progress;
 }

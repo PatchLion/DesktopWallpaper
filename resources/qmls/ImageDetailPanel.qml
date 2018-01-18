@@ -208,11 +208,17 @@ Item {
                                 width: 24
                                 height: 24
 
-                                property var cover: null
+                                WallpaperSetter {id: wallpaper_item }
                                 onClicked: {
-                                    cover = CoverPanel.showProgressBarCover(
-                                                Global.RootPanel)
-                                    wallpaper_item.setImageToDesktop(image_item.source)
+                                    var cover = CoverPanel.showProgressBarCover(Global.RootPanel);
+                                    wallpaper_item.setImageToDesktop(image_item.source, function(process, msg){
+                                        CoverPanel.setProgressBarCoverProgress(cover, progress);
+                                        CoverPanel.setProgressBarCoverTooltip(cover, msg)
+                                    },
+                                    function(suc, msg){
+                                        Global.destroyPanel(cover);
+                                        Toast.showToast(Global.RootPanel, suc ? "已成功设置壁纸":msg);
+                                    });
                                 }
                                 PLTooltip {
                                     target: parent
@@ -225,33 +231,6 @@ Item {
                                 hoverIcon: "qrc:/images/set_wallpaper_hover.png"
                                 disableIcon: "qrc:/images/set_wallpaper_default.png"
                                 //visible: download_button.visible
-                                WallpaperSetter {
-                                    id: wallpaper_item
-
-                                    onProgress: {
-                                        if (set_wallpaper_button.cover) {
-                                            CoverPanel.setProgressBarCoverProgress(
-                                                        set_wallpaper_button.cover,
-                                                        progress)
-                                            CoverPanel.setProgressBarCoverTooltip(
-                                                        set_wallpaper_button.cover,
-                                                        text)
-                                        }
-                                    }
-
-                                    onFinished: {
-
-                                        if (set_wallpaper_button.cover) {
-                                            set_wallpaper_button.cover.visible = false
-                                        }
-
-                                        if (success) {
-                                            Toast.showToast(root_item, "壁纸已设置！")
-                                        } else {
-                                            Toast.showToast(root_item, "壁纸设置失败," + msg)
-                                        }
-                                    }
-                                }
                             }
 
                             PLImageButtonItem {
