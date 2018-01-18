@@ -2,6 +2,8 @@ import QtQuick 2.9
 import QtQuick.Dialogs 1.2
 import DesktopWallpaper.APIRequestEx 1.0
 import DesktopWallpaper.WallpaperSetter 1.0
+import DesktopWallpaper.UserManager 1.0
+import DesktopWallpaper.DownloadBox 1.0
 
 import "../controls"
 import "../controls/PLToast.js" as Toast
@@ -18,62 +20,24 @@ Item {
     property string itemUrl: ""
 
     APIRequestEx{id:api_request}
+    UserManager{id: user_information}
+    DownloadBox {id: downloader }
 
-    Connections {
-        target: Global.APIRequestEx
-        onItemsDetailResponse: {
-
-        }
-
-        onAddPeferFinished: {
-            root_item.cover.visible = false
-            root_item.cover.destroy()
-
-            var result = Global.resolveAddPeferData(data)
-
-            if (result[0]) {
-                Toast.showToast(Global.RootPanel, "图片收藏成功")
-            } else {
-                Toast.showToast(Global.RootPanel, "图片收藏失败:" + result[1])
-            }
-        }
-
-        onApiRequestError: {
-            console.warn("Catch error when reuqest api:", apiName,
-                         "code:", error)
-        }
-    }
-
-    function toModelData(data){
-        var model_data = [];
-
-        var childlist = data.images;
-
-        for(var j = 0; j<childlist.length; j++)
-        {
-            var item = childlist[j];
-            model_data.push({ "image": item.image, "imageid": item.id});
-        }
-
-        return model_data;
-    }
 
     onItemIDChanged: {
-
-
         api_request.itemRequest(itemID, function(suc, msg, data){
 
-
-
-
-            var result = Global.resolveItemsDetailData(data)
+            var result = Global.resolveAPIResponse(suc, msg, data);
 
             if (result[0]) {
-                images_list_model.clear()
-                images_list_model.append(result[1])
+                images_list_model.clear();
+                images_list_model.append(Global.toImageDetailsModelData(result[1]));
 
-                downloadall_button.enabled = true
-                prefer_imagegroup_button.enabled = true
+                downloadall_button.enabled = true;
+                prefer_imagegroup_button.enabled = true;
+            }
+            else{
+                Toast.showToast(Global.RootPanel, result[1]);
             }
         });
     }
@@ -213,21 +177,26 @@ Item {
                                 }
 
                                 onClicked: {
-                                    if (Global.User.token.length === 0)
-                                    {
-                                        var messagebox = MessageBox.showMessageBox(
-                                                    Global.RootPanel, "收藏功能需要登录后才能使用!",
-                                                    function () {
-                                                        Global.RootPanel.showLoginPanel();
-                                                        messagebox.visible = false;
-                                                        messagebox.destroy();
-                                                    })
+                                    if (user_information.token.length === 0){
+                                        var messagebox = MessageBox.showMessageBox(Global.RootPanel, "收藏功能需要登录后才能使用!", function () {
+                                            Global.RootPanel.showLoginPanel();
+                                            Global.destroyPanel(messagebox);
+                                        });
+
                                     } else {
 
-                                        var cover = CoverPanel.showLoadingCover(
-                                                    Global.RootPanel, "添加收藏中...")
+                                        var cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
                                         //执行收藏操作
-                                        api_request.addPeferRequest(Global.User.token, [image_content_item.currentID])
+                                        api_request.addPeferRequest(user_information.token, [image_content_item.currentID], function(suc, msg ,data){
+                                            Global.destroyPanel(cover);
+
+                                            var result = Global.resolveAPIResponse(suc, msg, data);
+                                            if (result[0]) {
+                                                Toast.showToast(Global.RootPanel, "图片收藏成功")
+                                            } else {
+                                                Toast.showToast(Global.RootPanel, "图片收藏失败:" + result[1])
+                                            }
+                                        });
 
                                     }
                                 }
@@ -320,17 +289,14 @@ Item {
                                         onAccepted: {
                                             var source = image_item.source
 
-                                            Global.APIRequestEx.addDownload(
-                                                        fileUrl, Global.fixedDirName(
-                                                            root_item.title), [source])
+                                            downloader.addDownload(fileUrl, Global.fixedDirName(root_item.title), [source]);
                                         }
 
                                         Component.onCompleted: visible = true
                                     }
                                 }
                                 onClicked: {
-                                    var file_dialog = file_dialog_component.createObject(
-                                                root_item)
+                                    var file_dialog = file_dialog_component.createObject(root_item)
                                 }
                             }
 
@@ -396,28 +362,38 @@ Item {
             enabled: false
 
             onClicked: {
-                if (Global.User.token.length === 0) {
-                    var messagebox = MessageBox.showMessageBox(
-                                Global.RootPanel, "收藏功能需要登录后才能使用!",
-                                function () {
-                                    Global.RootPanel.showLoginPanel()
-                                    messagebox.visible = false
-                                    messagebox.destroy()
-                                })
+
+                if (user_information.token.length === 0){
+                    var messagebox = MessageBox.showMessageBox(Global.RootPanel, "收藏功能需要登录后才能使用!", function () {
+                        Global.RootPanel.showLoginPanel();
+                        Global.destroyPanel(messagebox);
+                    });
+
                 } else {
-                    //执行收藏操作
+
+                    var cover = CoverPanel.showLoadingCover(Global.RootPanel, "添加收藏中...");
+
+
                     var imageids = []
                     for (var i = 0; i < images_list_model.count; i++) {
-                        console.log("Image id---->",
-                                    images_list_model.get(i)["imageid"])
+                        //console.log("Image id---->",images_list_model.get(i)["imageid"])
                         imageids.push(images_list_model.get(i)["imageid"])
                     }
 
-                    Global.APIRequestEx.tryToPefer(Global.User.token, imageids)
+                    //执行收藏操作
+                    api_request.addPeferRequest(user_information.token, imageids, function(suc, msg ,data){
+                        Global.destroyPanel(cover);
 
-                    root_item.cover = CoverPanel.showLoadingCover(
-                                Global.RootPanel, "添加收藏中...")
+                        var result = Global.resolveAPIResponse(suc, msg, data);
+                        if (result[0]) {
+                            Toast.showToast(Global.RootPanel, "图片收藏成功")
+                        } else {
+                            Toast.showToast(Global.RootPanel, "图片收藏失败:" + result[1])
+                        }
+                    });
+
                 }
+
             }
         }
 
@@ -439,7 +415,7 @@ Item {
                 anchors.rightMargin: -8
                 anchors.topMargin: -8
                 text: "VIP"
-                visible: !Global.User.isVip
+                visible: !user_information.isVip
             }
 
             Component {
@@ -454,22 +430,16 @@ Item {
                     selectMultiple: false
 
                     onAccepted: {
-                        //var dest = fileUrl;
-                        var urls = []
+                        var urls = [];
                         for (var i = 0; i < images_list_model.count; i++) {
                             var obj = images_list_model.get(i)
                             if (obj) {
-                                var image = obj["image"]
-                                urls.push(image)
-                                //console.log(image, urls.length)
+                                var image = obj["image"];
+                                urls.push(image);
                             }
                         }
 
-                        //console.log(fileUrl, Global.fixedDirName(root_item.title))
-                        Global.APIRequestEx.addDownload(fileUrl,
-                                                      Global.fixedDirName(
-                                                          root_item.title),
-                                                      urls)
+                        downloader.addDownload(fileUrl, Global.fixedDirName(root_item.title), urls);
                     }
 
                     Component.onCompleted: visible = true
@@ -478,7 +448,7 @@ Item {
 
             onClicked: {
 
-                if (!Global.User.isVip) {
+                if (!user_information.isVip) {
                     var messagebox = MessageBox.showMessageBox(
                                 Global.RootPanel, "该功能为VIP功能，如果需要使用请升级为VIP!",
                                 function () {

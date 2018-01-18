@@ -98,6 +98,8 @@ function toPageModelData(data){
     for(var j = 0; j<childlist.length; j++){
         var item = childlist[j];
 
+        //console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source);
+
         model_data.push({"itemID": item.id,
                             "newOne": item.new,
                             "image": item.image,
@@ -108,6 +110,22 @@ function toPageModelData(data){
             //console.log("BBBBBBBBBreak!!!!!!!!!!!!!!!")
             break;
         }
+    }
+
+    return model_data;
+}
+/*
+  图片列表Model数据
+*/
+function toImageDetailsModelData(data){
+    var model_data = [];
+
+    var childlist = data.images;
+
+    for(var j = 0; j<childlist.length; j++)
+    {
+        var item = childlist[j];
+        model_data.push({ "image": item.image, "imageid": item.id});
     }
 
     return model_data;

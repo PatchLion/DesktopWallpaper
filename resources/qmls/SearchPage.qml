@@ -76,18 +76,18 @@ Rectangle {
                     var cover = CoverPanel.showLoadingCover(Global.RootPanel, "搜索中...");
                     api_request.searchRequest(keyword, function(suc, msg, data){
                         Global.destroyPanel(cover);
-                        var result = Global.resolveAPIResponse(suc, msg, data, true);
+                        var result = Global.resolveAPIResponse(suc, msg, data);
 
-                        console.log("搜索结果: " + result[0]);
+                        //console.log("搜索结果: " + result[0]);
 
                         if(result[0]){
                             var model_data = Global.toPageModelData(result[1]);
                             if (model_data.length > 0){
-                                console.log("Search result length: " + model_data.length);
+                                //console.log("Search result length: " + model_data.length);
                                 grid_view_model.append(model_data);
                             }
                             else{
-                                Toast.showToast(Global.RootPanel, "抱歉!按照您提供的关键词，我们没有搜索到任何结果!");
+                                Toast.showToast(Global.RootPanel, "抱歉! 我们没有搜索到任何结果!");
                             }
 
                         }

@@ -19,6 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += ./sources/APIRequestEx.h\
     ./sources/WallpaperSetter.h \
+    sources/DownloadBox.h \
     sources/UserManager.h \
     sources/Settings.h \
     sources/aes/aes.h \
@@ -27,6 +28,7 @@ HEADERS += ./sources/APIRequestEx.h\
 SOURCES += ./sources/APIRequestEx.cpp  main.cpp \
     ./sources/WallpaperSetter.cpp \
     sources/UserManager.cpp \
+    sources/DownloadBox.cpp \
     sources/Settings.cpp\
     sources/aes/aes.c \
     sources/aes/qaeswrap.cpp \

@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import DesktopWallpaper.DownloadBox 1.0
 import "./Global.js" as Global
 import "../controls"
 
@@ -8,10 +9,21 @@ Rectangle {
     //property alias model: downloadlist_model
     signal backButtonClicked();
 
+    DownloadBox{
+        id: downloader
+        onDownloadInfosChanged:{
+            //console.log("onDownloadInfosChanged:", downloads)
+            var jsondata = JSON.parse(downloads);
+
+            downloadlist_model.clear();
+            downloadlist_model.append(jsondata);
+        }
+    }
+
     color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
     Component.onCompleted: {
-        var data = Global.APIRequestEx.buildDownloadInfo();
+        var data = downloader.buildDownloadInfo();
 
         var jsonData = JSON.parse(data)
 
@@ -47,21 +59,6 @@ Rectangle {
 
         }
     }
-
-    Connections{
-        //id:api_request
-        target: Global.APIRequestEx
-
-        onDownloadInfosChanged:{
-            //console.log("onDownloadInfosChanged:", downloads)
-            var jsondata = JSON.parse(downloads);
-
-            downloadlist_model.clear();
-            downloadlist_model.append(jsondata);
-        }
-
-    }
-
 
     Item{
         anchors.left: top_area.left

@@ -62,11 +62,13 @@ void APIRequestEX::checkTokenRequest(const QString &token, QVariant jsFunc)
     return post(kAPITokenCheck, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::addPeferRequest(const QString &token, const QList<int> &imageids, QVariant jsFunc)
+void APIRequestEX::addPeferRequest(const QString &token, const QVariantList &imageids, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("token", token);
-    //param.insert("imageids", imageids);
+    param.insert("imageids", imageids);
+
+    //qDebug() << "|||||||||||||addPeferRequest: " << QJsonDocument::fromVariant(param).toJson();
 
     return post(kAPIAddPefer, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }

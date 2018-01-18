@@ -45,7 +45,7 @@ public:
     Q_INVOKABLE static void checkTokenRequest(const QString& token, QVariant jsFunc);
 
     //尝试收藏图片
-    Q_INVOKABLE static void addPeferRequest(const QString& token, const QList<int>& imageids, QVariant jsFunc);
+    Q_INVOKABLE static void addPeferRequest(const QString& token, const QVariantList & imageids, QVariant jsFunc);
 
     //尝试收藏图片
     Q_INVOKABLE static void getPefersRequest(const QString& toke, QVariant jsFunc);

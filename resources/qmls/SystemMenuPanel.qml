@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Window 2.2
+import DesktopWallpaper.DownloadBox 1.0
 import "./Global.js" as Global
 import "../controls"
 
@@ -9,9 +10,9 @@ Item{
     property bool enableDownloadBoxButton: true
     property bool enableSearchControl: true
 
-
-    property int downloadCount: 0
-
+    DownloadBox{
+        id: downloader
+    }
     onWindowChanged: {
         title_text_item.text = root_item.window.title
     }
@@ -175,9 +176,9 @@ Item{
             anchors.top: parent.top
             anchors.rightMargin: -6
             anchors.topMargin: -6
-            visible: root_item.downloadCount > 0
+            visible: downloader.downloadingCount > 0
 
-            text: (downloadCount >= 10 ? "9+" : downloadCount)
+            text: (downloader.downloadingCount >= 10 ? "9+" : downloader.downloadingCount)
 
             fontPixelSize: 9
 
