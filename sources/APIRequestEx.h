@@ -20,6 +20,7 @@ static const QString kAPIAddPefer = kAuthHost + "/api/addpefer"; //添加个人�
 static const QString kAPIGetPefer = kAuthHost + "/api/getpefer"; //获取个人收藏
 static const QString kAPIRemovePefer = kAuthHost + "/api/removepefer"; //移除个人收藏
 static const QString kAPIDefaultHeaders = kAuthHost + "/api/defaultheaders"; //获取默认头像列表
+static const QString kAPIModifyUser = kAuthHost + "/api/modifyuser"; //修改用户信息
 
 
 class APIRequestEX : public QObject
@@ -51,6 +52,9 @@ public:
     //发起注册请求
     Q_INVOKABLE static void regeisterRequest(const QString& user, const QString& pwd, const QString& nickname, const QString& headerimage, QVariant jsFunc);
 
+    //发起修改用户信息请求
+    Q_INVOKABLE static void modifyUserRequest(const QString& token, QVariant jsFunc, const QString& pwd="", const QString& nickname="", const QString& headerimage="");
+
     //发起token校验请求
     Q_INVOKABLE static void checkTokenRequest(const QString& token, QVariant jsFunc);
 
@@ -62,6 +66,8 @@ public:
 
     //移除收藏图片
     Q_INVOKABLE static void removePefersRequest(const QString& token, const QVariantList & imageids, QVariant jsFunc);
+
+
 
 private:
     //发起api请求

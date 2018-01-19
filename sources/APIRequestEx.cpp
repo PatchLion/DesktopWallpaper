@@ -68,6 +68,25 @@ void APIRequestEX::regeisterRequest(const QString &user, const QString &pwd, con
     return post(kAPIRegister, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
+void APIRequestEX::modifyUserRequest(const QString &token, QVariant jsFunc, const QString &pwd, const QString &nickname, const QString &headerimage)
+{
+    QVariantMap param;
+    param.insert("token", token);
+    if(!nickname.isEmpty()){
+        param.insert("nickname", nickname);
+    }
+
+    if(!pwd.isEmpty()){
+        param.insert("password", pwd);
+    }
+
+    if(!headerimage.isEmpty()){
+        param.insert("headerimage", headerimage);
+    }
+
+    return post(kAPIModifyUser, QJsonDocument::fromVariant(param).toJson(), jsFunc);
+}
+
 void APIRequestEX::checkTokenRequest(const QString &token, QVariant jsFunc)
 {
     QVariantMap param;
