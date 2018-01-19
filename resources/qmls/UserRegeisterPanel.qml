@@ -65,7 +65,7 @@ DefaultPopupPanelBase {
                 KeyNavigation.tab: password_item.inputItem
 
                 anchors.top: parent.top
-                anchors.left: head_image_item.right
+                anchors.left: nickname_item.right
                 anchors.leftMargin: 5
 
 
@@ -81,7 +81,7 @@ DefaultPopupPanelBase {
                 tipString: "请输入昵称"
 
 
-                KeyNavigation.tab: regeister_button
+                KeyNavigation.tab: password_item.inputItem
 
                 anchors.bottom: parent.bottom
                 anchors.left: head_image_item.right
@@ -112,7 +112,7 @@ DefaultPopupPanelBase {
 
             tipString: "请再次输入密码"
             echoMode: TextInput.Password
-            KeyNavigation.tab: nickname_item.inputItem
+            KeyNavigation.tab: regeister_button
 
             z: 10
         }
@@ -185,7 +185,7 @@ DefaultPopupPanelBase {
                 var nickname = trimStr(nickname_item.text)
                 var header = head_image_item.source
 
-                console.log("注册信息:", user, pwd, confirm, nickname);
+                console.log("注册信息:", user, pwd, confirm, nickname, header);
 
                 if(user.length === 0 || pwd.length === 0 || confirm.length === 0){
                     Toast.showToast(root_item, "用户名或密码为空");

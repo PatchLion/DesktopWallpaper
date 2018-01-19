@@ -74,5 +74,6 @@
         <file>qmls/PefersGridView.qml</file>
         <file>qmls/PefersImageDetailPanel.qml</file>
         <file>qmls/HeaderImageSelectItem.qml</file>
+        <file>qmls/BlueTextButton.qml</file>
     </qresource>
 </RCC>

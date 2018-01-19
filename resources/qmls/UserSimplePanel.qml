@@ -20,17 +20,17 @@ Rectangle {
         id: user_information
     }
 
-    width: head_image_item.width + user_name_item.width + logout_item.width + 25
+    width: head_image_item.width + user_name_item.width + (user_information.token.length > 0 ? logout_item.width + modify_item.width : 0) + 10
 
 
     Image{
         id: head_image_item
-        height: parent.height * 3 / 5
+        height: parent.height * 3.5 / 5
         width: height
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: 10
+        anchors.leftMargin: 15
 
 
         source: (user_information.headerImage.length === 0) ? "qrc:/images/default_head_icon.jpg" : user_information.headerImage
@@ -46,7 +46,7 @@ Rectangle {
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         text: user_information.token.length === 0 ? "点击登录" : (user_information.nickName.length === 0 ? user_information.userName : user_information.nickName)
-        font.pixelSize: 13
+        font.pixelSize: 15
         color: mousearea.containsMouse ? "#00BFFF" : "#ffffff"
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
@@ -71,26 +71,31 @@ Rectangle {
         }
     }
 
-    PLTextButton{
-        id: logout_item
+    BlueTextButton{
+        id: modify_item
         anchors.left:user_name_item.right
-        anchors.leftMargin: 5
+        anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
-        text: "注销"
-        textPixelSize: 11
+        text: "修改资料"
+
         visible: user_information.token.length>0
         width: 30
         height: user_name_item.height
 
-        defaultColor: "transparent"
-        hoverColor: "transparent"
-        pressedColor: "transparent"
-        disabledColor: "transparent"
+        onClicked: {
 
-        textDefaultColor: "#1E90FF"
-        textPressedColor: "#00BFFF"
-        textHoverColor: "#00BFFF"
-        textDisabledColor: "#B0C4DE"
+        }
+    }
+
+    BlueTextButton{
+        id: logout_item
+        anchors.left:modify_item.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        text: "注销"
+        visible: user_information.token.length>0
+        width: 30
+        height: modify_item.height
 
         onClicked: {
             Toast.showToast(Global.RootPanel, "用户"+user_information.nickName+"登出")
