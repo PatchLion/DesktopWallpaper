@@ -11,6 +11,7 @@ static const QString kAPIClassifies =  kImagesHost + "/api/classifies"; //图片
 static const QString kAPICacheVersion = kImagesHost + "/api/cacheversion"; //缓存版本号
 static const QString kAPIPage = kImagesHost + "/api/page"; //图片分类分页
 static const QString kAPIItem = kImagesHost + "/api/item"; //图片分组
+static const QString kAPIItems = kImagesHost + "/api/items"; //多个图片分组
 static const QString kAPISearch = kImagesHost + "/api/search"; //搜索
 static const QString kAPILogin = kAuthHost + "/api/login"; //登录
 static const QString kAPIRegister = kAuthHost + "/api/register"; //注册
@@ -32,6 +33,9 @@ public:
 
     //获取单个图片分组数据
     Q_INVOKABLE static void itemRequest(const QString& itemID, QVariant jsFunc);
+
+    //获取多个图片分组数据
+    Q_INVOKABLE static void itemsRequest(const QStringList& itemIDs, QVariant jsFunc);
 
     //搜索关键词
     Q_INVOKABLE static void searchRequest(const QString& key, QVariant jsFunc);

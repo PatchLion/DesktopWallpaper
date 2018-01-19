@@ -65,6 +65,9 @@ Rectangle {
             if(user_information.token.length===0){
                 Global.RootPanel.showLoginPanel();
             }
+            else{
+                Global.RootPanel.showPefersDetailsPanel();
+            }
         }
     }
 

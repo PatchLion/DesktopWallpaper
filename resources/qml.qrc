@@ -69,5 +69,9 @@
         <file>images/pefer_hover.png</file>
         <file>images/set_wallpaper_default.png</file>
         <file>images/set_wallpaper_hover.png</file>
+        <file>qmls/PefersDetailsPanel.qml</file>
+        <file>qmls/PefersImagesView.qml</file>
+        <file>qmls/PefersGridView.qml</file>
+        <file>qmls/PefersImageDetailPanel.qml</file>
     </qresource>
 </RCC>

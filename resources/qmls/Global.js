@@ -98,7 +98,7 @@ function toPageModelData(data){
     for(var j = 0; j<childlist.length; j++){
         var item = childlist[j];
 
-        //console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source);
+        console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source);
 
         model_data.push({"itemID": item.id,
                             "newOne": item.new,
@@ -114,6 +114,39 @@ function toPageModelData(data){
 
     return model_data;
 }
+
+
+/*
+  收藏Model数据
+*/
+function toPefersModelData(data){
+
+    var model_data = [];
+    var childlist = data.items;
+    var limit = arguments[1] ? arguments[1] : -1;//默认值为-1
+
+    //console.log("Page model limit =", limit, arguments[0], arguments[1]);
+
+    for(var j = 0; j<childlist.length; j++){
+        var item = childlist[j].info;
+
+        console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source);
+
+        model_data.push({"itemID": item.id,
+                            "newOne": item.new,
+                            "image": item.image,
+                            "title": item.title,
+                            "sourcePage":item.source});
+
+        if (limit > 0 && j>=(limit-1)){
+            //console.log("BBBBBBBBBreak!!!!!!!!!!!!!!!")
+            break;
+        }
+    }
+
+    return model_data;
+}
+
 /*
   图片列表Model数据
 */

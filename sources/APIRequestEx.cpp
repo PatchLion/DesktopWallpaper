@@ -27,6 +27,14 @@ void APIRequestEX::itemRequest(const QString &itemID, QVariant jsFunc)
     return post(kAPIItem, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
+void APIRequestEX::itemsRequest(const QStringList &itemIDs, QVariant jsFunc)
+{
+    QVariantMap param;
+    param.insert("itemids", itemIDs);
+
+    return post(kAPIItems, QJsonDocument::fromVariant(param).toJson(), jsFunc);
+}
+
 void APIRequestEX::searchRequest(const QString &key, QVariant jsFunc)
 {
     QVariantMap param;
