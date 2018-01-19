@@ -43,8 +43,19 @@ Item {
             var result = Global.resolveAPIResponse(suc, msg, data);
 
             if (result[0]) {
+
+                var mode_data = Global.toImageDetailsModelData(result[1]);
+
+                var filter_data = []
+                for (var i = 0; i < mode_data.length; i++){
+                    if(user_information.peferImageIDs.contains(mode_data[i].imageid)){
+                        filter_data.push(mode_data[i]);
+                    }
+                }
+
+
                 images_list_model.clear();
-                images_list_model.append(Global.toImageDetailsModelData(result[1]));
+                images_list_model.append(filter_data);
 
                 downloadall_button.enabled = true;
                 prefer_imagegroup_button.enabled = true;

@@ -5,6 +5,11 @@
 
 QNetworkAccessManager *APIRequestEX::g_network = 0;
 
+void APIRequestEX::defaultHeadImagesRequest(QVariant jsFunc)
+{
+    return APIRequestEX::post(kAPIDefaultHeaders, "", jsFunc);
+}
+
 void APIRequestEX::classifiesRequest(QVariant jsFunc)
 {
     return APIRequestEX::post(kAPIClassifies, "", jsFunc);
@@ -52,12 +57,13 @@ void APIRequestEX::loginRequest(const QString &user, const QString &pwd, QVarian
     return post(kAPILogin, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
-void APIRequestEX::regeisterRequest(const QString &user, const QString &pwd, const QString &nickname, QVariant jsFunc)
+void APIRequestEX::regeisterRequest(const QString &user, const QString &pwd, const QString &nickname, const QString& headerimage, QVariant jsFunc)
 {
     QVariantMap param;
     param.insert("user", user);
     param.insert("nickname", nickname);
     param.insert("password", pwd);
+    param.insert("headerimage", headerimage);
 
     return post(kAPIRegister, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }

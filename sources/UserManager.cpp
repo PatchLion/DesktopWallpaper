@@ -204,13 +204,14 @@ void UserManager::readHistory()
         dataStream >> UserManager::pefers;
 
 
+        /*
         qDebug() << "History readed:"<<UserManager::userName << ", "
                  << UserManager::nickName << ", "
                  << UserManager::isVip << ", "
                  << UserManager::headerImage  << ", "
                  << UserManager::token << ", "
                  << UserManager::pefers;
-
+        */
 
         Q_EMIT UserManager::userPrivate->userNameChanged();
         Q_EMIT UserManager::userPrivate->nickNameChanged();

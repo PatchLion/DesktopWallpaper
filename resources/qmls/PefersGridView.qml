@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import DesktopWallpaper.UserManager 1.0
 
 GridView{
     id: grid_view_item

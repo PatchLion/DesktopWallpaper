@@ -19,12 +19,17 @@ static const QString kAPITokenCheck = kAuthHost + "/api/tokencheck"; //token校�
 static const QString kAPIAddPefer = kAuthHost + "/api/addpefer"; //添加个人收藏
 static const QString kAPIGetPefer = kAuthHost + "/api/getpefer"; //获取个人收藏
 static const QString kAPIRemovePefer = kAuthHost + "/api/removepefer"; //移除个人收藏
+static const QString kAPIDefaultHeaders = kAuthHost + "/api/defaultheaders"; //获取默认头像列表
 
 
 class APIRequestEX : public QObject
 {
     Q_OBJECT
 public:
+
+    //获取分类数据
+    Q_INVOKABLE static void defaultHeadImagesRequest(QVariant jsFunc) ;
+
     //获取分类数据
     Q_INVOKABLE static void classifiesRequest(QVariant jsFunc) ;
 
@@ -44,7 +49,7 @@ public:
     Q_INVOKABLE static void loginRequest(const QString& user, const QString& pwd, QVariant jsFunc);
 
     //发起注册请求
-    Q_INVOKABLE static void regeisterRequest(const QString& user, const QString& pwd, const QString& nickname, QVariant jsFunc);
+    Q_INVOKABLE static void regeisterRequest(const QString& user, const QString& pwd, const QString& nickname, const QString& headerimage, QVariant jsFunc);
 
     //发起token校验请求
     Q_INVOKABLE static void checkTokenRequest(const QString& token, QVariant jsFunc);

@@ -21,6 +21,8 @@ PLCheckButtonBase
 
     Image
     {
+        smooth: true
+        antialiasing: true
         //z: 0
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit

@@ -181,6 +181,8 @@ StackView{
 
             onRegisterFinished: {
                root_item.pop();
+
+               Toast.showToast(root_item, "注册成功, 请登录!");
             }
 
             onCancelButtonClicked: {

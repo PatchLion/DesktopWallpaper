@@ -21,7 +21,11 @@ PLButtonBase
 
     Image
     {
-        //z: 0
+
+        smooth: true
+        antialiasing: true
+
+        z: 0
         anchors.fill: parent
         fillMode: Image.PreserveAspectFit
         source: !root_item.enabled ? disableIcon :

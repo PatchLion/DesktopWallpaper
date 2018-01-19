@@ -94,6 +94,10 @@ PLFrameLessAndMoveableWindow
             main_stackView.pop();
             main_stackView.panelStackedPanel.pop();
             main_stackView.lastPage = ((main_stackView.panelStackedPanel.length === 0) ? -1 : main_stackView.panelStackedPanel[main_stackView.panelStackedPanel.length-1])
+
+            if(main_stackView.lastPage === DataType.PanelPeferDetails){
+                //main_stackView.currentItem.updatePefers();
+            }
         }
     }
 

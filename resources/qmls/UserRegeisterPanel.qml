@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import DesktopWallpaper.APIRequestEx 1.0
 import "./Global.js" as Global
 import "../controls/PLToast.js" as Toast
 import "../controls/PLCoverPanel.js" as Cover
@@ -8,7 +9,6 @@ DefaultPopupPanelBase {
     id: root_item
     color: Qt.rgba(0, 0, 0, 0.3)
 
-    property var cover
 
     signal cancelButtonClicked();
     signal registerFinished(var data);
@@ -29,20 +29,64 @@ DefaultPopupPanelBase {
     }
 
     Column{
+        id:col_item
         parent: centerArea
         width: parent.width * 4 / 7
         anchors.centerIn: parent
         height: parent.height
 
-        spacing: 15
+        spacing: 20
 
-        InputItem{
-            id: user_name_item
-            width: parent.width
-            height: 30
+        z: 20
 
-            tipString: "请输入用户名"
-            KeyNavigation.tab: password_item.inputItem
+        Item{
+            id: content_item
+            width:parent.width
+            height: user_name_item.height + nickname_item.height + col_item.spacing
+
+            z: 22
+
+            HeaderImageSelectItem{
+
+                id: head_image_item
+                height: parent.height
+                width: height
+
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+            }
+
+            InputItem{
+                id: user_name_item
+                width: parent.width - head_image_item.width - 5
+                height: 30
+
+                tipString: "请输入用户名"
+                KeyNavigation.tab: password_item.inputItem
+
+                anchors.top: parent.top
+                anchors.left: head_image_item.right
+                anchors.leftMargin: 5
+
+
+            }
+
+
+            InputItem{
+                id: nickname_item
+                width: parent.width - head_image_item.width - 5
+                height: 30
+                anchors.verticalCenterOffset: parent.height *4 / 10
+
+                tipString: "请输入昵称"
+
+
+                KeyNavigation.tab: regeister_button
+
+                anchors.bottom: parent.bottom
+                anchors.left: head_image_item.right
+                anchors.leftMargin: 5
+            }
         }
 
         InputItem{
@@ -57,6 +101,7 @@ DefaultPopupPanelBase {
 
             KeyNavigation.tab: password_confirm_item.inputItem
 
+            z: 10
         }
 
         InputItem{
@@ -69,41 +114,22 @@ DefaultPopupPanelBase {
             echoMode: TextInput.Password
             KeyNavigation.tab: nickname_item.inputItem
 
+            z: 10
         }
 
-        InputItem{
-            id: nickname_item
-            width: parent.width
-            height: 30
-            anchors.verticalCenterOffset: parent.height *4 / 10
-
-            tipString: "请输入昵称"
-
-
-            KeyNavigation.tab: regeister_button
-        }
     }
-    Connections{
-        target: Global.APIRequestEx
-        onRegisterFinished:{
-            root_item.cover.visible =false;
-            root_item.cover.destroy();
-            root_item.cover = null;
-            var result = Global.resolveRegisterData(data);
-            if(result[0]){
 
-                root_item.registerFinished(result[1]);
-                root_item.cancelButtonClicked();
-            }
-            else{
-                Toast.showToast(root_item, "注册失败: "+result[1]);
-            }
-        }
-    }
+    APIRequestEx{id: api_request}
+
+    centerArea.z: 1
+    bottomArea.z: 0
+
     Item{
         parent: bottomArea
         anchors.fill: parent
 
+
+        z: 0
         MainTextButton{
             id: regeister_button
             text: "注册"
@@ -113,6 +139,7 @@ DefaultPopupPanelBase {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.horizontalCenterOffset: parent.width / 6
 
+
             anchors.verticalCenter: parent.verticalCenter
             function trimStr(str){
                 return str.replace(/(^\s*)|(\s*$)/g,"");
@@ -121,10 +148,11 @@ DefaultPopupPanelBase {
                 if(userName.split(" ").length > 1){
                     return "名称中包含空格";
                 }
-                var chars = '~!@#$^&*()=|{}\"\':;\',\\[\\].<>/?~！@#￥……&*（）——|{}【】'
-                for(var c in chars){
+                var chars = '~!@#$^&*()=|{}\"\':;\',\\[].<>/?'
+                for(var i=0; i<chars.length;i++){
+                    var c = chars[i];
                     if(userName.split(c).length > 1){
-                        return "名称中包含特殊字符("+chars+")";
+                        return "名称中包含特殊字符("+c+")\n特殊字符:"+chars;
                     }
                 }
 
@@ -153,8 +181,11 @@ DefaultPopupPanelBase {
             onClicked: {
                 var user = trimStr(user_name_item.text)
                 var pwd = trimStr(password_item.text)
-                var confirm = password_confirm_item.text
-                var nickname = nickname_item.text
+                var confirm = trimStr(password_confirm_item.text)
+                var nickname = trimStr(nickname_item.text)
+                var header = head_image_item.source
+
+                console.log("注册信息:", user, pwd, confirm, nickname);
 
                 if(user.length === 0 || pwd.length === 0 || confirm.length === 0){
                     Toast.showToast(root_item, "用户名或密码为空");
@@ -174,13 +205,25 @@ DefaultPopupPanelBase {
                     Toast.showToast(root_item, "密码格式不符合要求:"+res1);
                     return;
                 }
-                if(user !== confirm){
+                if(pwd !== confirm){
                     Toast.showToast(root_item, "两次输入的密码不一致");
                     return;
                 }
 
-                root_item.cover = Cover.showLoadingCover(root_item, "注册中...");
-                Global.APIRequestEx.tryToRegeister(user, pwd, nickname);
+                var cover = Cover.showLoadingCover(root_item, "注册中...");
+                api_request.regeisterRequest(user, pwd, nickname, header, function(suc, msg, data){
+                    Global.destroyPanel(cover);
+
+                    var result = Global.resolveAPIResponse(suc, msg, data);
+                    if(result[0]){
+                        root_item.registerFinished(result[1]);
+                        root_item.cancelButtonClicked();
+
+                    }
+                    else{
+                        Toast.showToast(root_item, result[1]);
+                    }
+                });
 
             }
 
@@ -194,6 +237,7 @@ DefaultPopupPanelBase {
             height: 36
             textPixelSize: 15
 
+            z: 0
 
             focus: true
             anchors.horizontalCenter: parent.horizontalCenter

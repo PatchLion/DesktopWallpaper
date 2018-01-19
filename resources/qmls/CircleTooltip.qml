@@ -21,7 +21,7 @@ Rectangle{
         anchors.centerIn: parent
         color: "white"
         font.bold: true
-        font.pixelSize: 10
+        font.pixelSize: 11
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
     }

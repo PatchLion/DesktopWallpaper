@@ -20,7 +20,6 @@ Item {
         }
         else{
             if (user_information.peferItemIDs.length > 0){
-
                 api_request.itemsRequest(user_information.peferItemIDs, function(suc, msg, data){
                     var result = Global.resolveAPIResponse(suc, msg, data, true);
 
@@ -61,7 +60,7 @@ Item {
             PLTextButton{
                 id: back_button
                 anchors.left: parent.left
-                anchors.leftMargin: 5
+                anchors.leftMargin: 10
                 anchors.verticalCenter: parent.verticalCenter
                 width: 60
                 height: 24
@@ -80,6 +79,19 @@ Item {
                 font.pointSize: 11
                 color: "white"
                 clip: true
+            }
+
+            PLTextButton{
+                id: update_button
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.verticalCenter: parent.verticalCenter
+                width: 60
+                height: 24
+                text: "刷新"
+                onClicked: {
+                    root_item.updatePefers();
+                }
             }
         }
 
@@ -102,7 +114,25 @@ Item {
             model: ListModel{
                 id: grid_view_model
             }
+
+
+            PLTextWithDefaultFamily{
+                anchors.centerIn: parent
+
+                visible: grid_view_model.count === 0
+
+                text: "您还没有收藏任何图片"
+
+                font.pixelSize: 15
+
+                color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+
+
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+            }
         }
+
     }
 
 

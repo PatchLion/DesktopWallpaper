@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import DesktopWallpaper.UserManager 1.0
 import "./Global.js" as Global
 
 import "../controls"
@@ -11,7 +12,23 @@ Rectangle{
     property string itemUrl: ""
     property bool isNew: false
 
+    function updatePeferCount(){
+        root_item.peferCountByItem = user_information.getPeferCountByItemID(itemID);
+    }
 
+    property int peferCountByItem: 0
+
+    onCurrentIDChanged: {
+        updatePeferCount();
+
+    }
+
+    UserManager{
+        id: user_information
+        onPefersChanged: {
+            updatePeferCount();
+        }
+    }
     Item{
         width: parent.width * 0.95
         height: parent.height * 0.95
@@ -75,14 +92,16 @@ Rectangle{
             anchors.top:parent.top
             anchors.topMargin: -5
 
-            visible: root_item.isNew
+            //visible: root_item.isNew
 
+            /*
             transform: Rotation{
                 angle: 15
             }
+            */
 
 
-            text: "New"
+            text: root_item.peferCountByItem > 9 ? "9+" : root_item.peferCountByItem
 
         }
     }

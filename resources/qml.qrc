@@ -73,5 +73,6 @@
         <file>qmls/PefersImagesView.qml</file>
         <file>qmls/PefersGridView.qml</file>
         <file>qmls/PefersImageDetailPanel.qml</file>
+        <file>qmls/HeaderImageSelectItem.qml</file>
     </qresource>
 </RCC>
