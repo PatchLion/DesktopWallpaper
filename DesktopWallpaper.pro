@@ -3,6 +3,8 @@ CONFIG += c++11
 TEMPLATE = app
 CONFIG -= flat
 
+include(public.pri)
+
 
 INCLUDEPATH += ./sources ./sources/aes
 
