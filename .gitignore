@@ -46,3 +46,11 @@ CMakeLists.txt.user*
 #
 .DS_Store
 .idea/
+
+#
+debug/
+release/
+temp/
+
+#
+.qmake.stash
