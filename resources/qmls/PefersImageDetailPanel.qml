@@ -22,7 +22,7 @@ Item {
     APIRequestEx{id:api_request}
     UserManager{
         id: user_information
-        onPefersChanged: {
+        onPeferImageIDsChanged: {
             updatePeferCount();
         }
     }

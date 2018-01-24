@@ -31,7 +31,8 @@ UserManager::UserManager(QObject *parent)
     connect(UserManager::userPrivate, &UserManagerPrivate::headerImageChanged, this, &UserManager::headerImageChanged);
     connect(UserManager::userPrivate, &UserManagerPrivate::userNameChanged, this, &UserManager::userNameChanged);
     connect(UserManager::userPrivate, &UserManagerPrivate::nickNameChanged, this, &UserManager::nickNameChanged);
-    connect(UserManager::userPrivate, &UserManagerPrivate::pefersChanged, this, &UserManager::pefersChanged);
+    connect(UserManager::userPrivate, &UserManagerPrivate::peferImageIDsChanged, this, &UserManager::peferImageIDsChanged);
+    connect(UserManager::userPrivate, &UserManagerPrivate::peferItemIDsChanged, this, &UserManager::peferItemIDsChanged);
 }
 
 bool UserManager::getIsVip() const
@@ -99,7 +100,8 @@ void UserManager::setPefers(const UserManager::MapItemIDToImageIDs &pefers)
 {
     UserManager::pefers = pefers;
 
-    Q_EMIT UserManager::userPrivate->pefersChanged();
+    Q_EMIT UserManager::userPrivate->peferItemIDsChanged();
+    Q_EMIT UserManager::userPrivate->peferImageIDsChanged();
 
     writeToHistory();
 
@@ -139,10 +141,11 @@ void UserManager::addPefer(const QString &itemID, const QList< int > &imageIDs)
     }
     else{
         UserManager::pefers[itemID] = imageIDs;
+        Q_EMIT UserManager::userPrivate->peferItemIDsChanged();
     }
     //qDebug() << "Add pefer2: " << UserManager::pefers[itemID].size();
 
-    Q_EMIT UserManager::userPrivate->pefersChanged();
+    Q_EMIT UserManager::userPrivate->peferImageIDsChanged();
 
     writeToHistory();
 }
@@ -153,7 +156,7 @@ void UserManager::removePeferByItemID(const QString &itemID)
         return;
     }
     UserManager::pefers.remove(itemID);
-    Q_EMIT UserManager::userPrivate->pefersChanged();
+    Q_EMIT UserManager::userPrivate->peferItemIDsChanged();
 }
 
 void UserManager::removePeferByImageID(const QString& itemID, const QList< int >& imageIDs)
@@ -170,8 +173,9 @@ void UserManager::removePeferByImageID(const QString& itemID, const QList< int >
     }
     if(UserManager::pefers[itemID].isEmpty()){
         UserManager::pefers.remove(itemID);
+        Q_EMIT UserManager::userPrivate->peferItemIDsChanged();
     }
-    Q_EMIT UserManager::userPrivate->pefersChanged();
+    Q_EMIT UserManager::userPrivate->peferImageIDsChanged();
 }
 
 void UserManager::clearUserInfo()
@@ -218,7 +222,8 @@ void UserManager::readHistory()
         Q_EMIT UserManager::userPrivate->isVipChanged();
         Q_EMIT UserManager::userPrivate->headerImageChanged();
         Q_EMIT UserManager::userPrivate->tokenChanged();
-        Q_EMIT UserManager::userPrivate->pefersChanged();
+        Q_EMIT UserManager::userPrivate->peferImageIDsChanged();
+        Q_EMIT UserManager::userPrivate->peferItemIDsChanged();
     }
 
 }
@@ -231,7 +236,8 @@ void UserManager::clearPefers()
 
     writeToHistory();
 
-    Q_EMIT UserManager::userPrivate->pefersChanged();
+    Q_EMIT UserManager::userPrivate->peferImageIDsChanged();
+    Q_EMIT UserManager::userPrivate->peferItemIDsChanged();
 
     qDebug() << "After clear pefers";
 

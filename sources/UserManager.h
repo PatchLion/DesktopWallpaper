@@ -16,7 +16,8 @@ Q_SIGNALS:
     void headerImageChanged();
     void userNameChanged();
     void nickNameChanged();
-    void pefersChanged();
+    void peferItemIDsChanged();
+    void peferImageIDsChanged();
 };
 
 class UserManager : public QObject
@@ -27,8 +28,8 @@ class UserManager : public QObject
     Q_PROPERTY(QString headerImage READ getHeaderImage WRITE setHeaderImage NOTIFY headerImageChanged)
     Q_PROPERTY(QString token READ getToken WRITE setToken NOTIFY tokenChanged)
     Q_PROPERTY(QString nickName READ getNickName WRITE setNickName NOTIFY nickNameChanged)
-    Q_PROPERTY(QStringList peferItemIDs READ getPeferItemIDs NOTIFY pefersChanged)
-    Q_PROPERTY(QList< int > peferImageIDs READ getPeferImageIDs NOTIFY pefersChanged)
+    Q_PROPERTY(QStringList peferItemIDs READ getPeferItemIDs NOTIFY peferItemIDsChanged)
+    Q_PROPERTY(QList< int > peferImageIDs READ getPeferImageIDs NOTIFY peferImageIDsChanged)
     //Q_PROPERTY(int peferCountByItemID READ getPeferCountByItemID NOTIFY pefersChanged)
     //Q_PROPERTY(QList< int > testIDs READ getTestIDs NOTIFY pefersChanged)
 
@@ -95,7 +96,8 @@ Q_SIGNALS:
     void headerImageChanged();
     void userNameChanged();
     void nickNameChanged();
-    void pefersChanged();
+    void peferItemIDsChanged();
+    void peferImageIDsChanged();
 
 private:
     static bool isInited;

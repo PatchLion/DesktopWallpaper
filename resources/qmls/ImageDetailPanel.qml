@@ -22,7 +22,7 @@ Item {
     APIRequestEx{id:api_request}
     UserManager{
         id: user_information
-        onPefersChanged: {
+        onPeferImageIDsChanged: {
             updatePeferCount();
         }
     }
@@ -138,7 +138,7 @@ Item {
 
                     visible: status === Image.Ready
 
-                    fillMode: Image.PreserveAspectCrop
+                    fillMode: Image.PreserveAspectFit
 
                     sourceSize.height: height
 

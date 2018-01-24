@@ -25,7 +25,7 @@ Rectangle{
 
     UserManager{
         id: user_information
-        onPefersChanged: {
+        onPeferItemIDsChanged: {
             updatePeferCount();
         }
     }

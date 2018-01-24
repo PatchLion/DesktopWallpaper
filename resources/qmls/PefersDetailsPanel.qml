@@ -28,6 +28,7 @@ Item {
 
                         grid_view_model.clear();
                         grid_view_model.append(model_data);
+                        Toast.showToast(Global.RootPanel, "已刷新我的收藏");
                     }
                     else{
                         Toast.showToast(Global.RootPanel, result[1]);
