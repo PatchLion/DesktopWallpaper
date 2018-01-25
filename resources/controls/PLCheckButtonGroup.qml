@@ -5,6 +5,13 @@ Rectangle{
 
     color: "transparent"
 
+    function appendButton(button){
+        button.canUncheckByManual = false;
+        component.createObject(root_item, {"target": button});
+        button.isChecked = false;
+        root_item.buttons.push(button);
+    }
+
     Component{
         id: component
         Connections{
@@ -29,7 +36,8 @@ Rectangle{
         //console.log(buttons.size, buttons.count, buttons.length)
         for (var i = 0; i < buttons.length; i++)
         {
-            buttons[i].canUncheckByManual = false
+
+            buttons[i].canUncheckByManual = false;
             buttons[i].isChecked = (0===i)
             component.createObject(root_item, {"target": buttons[i]})
         }

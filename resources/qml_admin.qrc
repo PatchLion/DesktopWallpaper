@@ -30,5 +30,7 @@
         <file>images/button_24_0_2.png</file>
         <file>images/loading.gif</file>
         <file>qmls/admin/ImageListPanel.qml</file>
+        <file>qmls/admin/AdminItemDetails.qml</file>
+        <file>images/icon.png</file>
     </qresource>
 </RCC>

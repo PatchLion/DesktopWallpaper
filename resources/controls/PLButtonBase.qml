@@ -8,7 +8,7 @@ Rectangle{
 
     property string defaultColor: "#fbfbfb"
     property string hoverColor: "#E8E8E8"
-    property string pressedColor: "#E8E8E8"
+    property string pressedColor: "#1E90FF"
     property string disabledColor: "#CFCFCF"
 
     property string defaultBorderColor: "transparent"

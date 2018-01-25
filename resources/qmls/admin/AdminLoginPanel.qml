@@ -17,6 +17,25 @@ Rectangle{
 
     signal loginSuccessed(string token);
 
+    PLImageButtonItem{
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 10
+        anchors.rightMargin: 10
+
+        width: 24
+        height: 24
+
+        defaultIcon: "qrc:/images/button_24_0_2.png"
+        pressedIcon: "qrc:/images/button_24_0_1.png"
+        hoverIcon: "qrc:/images/button_24_0_0.png"
+        disableIcon: "qrc:/images/button_24_0_2.png"
+
+        onClicked: {
+            Qt.quit();
+        }
+    }
+
 
     Rectangle{
         width: 420
@@ -28,29 +47,10 @@ Rectangle{
 
         radius: 10
 
-        PLImageButtonItem{
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.topMargin: 10
-            anchors.rightMargin: 10
-
-            width: 24
-            height: 24
-
-            defaultIcon: "qrc:/images/button_24_0_2.png"
-            pressedIcon: "qrc:/images/button_24_0_1.png"
-            hoverIcon: "qrc:/images/button_24_0_0.png"
-            disableIcon: "qrc:/images/button_24_0_2.png"
-
-            onClicked: {
-                Qt.quit();
-            }
-        }
-
         PLTextWithDefaultFamily{
             id: title_item
             text: "管理员登录"
-            font.pixelSize: 22
+            font.pixelSize: 18
             color: Qt.rgba(1, 1, 1, 0.7)
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -74,6 +74,8 @@ Rectangle{
 
                 tipString: "请输入用户名"
 
+                text: "admin"
+
                 KeyNavigation.tab: password_item.inputItem
 
                 Keys.onPressed: {
@@ -96,6 +98,8 @@ Rectangle{
 
 
                 KeyNavigation.tab: login_button
+
+                focus: true
 
                 Keys.onPressed: {
                     switch(event.key){
@@ -153,7 +157,6 @@ Rectangle{
                                 }
                                 else{
                                     root_item.loginSuccessed(info.token);
-                                    Global.destroyPanel(root_item);
                                 }
                             }
                             else{

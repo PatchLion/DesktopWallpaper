@@ -4,7 +4,7 @@ PLButtonBase{
     property alias text: text_item.text
 
     property string textDefaultColor: "#696969"
-    property string textPressedColor: "#4F4F4F"
+    property string textPressedColor: "white"
     property string textHoverColor: "#4F4F4F"
     property string textDisabledColor: "#363636"
 
@@ -23,8 +23,7 @@ PLButtonBase{
                           (mouseArea.pressed ? textPressedColor :
                                                 (mouseArea.containsMouse ? textHoverColor : textDefaultColor))
 
+        clip: true
         font.pixelSize: 12
-        width: 0
-        height: 0
     }
 }

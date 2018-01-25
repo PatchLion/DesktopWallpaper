@@ -28,24 +28,25 @@ PLFrameLessAndMoveableWindow
 
         smooth: true
 
-        AdminLoginPanel{
-            id: login_panel
+        StackView{
+            id: main_stackview
             anchors.fill: parent
-            onLoginSuccessed: {
-                /*
-                    var msgbox = MessageBox.showMessageBox(root_window, "Admin: "+token, function(){
-                    Global.destroyPanel(msgbox);
-                });
-                */
-                visible = false;
-                root_window.adminToken = token;
+
+            initialItem:  AdminLoginPanel{
+                id: login_panel
+                onLoginSuccessed: {
+                    root_window.adminToken = token;
+                    main_stackview.push(image_list_panel_componet);
+                }
             }
         }
 
 
-        ImageListPanel{
-            anchors.fill: parent
-            visible: !login_panel.visible
+
+        Component{
+            id: image_list_panel_componet
+            ImageListPanel{
+            }
         }
 
     }

@@ -4,7 +4,7 @@ PLCheckButtonBase{
     property alias text: text_item.text
 
     property string textDefaultColor: "#828282"
-    property string textPressedColor: "#262626"
+    property string textPressedColor: "white"
     property string textHoverColor: "#666666"
     property string textDisabledColor: "#161616"
 

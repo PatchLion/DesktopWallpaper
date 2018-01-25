@@ -98,7 +98,7 @@ function toPageModelData(data){
     for(var j = 0; j<childlist.length; j++){
         var item = childlist[j];
 
-        //console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source);
+        //console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source, item.images);
 
         model_data.push({"itemID": item.id,
                             "newOne": item.new,
