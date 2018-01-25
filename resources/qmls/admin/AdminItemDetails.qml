@@ -14,6 +14,7 @@ Rectangle {
     property string myTitle: title
 
 
+    signal needHide();
     color: Qt.rgba(1, 1, 1, 0.3)
 
     APIRequestEx{id: api_request}
@@ -86,13 +87,14 @@ Rectangle {
                 var result = Global.resolveAPIResponse(suc, msg, data);
                 if(result[0]){
                     Toast.showToast(Global.RootPanel, "已通过");
+
+                    root_item.needHide();
                 }
                 else{
 
                     Toast.showToast(Global.RootPanel, "通过图片组失败: " + result[1]);
                 }
             });
-
         }
     }
 
@@ -126,6 +128,8 @@ Rectangle {
                 var result = Global.resolveAPIResponse(suc, msg, data);
                 if(result[0]){
                     Toast.showToast(Global.RootPanel, "已隐藏");
+
+                    root_item.needHide();
                 }
                 else{
 

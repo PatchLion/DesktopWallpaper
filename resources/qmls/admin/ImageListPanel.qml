@@ -165,6 +165,10 @@ Rectangle{
             width: image_list_item.width
             myID: itemID
             myTitle: title
+
+            onNeedHide: {
+                item_model.remove(index)
+            }
         }
 
         model: ListModel{
