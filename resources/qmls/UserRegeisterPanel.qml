@@ -62,11 +62,11 @@ DefaultPopupPanelBase {
                 height: 30
 
                 tipString: "请输入用户名"
-                KeyNavigation.tab: password_item.inputItem
+                KeyNavigation.tab: nickname_item.inputItem
 
                 anchors.top: parent.top
-                anchors.left: nickname_item.right
-                anchors.leftMargin: 5
+                anchors.left: nickname_item.left
+
 
 
             }

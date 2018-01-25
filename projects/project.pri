@@ -8,6 +8,7 @@ HEADERS += ../sources/APIRequestEx.h\
     ../sources/Settings.h \
     ../sources/aes/aes.h \
     ../sources/aes/qaeswrap.h \
+    ../sources/VersionDefine.h \
     ../sources/APIRequestPrivate.h
 
 SOURCES += ../sources/APIRequestEx.cpp \
@@ -25,7 +26,7 @@ win32{
 }
 
 macx{
-    OBJECTIVE_SOURCES += ./sources/mac/WallpaperSetter_mac.mm
+    OBJECTIVE_SOURCES += ../sources/mac/WallpaperSetter_mac.mm
     QMAKE_LFLAGS += -framework AppKit
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
     QMAKE_MAC_SDK=macosx10.13

@@ -7,6 +7,7 @@
 
 static const QString kImagesHost = "http://www.patchlion.cn:5000";
 static const QString kAuthHost = "http://www.patchlion.cn:8200";
+static const QString kAuthStatisticsHost = "http://www.patchlion.cn:13000";
 static const QString kAPIClassifies =  kImagesHost + "/api/classifies"; //图片分类查询API
 static const QString kAPICacheVersion = kImagesHost + "/api/cacheversion"; //缓存版本号
 static const QString kAPIPage = kImagesHost + "/api/page"; //图片分类分页
@@ -21,6 +22,8 @@ static const QString kAPIGetPefer = kAuthHost + "/api/getpefer"; //获取个人�
 static const QString kAPIRemovePefer = kAuthHost + "/api/removepefer"; //移除个人收藏
 static const QString kAPIDefaultHeaders = kAuthHost + "/api/defaultheaders"; //获取默认头像列表
 static const QString kAPIModifyUser = kAuthHost + "/api/modifyuser"; //修改用户信息
+static const QString kAPIViewStatistics = kAuthStatisticsHost + "/statistics/view"; //页面统计
+static const QString kAPIEventStatistics = kAuthStatisticsHost + "/statistics/event"; //事件统计
 
 
 class APIRequestEX : public QObject
@@ -67,7 +70,11 @@ public:
     //移除收藏图片
     Q_INVOKABLE static void removePefersRequest(const QString& token, const QVariantList & imageids, QVariant jsFunc);
 
+    //统计页面
+    Q_INVOKABLE static void viewStatistics(const QString& page, const QString& title);
 
+    //统计事件
+    Q_INVOKABLE static void eventStatistics(const QString& category, const QString& action, const QString& label);
 
 private:
     //发起api请求

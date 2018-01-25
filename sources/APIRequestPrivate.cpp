@@ -2,11 +2,14 @@
 
 APIRequestPrivate::APIRequestPrivate(QNetworkReply* reply, QJSValue jsObj, QObject *parent)
     : QObject(parent)
+    , m_jsFunctionObject(0)
 {
-    Q_ASSERT(jsObj.isCallable());
+    //Q_ASSERT(jsObj.isCallable());
     Q_ASSERT(reply);
 
-    m_jsFunctionObject = new QJSValue(jsObj);
+    if(jsObj.isCallable()){
+        m_jsFunctionObject = new QJSValue(jsObj);
+    }
     connect(reply, &QNetworkReply::finished, this, &APIRequestPrivate::onFinished, Qt::DirectConnection);
     reply->setParent(this);
 
@@ -23,7 +26,7 @@ void APIRequestPrivate::onFinished()
    const QByteArray data = reply->readAll();
    if (error == QNetworkReply::NoError)
    {
-       //qDebug() << "onFinished: " << true << "" << data.data();
+       qDebug() << "Api Finished: " << true << "" << data.data();
 
        listValue << QJSValue(true);
        listValue << QJSValue("");
@@ -39,5 +42,7 @@ void APIRequestPrivate::onFinished()
        listValue << QJSValue("");
    }
 
-   m_jsFunctionObject->call(listValue);
+   if(m_jsFunctionObject){
+       m_jsFunctionObject->call(listValue);
+   }
 }

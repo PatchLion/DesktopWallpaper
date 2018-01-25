@@ -1,6 +1,10 @@
 #include "APIRequestEx.h"
 #include "APIRequestPrivate.h"
 #include <QObject>
+#include "VersionDefine.h"
+#include "Settings.h"
+
+#define kStatisticsKey "90efc7e6011d11e89e73787b8ab9b5fd90f3bd24011d11e8afa5787b8ab9b5fd"
 
 
 QNetworkAccessManager *APIRequestEX::g_network = 0;
@@ -125,9 +129,34 @@ void APIRequestEX::removePefersRequest(const QString &token, const QVariantList 
     return post(kAPIRemovePefer, QJsonDocument::fromVariant(param).toJson(), jsFunc);
 }
 
+void APIRequestEX::viewStatistics(const QString &page, const QString &title)
+{
+    QVariantMap param;
+    param.insert("key", kStatisticsKey);
+    param.insert("page", page);
+    param.insert("title", title);
+    param.insert("appversion", Version);
+    param.insert("clientid", Settings::clientID());
+
+    return post(kAPIViewStatistics, QJsonDocument::fromVariant(param).toJson(), QVariant());
+}
+
+void APIRequestEX::eventStatistics(const QString &category, const QString &action, const QString &label)
+{
+    QVariantMap param;
+    param.insert("key", kStatisticsKey);
+    param.insert("category", category);
+    param.insert("action", action);
+    param.insert("label", label);
+    param.insert("appversion", Version);
+    param.insert("clientid", Settings::clientID());
+
+    return post(kAPIEventStatistics, QJsonDocument::fromVariant(param).toJson(), QVariant());
+}
+
 void APIRequestEX::post(const QString &apiurl, const QString &param, QVariant jsFunc)
 {
-    Q_ASSERT(jsFunc.canConvert<QJSValue>());
+    //Q_ASSERT(jsFunc.canConvert<QJSValue>());
 
     QNetworkRequest request(apiurl);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");

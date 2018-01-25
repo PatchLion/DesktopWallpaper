@@ -56,6 +56,9 @@ int main(int argc, char *argv[])
     qDebug() << "Application client id:" << Settings::clientID();
     qDebug() << "Application settings file path:" << Settings::settingsFilePath();
 
+    APIRequestEX::eventStatistics("app", "run", "1");
+    APIRequestEX::viewStatistics("main", "main");
+
     app.setWindowIcon(QIcon(":/images/icon.png"));
 #ifdef Q_OS_WIN
     const QString path = QGuiApplication::applicationDirPath() + "/fonts";
