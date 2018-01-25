@@ -154,6 +154,33 @@ void APIRequestEX::eventStatistics(const QString &category, const QString &actio
     return post(kAPIEventStatistics, QJsonDocument::fromVariant(param).toJson(), QVariant());
 }
 
+void APIRequestEX::setImagesVisibleRequest(const QString &token, const QVariantList &hideimageids, const QVariantList &showimageids, QVariant jsFunc)
+{
+    QVariantMap param;
+    param.insert("token", token);
+
+    QVariantList checksParam;
+    Q_FOREACH(QVariant id, hideimageids){
+        QVariantMap temp;
+        temp.insert("imageid", id);
+        temp.insert("checked", true);
+        temp.insert("shown", false);
+        checksParam.append(temp);
+    }
+    Q_FOREACH(QVariant id, showimageids){
+        QVariantMap temp;
+        temp.insert("imageid", id);
+        temp.insert("checked", true);
+        temp.insert("shown", true);
+        checksParam.append(temp);
+    }
+
+    param.insert("checks", checksParam);
+
+    //qDebug() << "--->" <<  QJsonDocument::fromVariant(param).toJson();
+    return post(kAPISetImagesVisible, QJsonDocument::fromVariant(param).toJson(), jsFunc);
+}
+
 void APIRequestEX::post(const QString &apiurl, const QString &param, QVariant jsFunc)
 {
     //Q_ASSERT(jsFunc.canConvert<QJSValue>());

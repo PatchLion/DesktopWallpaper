@@ -16,7 +16,7 @@ Rectangle{
     property string pressedBorderColor: "transparent"
     property string disabledBorderColor: "transparent"
 
-    radius: 5
+    radius: 3
 
     color: !enabled ? disabledColor :
                       (mouse_area.pressed ? pressedColor :

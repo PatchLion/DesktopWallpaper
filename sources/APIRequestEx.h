@@ -22,6 +22,7 @@ static const QString kAPIGetPefer = kAuthHost + "/api/getpefer"; //获取个人�
 static const QString kAPIRemovePefer = kAuthHost + "/api/removepefer"; //移除个人收藏
 static const QString kAPIDefaultHeaders = kAuthHost + "/api/defaultheaders"; //获取默认头像列表
 static const QString kAPIModifyUser = kAuthHost + "/api/modifyuser"; //修改用户信息
+static const QString kAPISetImagesVisible = kAuthHost + "/api/admin/imagesVisible"; //设置图片是否显示
 static const QString kAPIViewStatistics = kAuthStatisticsHost + "/statistics/view"; //页面统计
 static const QString kAPIEventStatistics = kAuthStatisticsHost + "/statistics/event"; //事件统计
 
@@ -76,6 +77,8 @@ public:
     //统计事件
     Q_INVOKABLE static void eventStatistics(const QString& category, const QString& action, const QString& label);
 
+    //设置图片是否
+    Q_INVOKABLE static void setImagesVisibleRequest(const QString& token, const QVariantList& hideimageids, const QVariantList& showimageids, QVariant jsFunc);
 private:
     //发起api请求
     static void post(const QString& apiurl, const QString& param, QVariant jsFunc);

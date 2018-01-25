@@ -32,5 +32,6 @@
         <file>qmls/admin/ImageListPanel.qml</file>
         <file>qmls/admin/AdminItemDetails.qml</file>
         <file>images/icon.png</file>
+        <file>qmls/SearchControl.qml</file>
     </qresource>
 </RCC>

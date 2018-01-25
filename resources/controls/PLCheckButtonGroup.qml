@@ -2,6 +2,7 @@ import QtQuick 2.3
 Rectangle{
     id: root_item
     property var buttons: []
+    property bool autoCheckFirst: true
 
     color: "transparent"
 
@@ -38,7 +39,9 @@ Rectangle{
         {
 
             buttons[i].canUncheckByManual = false;
-            buttons[i].isChecked = (0===i)
+            if(autoCheckFirst){
+                buttons[i].isChecked = (0===i)
+            }
             component.createObject(root_item, {"target": buttons[i]})
         }
     }

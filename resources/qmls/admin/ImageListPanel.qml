@@ -44,7 +44,36 @@ Rectangle{
             }
         }
 
+
+        SearchControl{
+            anchors.left: classifies_listview.right
+            anchors.verticalCenter: classifies_listview.verticalCenter
+            anchors.leftMargin: 10
+
+            onStartSearch: {
+
+                var cover = Cover.showLoadingCover(Global.RootPanel, "搜索中...");
+                api_request.searchRequest(keyword, function(suc, msg, data){
+
+                    Global.destroyPanel(cover);
+                    var result = Global.resolveAPIResponse(suc, msg, data);
+                    if(result[0]){
+                        var model_data = Global.toPageModelData(result[1]);
+
+                        root_item.currentPageIndex = 0;
+                        item_model.clear();
+                        item_model.append(model_data);
+                    }
+                    else{
+                        Toast.showToast(Global.RootPanel, result[1]);
+                    }
+                });
+
+            }
+        }
+
         ListView{
+            id: classifies_listview
             height: 30
 
             anchors.left: parent.left
@@ -53,6 +82,7 @@ Rectangle{
 
             clip: true
             boundsBehavior: Flickable.StopAtBounds
+            anchors.rightMargin: 160
 
             orientation: ListView.Horizontal
 
@@ -113,6 +143,7 @@ Rectangle{
 
     }
 
+
     ListView{
         id: image_list_item
         anchors.left: parent.left
@@ -121,6 +152,8 @@ Rectangle{
         anchors.bottom: parent.bottom
 
         anchors.margins: 10
+
+
 
         spacing: 5
 
@@ -140,7 +173,7 @@ Rectangle{
 
 
         onContentYChanged: {
-            console.log(contentY, contentHeight, height)
+            //console.log(contentY, contentHeight, height)
             var temp = contentHeight - height + 100
             if (contentY >= temp)
             {

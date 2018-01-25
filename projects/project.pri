@@ -7,6 +7,7 @@ HEADERS += ../sources/APIRequestEx.h\
     ../sources/UserManager.h \
     ../sources/Settings.h \
     ../sources/aes/aes.h \
+    ../sources/Functions.h \
     ../sources/aes/qaeswrap.h \
     ../sources/VersionDefine.h \
     ../sources/APIRequestPrivate.h
@@ -17,6 +18,7 @@ SOURCES += ../sources/APIRequestEx.cpp \
     ../sources/UserManager.cpp \
     ../sources/DownloadBox.cpp \
     ../sources/Settings.cpp\
+    ../sources/Functions.cpp \
     ../sources/aes/aes.c \
     ../sources/aes/qaeswrap.cpp \
     ../sources/APIRequestPrivate.cpp

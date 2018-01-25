@@ -9,7 +9,7 @@ PLCheckButtonBase{
     property string textDisabledColor: "#161616"
 
     property alias textFontFamliy: text_item.font.family
-    property alias textPointSize: text_item.font.pointSize
+    property alias textPixelSize: text_item.font.pixelSize
 
 
     PLTextWithDefaultFamily
@@ -21,6 +21,6 @@ PLCheckButtonBase{
         color:!enabled ? textDisabledColor :
                          (isChecked ? textPressedColor : textDefaultColor)
 
-        font.pointSize: 12
+        font.pixelSize: 12
     }
 }
