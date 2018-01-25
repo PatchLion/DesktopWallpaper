@@ -13,7 +13,16 @@ StackView{
 
     APIRequestEx{ id: api_request } //api请求对象
     UserManager {id: user_information } //用户信息对象
-
+    focus: true
+    Keys.enabled: true
+    Keys.onPressed: {
+        switch(event.key){
+        case Qt.Key_Enter:
+        case Qt.Key_Return:
+            //console.log("enter");
+            login_button.clicked();
+        }
+    }
 
     initialItem:Component{
         DefaultPopupPanelBase {
@@ -63,6 +72,17 @@ StackView{
                     tipString: "请输入用户名"
 
                     KeyNavigation.tab: password_item.inputItem
+
+                    focus: true
+                    Keys.enabled: true
+                    Keys.onPressed: {
+                        switch(event.key){
+                        case Qt.Key_Enter:
+                        case Qt.Key_Return:
+                            //console.log("enter");
+                            login_button.clicked();
+                        }
+                    }
                 }
 
                 InputItem{
@@ -75,6 +95,17 @@ StackView{
 
 
                     KeyNavigation.tab: login_button
+
+                    focus: true
+                    Keys.enabled: true
+                    Keys.onPressed: {
+                        switch(event.key){
+                        case Qt.Key_Enter:
+                        case Qt.Key_Return:
+                            //console.log("enter");
+                            login_button.clicked();
+                        }
+                    }
 
                 }
             }

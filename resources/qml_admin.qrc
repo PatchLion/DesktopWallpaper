@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qmls/admin/main_admin.qml</file>
+        <file>controls/PLButtonBase.qml</file>
+        <file>controls/PLCheckButtonBase.qml</file>
+        <file>controls/PLCheckButtonGroup.qml</file>
+        <file>controls/PLCheckTextButton.qml</file>
+        <file>controls/PLComboBoxItem.qml</file>
+        <file>controls/PLCoverPanel.js</file>
+        <file>controls/PLCoverPanel.qml</file>
+        <file>controls/PLFrameLessAndMoveableWindow.qml</file>
+        <file>controls/PLImageButtonItem.qml</file>
+        <file>controls/PLImageCheckButtonItem.qml</file>
+        <file>controls/PLLoadingItem.qml</file>
+        <file>controls/PLMessageBoxItem.js</file>
+        <file>controls/PLMessageBoxItem.qml</file>
+        <file>controls/PLProgressBar.qml</file>
+        <file>controls/PLProgressTooltipPanel.qml</file>
+        <file>controls/PLTextButton.qml</file>
+        <file>controls/PLTextWithDefaultFamily.qml</file>
+        <file>controls/PLToast.js</file>
+        <file>controls/PLToast.qml</file>
+        <file>controls/PLTooltip.qml</file>
+        <file>qmls/admin/AdminLoginPanel.qml</file>
+        <file>qmls/InputItem.qml</file>
+        <file>qmls/MainTextButton.qml</file>
+        <file>qmls/Global.js</file>
+        <file>images/button_24_0_0.png</file>
+        <file>images/button_24_0_1.png</file>
+        <file>images/button_24_0_2.png</file>
+        <file>images/loading.gif</file>
+        <file>qmls/admin/ImageListPanel.qml</file>
+    </qresource>
+</RCC>

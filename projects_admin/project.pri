@@ -2,23 +2,14 @@ INCLUDEPATH += ../sources \
     ../sources/aes
 
 HEADERS += ../sources/APIRequestEx.h\
-    ../sources/WallpaperSetter.h \
-    ../sources/DownloadBox.h \
-    ../sources/UserManager.h \
+    ../sources/Functions.h \
     ../sources/Settings.h \
-    ../sources/aes/aes.h \
-    ../sources/aes/qaeswrap.h \
-    ../sources/VersionDefine.h \
     ../sources/APIRequestPrivate.h
 
 SOURCES += ../sources/APIRequestEx.cpp \
-    ../sources/main.cpp \
-    ../sources/WallpaperSetter.cpp \
-    ../sources/UserManager.cpp \
-    ../sources/DownloadBox.cpp \
-    ../sources/Settings.cpp\
-    ../sources/aes/aes.c \
-    ../sources/aes/qaeswrap.cpp \
+    ../sources/main_admin.cpp \
+    ../sources/Functions.cpp \
+    ../sources/Settings.cpp \
     ../sources/APIRequestPrivate.cpp
 
 win32{
@@ -33,4 +24,6 @@ macx{
 }
 
 
-RESOURCES += ../resources/qml.qrc
+RESOURCES += ../resources/qml_admin.qrc
+
+DISTFILES +=

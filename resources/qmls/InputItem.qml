@@ -23,10 +23,13 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignLeft
 
+        selectByMouse: true
+
 
 
 
         focus: true
+        Keys.enabled: true
 
         PLTextWithDefaultFamily{
             id: title_item
