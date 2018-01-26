@@ -22,6 +22,10 @@ Rectangle {
         anchors.fill: parent
     }
 
+    Component.onCompleted: {
+        api_request.viewStatistics("/searchpage", "searchpage");
+    }
+
 
     Item{
 

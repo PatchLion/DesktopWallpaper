@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import DesktopWallpaper.APIRequestEx 1.0
 import DesktopWallpaper.DownloadBox 1.0
 import "./Global.js" as Global
 import "../controls"
@@ -20,9 +21,13 @@ Rectangle {
         }
     }
 
+    APIRequestEx{id:api_request}
+
     color: Qt.rgba(0.7, 0.7, 0.7, 0.3)
 
     Component.onCompleted: {
+
+        api_request.viewStatistics("/downloadboxpage", "downloadbox");
         var data = downloader.buildDownloadInfo();
 
         var jsonData = JSON.parse(data)

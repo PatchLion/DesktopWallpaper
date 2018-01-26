@@ -107,5 +107,8 @@ Item {
         }
     }
 
+    Component.onCompleted: {
+        api_request.viewStatistics("/classifydetailpage", "classifydetail");
+    }
 
 }

@@ -214,6 +214,7 @@ DefaultPopupPanelBase {
                 api_request.regeisterRequest(user, pwd, nickname, header, function(suc, msg, data){
                     Global.destroyPanel(cover);
 
+                    api_request.eventStatistics("regeister_event", "click", "1");
                     var result = Global.resolveAPIResponse(suc, msg, data);
                     if(result[0]){
                         root_item.registerFinished(result[1]);
@@ -248,5 +249,9 @@ DefaultPopupPanelBase {
                 root_item.cancelButtonClicked();
             }
         }
+    }
+
+    Component.onCompleted: {
+        api_request.viewStatistics("/regeister_page", "regeister");
     }
 }

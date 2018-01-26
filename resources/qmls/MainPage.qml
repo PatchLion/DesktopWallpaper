@@ -60,4 +60,8 @@ Item {
         }
 
     }
+
+    Component.onCompleted: {
+        api_request.viewStatistics("/mainpage", "mainpage");
+    }
 }

@@ -216,6 +216,8 @@ Item {
                                                 if (result[0]) {
                                                     Toast.showToast(Global.RootPanel, "移除收藏成功")
                                                     user_information.removePeferByImageID(root_item.itemID, [image_content_item.currentID]);
+                                                    api_request.eventStatistics("remove_pefer_event", "click", image_content_item.currentID.toString());
+
                                                 } else {
                                                     Toast.showToast(Global.RootPanel, result[1])
                                                 }
@@ -233,6 +235,9 @@ Item {
                                                 if (result[0]) {
                                                     Toast.showToast(Global.RootPanel, "图片收藏成功")
                                                     user_information.addPefer(root_item.itemID, [image_content_item.currentID]);
+
+                                                    api_request.eventStatistics("pefer_event", "click", image_content_item.currentID.toString());
+
                                                 } else {
                                                     Toast.showToast(Global.RootPanel, result[1])
                                                 }
@@ -255,6 +260,8 @@ Item {
                                 WallpaperSetter {id: wallpaper_item }
                                 onClicked: {
                                     var cover = CoverPanel.showProgressBarCover(Global.RootPanel);
+                                    api_request.eventStatistics("set_wallpaper_button", "click", image_item.source);
+
                                     wallpaper_item.setImageToDesktop(image_item.source, function(process, msg){
                                         CoverPanel.setProgressBarCoverProgress(cover, progress);
                                         CoverPanel.setProgressBarCoverTooltip(cover, msg)
@@ -313,6 +320,9 @@ Item {
                                             var source = image_item.source
 
                                             downloader.addDownload(fileUrl, Global.fixedDirName(root_item.title), [source]);
+
+                                            api_request.eventStatistics("download_image_button", "click", fileUrl);
+
                                         }
 
                                         Component.onCompleted: visible = true
@@ -367,8 +377,9 @@ Item {
             text: "跳转到源网页"
 
             onClicked: {
-                console.log("Jump to", root_item.itemUrl)
-                Qt.openUrlExternally(root_item.itemUrl)
+                console.log("Jump to", root_item.itemUrl);
+                Qt.openUrlExternally(root_item.itemUrl);
+                api_request.eventStatistics("try_jump_to_url", "click", root_item.itemUrl);
             }
         }
 
@@ -499,6 +510,7 @@ Item {
                             }
                         }
 
+                        api_request.eventStatistics("download_all", "apply", root_item.itemUrl);
                         downloader.addDownload(fileUrl, Global.fixedDirName(root_item.title), urls);
                     }
 

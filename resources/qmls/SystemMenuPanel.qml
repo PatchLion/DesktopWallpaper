@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Window 2.2
+import DesktopWallpaper.APIRequestEx 1.0
 import DesktopWallpaper.DownloadBox 1.0
 import "./Global.js" as Global
 import "../controls"
@@ -14,6 +15,8 @@ Item{
     DownloadBox{
         id: downloader
     }
+
+    APIRequestEx{id: api_request}
     onWindowChanged: {
         title_text_item.text = root_item.window.title
     }
@@ -164,6 +167,7 @@ Item{
         //radius: close_button.radius
 
         onClicked: {
+            api_request.eventStatistics("downloadbox_button", "click", "1");
             Global.RootPanel.showDownloadBoxButtonClicked();
         }
 

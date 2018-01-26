@@ -63,6 +63,7 @@ Rectangle{
             height: 24
 
             onClicked: {
+                api_request.eventStatistics("item_more", "click", root_item.classify);
                 Global.RootPanel.showAllItemByClassifyPanel(root_item.classify);
             }
         }
@@ -83,5 +84,9 @@ Rectangle{
         model: ListModel{
             id: grid_view_model
         }
+    }
+
+    Component.onCompleted: {
+        api_request.viewStatistics("/itemlistpage", "itemlist");
     }
 }

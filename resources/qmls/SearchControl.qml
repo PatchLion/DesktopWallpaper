@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import DesktopWallpaper.APIRequestEx 1.0
 import "./Global.js" as Global
 import "../controls"
 import "../controls/PLToast.js" as Toast
@@ -66,6 +67,9 @@ Rectangle{
     }
 
 
+    APIRequestEx{
+        id: api_request
+    }
 
     PLTextButton{
         id: search_button
@@ -80,11 +84,14 @@ Rectangle{
         radius: 0
         anchors.verticalCenter: parent.verticalCenter
 
+
         onClicked: {
             var keyword = textinput_keyword.text
             if ( keyword.length>0){
                 root_item.startSearch(keyword);
                 textinput_keyword.text = "";
+
+                api_request.eventStatistics("search_event", "click", keyword);
             }
             else{
                 Toast.showToast(Global.RootPanel, "关键词不能为空")

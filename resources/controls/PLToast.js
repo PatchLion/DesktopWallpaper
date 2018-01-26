@@ -13,7 +13,7 @@ function showToast(parent, text) {
                                      "height":parent.height,
                                      "text": text});
 
-        //toast.show();
+        toast.show();
     }
     else
     {

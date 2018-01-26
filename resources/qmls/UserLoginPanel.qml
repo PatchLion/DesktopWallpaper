@@ -133,6 +133,7 @@ StackView{
                         }
                         else{
                             var cover = Cover.showLoadingCover(root_item, "登录中...");
+                            api_request.eventStatistics("try_login_event", "click", "1");
                             api_request.loginRequest(user, pwd, function(suc, msg, data){
                                 Global.destroyPanel(cover);
 
@@ -174,6 +175,7 @@ StackView{
                     anchors.verticalCenter: parent.verticalCenter
                     onClicked: {
                         root_item.push(regeister_component);
+                        api_request.eventStatistics("regesiter_button", "click", "1");
                     }
 
 
@@ -220,5 +222,9 @@ StackView{
                 root_item.pop();
             }
         }
+    }
+
+    Component.onCompleted: {
+        api_request.viewStatistics("/login_page", "login");
     }
 }

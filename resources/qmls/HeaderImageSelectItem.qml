@@ -102,6 +102,8 @@ PLImageCheckButtonItem {
                 root_item.source = list_item.source;
 
                 root_item.isChecked = false;
+
+                api_request.eventStatistics("header_image", "select", list_item.source);
             }
 
             Rectangle{

@@ -1,4 +1,5 @@
 import QtQuick 2.9
+import DesktopWallpaper.APIRequestEx 1.0
 import "./Global.js" as Global
 
 import "../controls"
@@ -11,6 +12,7 @@ Rectangle{
     property string itemUrl: ""
     property bool isNew: false
 
+    APIRequestEx{id:api_request}
 
     Item{
         width: parent.width * 0.95
@@ -102,6 +104,7 @@ Rectangle{
 
         onClicked: {
             console.log("Item", root_item.currentID, "clicked!!!")
+            api_request.eventStatistics("item", "click", root_item.currentID.toString());
             Global.RootPanel.showItemDetailsPanel(root_item.currentID, text_item.text, root_item.itemUrl);
         }
     }

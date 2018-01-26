@@ -151,6 +151,9 @@ void APIRequestEX::eventStatistics(const QString &category, const QString &actio
     param.insert("appversion", Version);
     param.insert("clientid", Settings::clientID());
 
+    qDebug() << "Event statistics:" << category << action << label;
+
+
     return post(kAPIEventStatistics, QJsonDocument::fromVariant(param).toJson(), QVariant());
 }
 
