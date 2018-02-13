@@ -73,6 +73,8 @@ Q_SIGNALS:
 private Q_SLOTS:
     void onReplyFinished();
 
+    void onRedirected(const QUrl &url);
+
 private:
     static QNetworkAccessManager* g_network;
     static URLToLocalPath g_localinfo;

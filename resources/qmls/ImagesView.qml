@@ -11,6 +11,7 @@ Rectangle{
     property string titleString: ""
     property string itemUrl: ""
     property bool isNew: false
+    //property alias originReferer: image_item.originReferer
 
     APIRequestEx{id:api_request}
 

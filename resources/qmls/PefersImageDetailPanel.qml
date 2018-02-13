@@ -154,6 +154,8 @@ Item {
 
                     sourceSize.height: height
 
+                    //originReferer: referer
+
                     originUrl: image
                     MouseArea {
                         id: image_mouse_area

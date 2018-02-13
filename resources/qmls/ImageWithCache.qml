@@ -5,6 +5,7 @@ Image {
     id: root_item
 
     property alias originUrl: cache.originUrl
+    //property alias originReferer: cache.originReferer
     source: cache.safeUrl
 
     ImageCache{ id: cache }

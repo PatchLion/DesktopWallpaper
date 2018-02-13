@@ -11,6 +11,7 @@ Rectangle{
     property string titleString: ""
     property string itemUrl: ""
     property bool isNew: false
+    //property alias originReferer: image_item.originReferer
 
     function updatePeferCount(){
         root_item.peferCountByItem = user_information.getPeferCountByItemID(itemID);

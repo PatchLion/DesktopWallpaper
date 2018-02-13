@@ -72,7 +72,24 @@ void ImageCachePrivate::addOriginUrl(const QString &url)
 
         QNetworkRequest request(url);
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-        request.setRawHeader("refer", QUrl(url).host().toLocal8Bit());
+
+        QString referstring;
+        if (url.contains("&referer="))
+        {
+            QStringList list = url.split("&referer=");
+
+            if(list.size() >=2){
+                referstring = list[1];
+                request.setUrl(list[0]);
+            }
+        }
+        //QString referstring = QUrl(url).scheme() + "://" +QUrl(url).host().toLocal8Bit();
+
+        qDebug() << "Start request----->" << request.url().toString() << " referer---->" << referstring;
+        if (!referstring.isEmpty())
+        {
+            request.setRawHeader("referer", referstring.toLocal8Bit());
+        }
 
         QNetworkReply* reply = g_network->get(request);
         reply->setProperty(URLRole, url);
@@ -141,11 +158,11 @@ void ImageCachePrivate::onReplyFinished()
         const QByteArray data = reply->readAll();
 
         const QString url = reply->property(URLRole).toString();
-        const QString filename = url.toLocal8Bit().toBase64() + "." + QFileInfo(url).suffix();
+        const QString filename = url.toLocal8Bit().toBase64()+".dat";
 
         const QString fullpath = Settings::appCacheRootDir() + filename;
 
-        qDebug() << "Cache filepath:" << fullpath;
+        qDebug() << "Cache filepath:" << fullpath << error;
 
         if(success && data.length() > 0 && !url.isEmpty()){
             QFile file(fullpath);
@@ -162,6 +179,11 @@ void ImageCachePrivate::onReplyFinished()
         }
         Q_EMIT imageLoadFinished(url, success);
     }
+
+}
+
+void ImageCachePrivate::onRedirected(const QUrl &url)
+{
 
 }
 

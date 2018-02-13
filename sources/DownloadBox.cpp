@@ -67,7 +67,11 @@ QString DownloadBox::addDownload(const QString &savePath, const QString &name, c
 
                 QNetworkRequest request(url);
                 request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-                request.setRawHeader("refer", QUrl(url).host().toLocal8Bit());
+
+                QString referstring = QUrl(url).scheme() + "://" +QUrl(url).host().toLocal8Bit();
+
+                //qDebug() << "referer----->" << referstring;
+                request.setRawHeader("referer", referstring.toLocal8Bit());
 
                 QNetworkReply* reply = network()->get(request);
                 reply->setProperty(RequestArgsRole, args);

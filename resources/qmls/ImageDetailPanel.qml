@@ -88,7 +88,8 @@ Item {
                 width: image_item.status === Image.Ready ? image_item.width : loadding_image.width
 
                 visible: !(image_item.status === Image.Error
-                           || image_item.status === Image.Null)
+                           || image_item.status === Image.Null
+                           || image_item.source.length === 0)
 
                 property int currentID: imageid
 
@@ -143,6 +144,7 @@ Item {
                     sourceSize.height: height
 
                     originUrl: image
+                    //originReferer: referer
                     MouseArea {
                         id: image_mouse_area
                         anchors.fill: parent

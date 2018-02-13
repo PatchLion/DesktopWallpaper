@@ -26,7 +26,7 @@ void APIRequestPrivate::onFinished()
    const QByteArray data = reply->readAll();
    if (error == QNetworkReply::NoError)
    {
-       qDebug() << "Api Finished: " << true << "" << data.data();
+       // qDebug() << "Api Finished: " << true << "" << data.data();
 
        listValue << QJSValue(true);
        listValue << QJSValue("");

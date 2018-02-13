@@ -19,7 +19,7 @@ QString Settings::appCacheRootDir()
   const QStringList listPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
   path = QString("%1:/ProgramData/").arg(listPath[0].mid(0, 1)) + "beautyfinder/";
 #else //Q_OS_MAC
-  path = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+  path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) +"/beautyfinder/";
 #endif
 
   //qDebug() << "appCacheRootDir:" << path;

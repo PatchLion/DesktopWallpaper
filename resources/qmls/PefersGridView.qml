@@ -24,5 +24,6 @@ GridView{
         titleString: title
         source: image
         itemUrl: sourcePage
+        //originReferer: referer
     }
 }
