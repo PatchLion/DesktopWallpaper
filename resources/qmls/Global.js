@@ -90,7 +90,7 @@ function toClassifiesModelData(data){
 function toPageModelData(data){
 
     var model_data = [];
-    var childlist = data.items;
+    var childlist = data;
     var limit = arguments[1] ? arguments[1] : -1;//默认值为-1
 
     //console.log("Page model limit =", limit, arguments[0], arguments[1]);
@@ -98,7 +98,7 @@ function toPageModelData(data){
     for(var j = 0; j<childlist.length; j++){
         var item = childlist[j];
 
-        //console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source, item.images);
+        //console.log("Page data:", item.id, item.new, item.image, item.title, item.source, item.images);
 
         model_data.push({"itemID": item.id,
                             "newOne": item.new,
@@ -122,15 +122,15 @@ function toPageModelData(data){
 function toPefersModelData(data){
 
     var model_data = [];
-    var childlist = data.items;
+    var childlist = data;
     var limit = arguments[1] ? arguments[1] : -1;//默认值为-1
 
     //console.log("Page model limit =", limit, arguments[0], arguments[1]);
 
     for(var j = 0; j<childlist.length; j++){
-        var item = childlist[j].info;
+        var item = childlist[j];
 
-        //console.log("Page data:", item.id, item.new, /*item.image, */item.title, item.source);
+        //console.log("Page data:", item.id, item.new, item.image, item.title, item.source);
 
         model_data.push({"itemID": item.id,
                             "newOne": item.new,
@@ -153,7 +153,7 @@ function toPefersModelData(data){
 function toImageDetailsModelData(data){
     var model_data = [];
 
-    var childlist = data.images;
+    var childlist = data;
 
     for(var j = 0; j<childlist.length; j++)
     {

@@ -9,6 +9,7 @@
 #include "UserManager.h"
 #include "Settings.h"
 #include "Functions.h"
+#include "ImageCache.h"
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +37,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<DownloadBox>("DesktopWallpaper.DownloadBox", 1, 0, "DownloadBox");
     qmlRegisterType<APIRequestEX>("DesktopWallpaper.APIRequestEx", 1, 0, "APIRequestEx");
     qmlRegisterType<WallpaperSetter>("DesktopWallpaper.WallpaperSetter", 1, 0, "WallpaperSetter");
+    qmlRegisterType<ImageCache>("DesktopWallpaper.ImageCache", 1, 0, "ImageCache");
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/qmls/main.qml")));
     if (engine.rootObjects().isEmpty())

@@ -12,6 +12,11 @@ HEADERS += ../sources/APIRequestEx.h\
     ../sources/VersionDefine.h \
     ../sources/APIRequestPrivate.h
 
+HEADERS += \
+    ../sources/ImageCache.h
+
+SOURCES += \
+    ../sources/ImageCache.cpp
 SOURCES += ../sources/APIRequestEx.cpp \
     ../sources/main.cpp \
     ../sources/WallpaperSetter.cpp \

@@ -49,7 +49,7 @@ Item{
         disableIcon: "qrc:/images/button_24_0_0.png"
 
         anchors.right: parent.right
-        anchors.rightMargin: Qt.platform.os === "windows" ? 10 : 0
+        anchors.rightMargin: Qt.platform.os === "windows" ? 0 : 0
 
         smooth: true
 

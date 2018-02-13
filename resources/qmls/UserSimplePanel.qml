@@ -26,7 +26,7 @@ Rectangle {
     width: head_image_item.width + user_name_item.width + (user_information.token.length > 0 ? logout_item.width + modify_item.width : 0) + 10
 
 
-    Image{
+    ImageWithCache{
         id: head_image_item
         height: parent.height * 3.5 / 5
         width: height
@@ -36,7 +36,7 @@ Rectangle {
         anchors.leftMargin: 15
 
 
-        source: (user_information.headerImage.length === 0) ? "qrc:/images/default_head_icon.jpg" : user_information.headerImage
+        originUrl: (user_information.headerImage.length === 0) ? "qrc:/images/default_head_icon.jpg" : user_information.headerImage
 
         smooth: true
         antialiasing: true

@@ -134,14 +134,14 @@ Item {
                     }
                 }
 
-                Image {
+                ImageWithCache {
 
                     id: image_item
                     //anchors.centerIn: parent
                     anchors.bottom: parent.bottom
 
                     //anchors.bottomMargin: 10
-                    cache: true
+                    //cache: true
 
                     smooth: false
                     mipmap: false
@@ -154,7 +154,7 @@ Item {
 
                     sourceSize.height: height
 
-                    source: image
+                    originUrl: image
                     MouseArea {
                         id: image_mouse_area
                         anchors.fill: parent

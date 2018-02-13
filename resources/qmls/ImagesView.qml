@@ -7,7 +7,7 @@ Rectangle{
     id: root_item
 
     property string currentID: ""
-    property alias source: image_item.source
+    property alias source: image_item.originUrl
     property string titleString: ""
     property string itemUrl: ""
     property bool isNew: false
@@ -28,7 +28,7 @@ Rectangle{
             anchors.bottom: text_area_item.top
             color: Qt.rgba(1, 1, 1, 0.05)
 
-            Image{
+            ImageWithCache{
                 id: image_item
 
                 fillMode: Image.PreserveAspectCrop
@@ -42,7 +42,7 @@ Rectangle{
 
                 anchors.fill: parent
 
-                cache: true
+                //cache: true
 
             }
 

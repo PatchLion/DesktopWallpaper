@@ -75,5 +75,6 @@
         <file>qmls/PefersImageDetailPanel.qml</file>
         <file>qmls/HeaderImageSelectItem.qml</file>
         <file>qmls/BlueTextButton.qml</file>
+        <file>qmls/ImageWithCache.qml</file>
     </qresource>
 </RCC>
